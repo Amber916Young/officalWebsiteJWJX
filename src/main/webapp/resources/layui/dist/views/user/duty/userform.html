@@ -1,0 +1,95 @@
+<style>
+
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户列表</label>
+    <div class="layui-input-block" >
+      <input id="dutyList"  name="dutyList" hidden="hidden" />
+      <input id="dutyName"  name="dutyName" hidden="hidden" />
+
+      <div id="userList"   ></div>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">日期</label>
+    <div class="layui-input-inline">
+      <input type="text" name="dateTime" class="layui-input" id="dateCheck2">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+
+<script>
+
+
+layui.use(['admin', 'form', 'upload','transfer','laydate'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+  var transfer = layui.transfer;
+  var laydate = layui.laydate;
+  getUserList();
+  console.info("break");
+
+  function getUserList(){
+    var api = "/api/user/duty/queryUserList";
+    var res = postJsonNoParam(api);
+    if(res.errcode==0){
+      var data = res.data;
+      //渲染
+      transfer.render({
+        elem: '#userList'  //绑定元素
+        ,data:data
+        ,onchange: function(data, index){
+          var getData = transfer.getData('transferId');
+          // console.log("getData"+getData);
+          var itemData ="";
+          var itemData2 ="";
+          for(var i = 0 ;i<getData.length;i++){
+            itemData+=getData[i].value+',';
+            itemData2+=getData[i].title+',';
+          }
+          $("#dutyList").val(itemData);
+          $("#dutyName").val(itemData2);
+        }
+        ,width:200
+        ,height:250
+        ,showSearch:true
+        ,id: 'transferId' //定义索引
+      });
+      //获得右侧数据
+    }
+
+  }
+
+
+  //日期选择器
+  laydate.render({
+    elem: '#dateCheck2'
+    ,format: 'yyyy年MM月dd日' //可任意组合
+    ,trigger: 'click' //采用click弹出
+  });
+
+  //上传头像
+  upload.render({
+    elem: '#layuiadmin-upload-useradmin'
+    ,url: '/resources/layui/start/json/upload/demo.js'
+    ,accept: 'images'
+    ,method: 'get'
+    ,acceptMime: 'image/*'
+    ,done: function(res){
+      $(this.item).prev("div").children("input").val(res.data.src)
+    }
+  });
+})
+</script>

@@ -1,0 +1,204 @@
+
+<title>消息详情</title>
+<style>
+  .selectUp .layui-form-select dl{
+    top: auto;
+    bottom: 36px;
+  }
+
+
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a lay-href="app/message/">消息中心</a>
+    <a><cite>详情</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-app-message-detail">
+  <div class="layui-card layuiAdmin-msg-detail">
+    <div template lay-url="/message/message/queryById?type=question&id={{ layui.router().search.id }}">
+      <div class="layui-card-header">
+        <div style="display: flex">
+          <h1 id="Mid"  style="margin-right: 1em;font-weight: 600">{{ d.data.id }}</h1>
+          <h1>{{ d.data.nickName }}</h1>
+        </div>
+
+        <p>
+          <span>{{ layui.util.timeAgo(d.data.createTime) }}</span>
+        </p>
+      </div>
+      <div class="layui-card-body layui-text">
+        <div class="layadmin-text">
+          {{ d.data.msgContent }}
+        </div>
+        
+        <div style="padding-top: 30px;">
+          <a lay-href="app/message/" class="layui-btn layui-btn-primary layui-btn-sm">返回上级</a>
+        </div>
+      </div>
+
+      <form class="layui-form" action="">
+        <div class="layui-form-item">
+          <label class="layui-form-label">发件人</label>
+          <div class="layui-input-inline">
+            <select name="sendName" lay-verify="required" lay-search>
+              <option value="-1">未选择</option>
+              <option value="0">北京</option>
+              <option value="1">上海</option>
+              <option value="2">广州</option>
+              <option value="3">深圳</option>
+              <option value="4">杭州</option>
+            </select>
+          </div>
+        </div>
+        <!--<div class="layui-form-item">-->
+          <!--<label class="layui-form-label">发件人</label>-->
+          <!--<div class="layui-input-inline">-->
+            <!--<input type="text" name="sendName" required  lay-verify="required" placeholder="发件人" autocomplete="off" class="layui-input">-->
+          <!--</div>-->
+        <!--</div>-->
+        <div class="layui-form-item">
+          <label class="layui-form-label">收信人</label>
+          <div class="layui-input-inline">
+            <input type="text" name="receiveName" value="{{ d.data.email }}" required  lay-verify="required" placeholder="收信人" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">回复标题</label>
+          <div class="layui-input-inline">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+          <label class="layui-form-label">回复内容</label>
+          <div class="layui-input-block">
+            <div  id="editor"  style="z-index: 8"></div>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+      </form>
+
+
+
+    </div>
+  </div>
+</div>
+<script src="/resources/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+
+<script>
+layui.use('contlist', layui.factory('contlist')).use(['admin','form', 'table'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,table = layui.table
+  ,element = layui.element;
+  var form = layui.form;
+    //监听提交
+    form.on('submit(formDemo)', function(data){
+        // layer.msg(JSON.stringify(data.field));
+        var jsonData = {};
+        var con=editor.txt.html();
+        var loadingIndex = null;
+        var sendName = data.field.sendName;
+        var receiveName = data.field.receiveName;
+        var title = data.field.title;
+
+        jsonData["content"] = con;
+        jsonData["title"] = title;
+        jsonData["sendName"] = sendName;
+        jsonData["id"] = $("#Mid").text();
+        console.info(jsonData);
+        jsonData["receiveName"] = receiveName;
+        if (sendName=="-1"){
+            layer.msg("发件人未选择，请选择", {time:2000, icon:5, shift:6});
+            return;
+        }
+        if (con==""){
+            layer.msg("文本内容不能为空，请输入", {time:2000, icon:5, shift:6});
+            return;
+        }
+        layer.confirm("新增, 是否继续",  {icon: 3, title:'提示'}, function(cindex){
+            // 删除选择的用户信息
+            $.ajax({
+                type : "POST",
+                processData: false,
+                contentType: "application/json",
+                url  : "/message/message/detailUpload",
+                data : JSON.stringify(jsonData),
+                dataType: "json",
+                cache: false,
+                beforeSend : function() {
+                    loadingIndex = layer.msg('处理中', {icon: 16});
+                },
+                success : function(result) {
+                    layer.close(loadingIndex);
+                    if ( result.code==0 ) {
+                        window.location.href="layuiAdmin#/app/message/index";
+                    } else {
+                        layer.msg("邮件回复失败", {time:3000, icon:5});
+                    }
+                },
+                error:function () {
+                    layer.msg("ajax请求失败", {time:3000, icon:5});
+                }
+            });
+            layer.close(cindex);
+        }, function(cindex){
+            layer.close(cindex);
+        });
+
+
+
+        return false;
+    });
+    form.render();
+
+    const E = window.wangEditor;
+    const editor = new E('#editor');
+    // 默认情况下，显示所有菜单
+    editor.config.menus = [
+        'head',
+        'bold',
+        'fontSize',
+        'fontName',
+        'italic',
+        'underline',
+        'foreColor',
+        'link',
+        'list',
+        'justify',
+        'image',
+        'table',
+        'splitLine',
+        'undo',
+        'redo',
+    ];
+    editor.config.height = 400;
+    editor.config.uploadImgMaxSize = 3 * 1024 * 1024; // 将图片大小限制为 3M
+    editor.config.uploadFileName = 'upload';
+    editor.config.uploadImgServer ="/image/message/uploadImage.do/";
+    editor.config.uploadImgHooks = {
+        error: function(xhr, editor, resData) {
+            console.log('error', xhr, resData);
+            alert('error'+xhr+"====" +resData);
+        },
+        customInsert: function(insertImgFn, result) {
+            // result 即服务端返回的接口
+            console.log('customInsert', result)
+            if(result.uploaded=="true"){
+                insertImgFn(result.url)
+            }else{
+                layer.msg("图片插入失败", {time:3000, icon:5});
+            }
+        }
+    };
+    editor.create();
+});
+</script>

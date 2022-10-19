@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistentConfig">
+    <option name="historyConfigList">
+      <map>
+        <entry key="egt_company">
+          <value>
+            <Config>
+              <option name="comment" value="true" />
+              <option name="daoMvnPath" value="src/main/java" />
+              <option name="daoName" value="EgtCompanyClientMapper" />
+              <option name="daoPackage" value="mapper" />
+              <option name="daoPostfix" value="ClientMapper" />
+              <option name="daoTargetFolder" value="$PROJECT_DIR$/src/main/java/com/web/mapper" />
+              <option name="modelMvnPath" value="src/main/java" />
+              <option name="modelName" value="EgtCompany" />
+              <option name="modelPackage" value="model" />
+              <option name="modelTargetFolder" value="$PROJECT_DIR$/src/main/java/com/web/model" />
+              <option name="name" value="egt_company" />
+              <option name="needToStringHashcodeEquals" value="true" />
+              <option name="offsetLimit" value="true" />
+              <option name="overrideXML" value="true" />
+              <option name="primaryKey" value="companyID" />
+              <option name="projectFolder" value="$PROJECT_DIR$" />
+              <option name="tableName" value="egt_company" />
+              <option name="useExample" value="true" />
+              <option name="useSchemaPrefix" value="true" />
+              <option name="xmlMvnPath" value="src/main/resources" />
+              <option name="xmlPackage" value="generator" />
+              <option name="xmlTargetFolder" value="$PROJECT_DIR$/src/main/java/com/web/mapper" />
+            </Config>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="users">
+      <map>
+        <entry key="jdbc:mysql://rdso9qjpuxagojup1c1wuo.mysql.rds.aliyuncs.com:3306/egt">
+          <value>
+            <User>
+              <option name="username" value="egt" />
+            </User>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

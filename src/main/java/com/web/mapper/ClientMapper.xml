@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.mapper.ClientMapper">
+
+  <insert id="insertjwjx_weixin" parameterType="hashmap">
+    insert into  jwjx.weixin(appID,originalID,memo,appSecret,token
+    ,access_token,jsapi_ticket,nonceStr,url,signature,timestamp,userDBname,loginName,
+    loginPass,sqlDbName,gzhAppID,isPublish,admin_wxopenid,appletTitle,isAudit)
+    values (
+     #{appID}
+    ,#{originalID}
+    ,#{memo}
+    ,#{appSecret}
+    ,#{token}
+    ,#{access_token}
+    ,#{jsapi_ticket}
+    ,#{nonceStr}
+    ,#{url}
+    ,#{signature}
+    ,#{timestamp}
+    ,#{userDBname}
+    ,#{loginName}
+    ,#{loginPass}
+    ,#{sqlDbName}
+    ,#{gzhAppID}
+    ,#{isPublish}
+    ,#{admin_wxopenid}
+    ,#{appletTitle}
+    ,#{isAudit}
+    )
+  </insert>
+
+
+  <update id="updatejwjx_weixin" parameterType="hashmap">
+    update  jwjx.weixin
+    <set>
+      <if test="appID != null">
+        appID = #{appID},
+      </if>
+      <if test="originalID != null">
+        originalID = #{originalID},
+      </if>
+      <if test="memo != null">
+        memo = #{memo},
+      </if>
+      <if test="appSecret != null">
+        appSecret = #{appSecret},
+      </if>
+      <if test="token != null">
+        token = #{token},
+      </if>
+      <if test="access_token != null">
+        access_token = #{access_token},
+      </if>
+      <if test="jsapi_ticket != null">
+        jsapi_ticket = #{jsapi_ticket},
+      </if>
+      <if test="nonceStr != null">
+        nonceStr = #{nonceStr},
+      </if>
+      <if test="url != null">
+        url = #{url},
+      </if>
+      <if test="signature != null">
+        signature = #{signature},
+      </if>
+
+      <if test="userDBname != null">
+        userDBname = #{userDBname},
+      </if>
+      <if test="loginName != null">
+        loginName = #{loginName},
+      </if>
+      <if test="loginPass != null">
+        loginPass = #{loginPass},
+      </if>
+      <if test="sqlDbName != null">
+        sqlDbName = #{sqlDbName},
+      </if>
+      <if test="gzhAppID != null">
+        gzhAppID = #{gzhAppID},
+      </if>
+      <if test="admin_wxopenid != null">
+        admin_wxopenid = #{admin_wxopenid},
+      </if>
+
+      <if test="appletTitle != null">
+        appletTitle = #{appletTitle},
+      </if>
+
+      <if test="isAudit != null">
+        isAudit = #{isAudit},
+      </if>
+      <if test="timestamp != null">
+        timestamp = #{timestamp},
+      </if>
+      <if test="isPublish != null">
+        isPublish = #{isPublish},
+      </if>
+    </set>
+    where appID = #{appID}
+  </update>
+
+  <select id="selectPageListjwjxweixin" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *
+    from jwjx.weixin
+    <where>
+    1=1
+      <if test="keyWord !=null">
+        and   concat(
+           IFNULL(appID,'')
+          ,IFNULL(memo,'')
+          ,IFNULL(originalID,'')
+          ,IFNULL(loginName,'')
+          ,IFNULL(loginPass,'')
+          ,IFNULL(access_token,'')
+          ,IFNULL(appSecret,'')
+          ,IFNULL(nonceStr,'')
+          ,IFNULL(url,'')
+          ,IFNULL(userDBname,'')
+          ,IFNULL(sqlDbName,'')
+          ,IFNULL(gzhAppID,'')
+          ,IFNULL(admin_wxopenid,'')
+          ,IFNULL(appletTitle,''))
+           like concat('%', #{keyWord}, '%')
+
+      </if>
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountjwjxweixin" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from jwjx.weixin
+    <where>
+      1=1
+      <if test="keyWord !=null">
+      and   concat(
+        IFNULL(appID,'')
+        ,IFNULL(memo,'')
+        ,IFNULL(originalID,'')
+        ,IFNULL(loginName,'')
+        ,IFNULL(loginPass,'')
+        ,IFNULL(access_token,'')
+        ,IFNULL(appSecret,'')
+        ,IFNULL(nonceStr,'')
+        ,IFNULL(url,'')
+        ,IFNULL(userDBname,'')
+        ,IFNULL(sqlDbName,'')
+        ,IFNULL(gzhAppID,'')
+        ,IFNULL(admin_wxopenid,'')
+        ,IFNULL(appletTitle,''))
+        like concat('%', #{keyWord}, '%')
+      </if>
+    </where>
+  </select>
+
+  <insert id="insertGnss_system_ClientTerminaldb">
+    insert into gnss_system.client_terminals_db(clientCode,terminalsCode,carNumber,simNumber) values
+    <foreach collection="list " item="Gnss_system_ClientTerminaldb" separator=",">
+      (#{Gnss_system_ClientTerminaldb.clientCode},#{Gnss_system_ClientTerminaldb.terminalsCode},#{Gnss_system_ClientTerminaldb.carNumber}
+      ,#{Gnss_system_ClientTerminaldb.simNumber})
+    </foreach>
+  </insert>
+
+  <select id="selectPageListgnss_system_ClientTerminaldb" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *
+    from gnss_system.client_terminals_db
+    <where>
+      1=1
+      <if test="data.simNumber !=null">
+        and simNumber like concat('%', #{data.simNumber}, '%')
+      </if>
+      <if test="data.carNumber !=null">
+        and carNumber like concat('%', #{data.carNumber}, '%')
+      </if>
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountgnss_system_ClientTerminaldb" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from gnss_system.client_terminals_db
+    <where>
+      1=1
+      <if test="data.simNumber !=null">
+        and simNumber like concat('%', #{data.simNumber}, '%')
+      </if>
+      <if test="data.carNumber !=null">
+        and carNumber like concat('%', #{data.carNumber}, '%')
+      </if>
+    </where>
+  </select>
+
+
+
+
+  <insert id="insertGnss_system_Clientdb" parameterType="Gnss_system_Clientdb">
+    insert into gnss_system.client_db(clientCode,clientName,pass,memo,accredit
+    ,serverFlag,maxSpeed,adcode,password)
+    values (
+     #{clientCode}
+    ,#{clientName}
+    ,#{pass}
+    ,#{memo}
+    ,#{accredit}
+    ,#{serverFlag}
+    ,#{maxSpeed}
+    ,#{adcode}
+    ,#{password}
+    )
+  </insert>
+
+  <update id="updateGnss_system_Clientdb" parameterType="Gnss_system_Clientdb">
+    update gnss_system.client_db
+    <set>
+      <if test="clientCode != null">
+        clientCode = #{clientCode},
+      </if>
+      <if test="clientName != null">
+        clientName = #{clientName},
+      </if>
+      <if test="remoteType != null">
+        pass = #{pass},
+      </if>
+      <if test="memo != null">
+        memo = #{memo},
+      </if>
+      <if test="accredit != null">
+        accredit = #{accredit},
+      </if>
+      <if test="serverFlag != null">
+        serverFlag = #{serverFlag},
+      </if>
+      <if test="maxSpeed != null">
+        maxSpeed = #{maxSpeed},
+      </if>
+      <if test="adcode != null">
+        adcode = #{adcode},
+      </if>
+      <if test="password != null">
+        password = #{password},
+      </if>
+    </set>
+    where clientID = #{clientID}
+  </update>
+
+
+  <select id="selectPageListgnss_system_Clientdb" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *
+    from gnss_system.client_db
+    <where>
+      1=1
+      <if test="data.clientCode !=null">
+        and clientCode like concat('%', #{data.clientCode}, '%')
+      </if>
+      <if test="data.clientName !=null">
+        and clientName like concat('%', #{data.clientName}, '%')
+      </if>
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountgnss_system_Clientdb" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from gnss_system.client_db
+    <where>
+      1=1
+      <if test="data.clientCode !=null">
+        and clientCode like concat('%', #{data.clientCode}, '%')
+      </if>
+      <if test="data.clientName !=null">
+        and clientName like concat('%', #{data.clientName}, '%')
+      </if>
+    </where>
+  </select>
+
+
+
+
+  <insert id="insertEgtRemoteMode" parameterType="EgtRemoteMode">
+    insert into egt.remote_mode(companyName,controlledMember,remoteType,account,password)
+    values (
+     #{companyName}
+    ,#{controlledMember}
+    ,#{remoteType}
+    ,#{account}
+    ,#{password})
+  </insert>
+
+  <update id="updateEgtRemoteMode" parameterType="EgtRemoteMode">
+    update egt.remote_mode
+    <set>
+      <if test="companyName != null">
+        companyName = #{companyName},
+      </if>
+      <if test="controlledMember != null">
+        controlledMember = #{controlledMember},
+      </if>
+      <if test="remoteType != null">
+        remoteType = #{remoteType},
+      </if>
+      <if test="account != null">
+        account = #{account},
+      </if>
+      <if test="password != null">
+        password = #{password},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+
+
+  <select id="selectPageListegt_remote_mode" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *
+    from egt.remote_mode
+    <where>
+      1=1
+      <if test="data.companyName !=null">
+        and companyName like concat('%', #{data.companyName}, '%')
+      </if>
+      <if test="data.remoteType !=null">
+        and remoteType = #{data.remoteType}
+      </if>
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountegt_remote_mode" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from egt.remote_mode
+    <where>
+      1=1
+      <if test="data.companyName !=null">
+        and companyName like concat('%', #{data.companyName}, '%')
+      </if>
+      <if test="data.remoteType !=null">
+        and remoteType = #{data.remoteType}
+      </if>
+    </where>
+  </select>
+
+
+
+
+
+  <select id="selectPageListjwjxclientInfo" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *,(select memo from jwjx.weixin where originalID = WeiXinName) as wxName
+    from jwjx.clientinfo
+    <where>
+      1=1
+      <if test="data.nickname !=null">
+        and nickname like concat('%', #{data.nickname}, '%')
+      </if>
+      <if test="data.sex !=-1">
+        and sex = #{data.sex}
+      </if>
+
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountjwjxclientInfo" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from jwjx.clientinfo
+    <where>
+      1=1
+      <if test="data.nickname !=null">
+        and nickname like concat('%', #{data.nickname}, '%')
+      </if>
+      <if test="data.sex !=-1">
+        and sex = #{data.sex}
+      </if>
+    </where>
+  </select>
+
+
+
+
+  <select id="queryEgtcompany" parameterType="hashmap" resultType="hashmap" >
+    select *
+    from egt.egt_company
+    <where>
+      1=1
+      <if test="regNO !=null">
+        and regNO=#{regNO}
+      </if>
+    </where>
+  </select>
+  <select id="queryegt_clientInfo" parameterType="hashmap" resultType="hashmap" >
+    select *
+    from jwjx.clientinfo
+    <where>
+      1=1
+      <if test="openid !=null">
+        and openid =#{openid}
+      </if>
+
+    </where>
+  </select>
+
+  <!-- 通过条件分页查询，返回数据集 -->
+  <select id="selectPageListapplet" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *,(select memo from jwjx.weixin where jwjx.weixin.appID = jwjx.applet.appID) as appName
+    from jwjx.applet
+    <where>
+      1=1
+      <if test="data.nickName !=null">
+        and nickName like concat('%', #{data.nickName}, '%')
+      </if>
+      <if test="data.userName !=null">
+        and userName like concat('%', #{data.userName}, '%')
+      </if>
+      <if test="data.phone !=null">
+        and phone like concat('%', #{data.phone}, '%')
+      </if>
+      <if test="data.userType !=null">
+        and regNO like concat('%', #{data.regNO}, '%')
+      </if>
+      <if test="data.companyName !=null">
+        and companyName like concat('%', #{data.companyName}, '%')
+      </if>
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountapplet" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from jwjx.applet
+    <where>
+      1=1
+
+      <if test="data.nickName !=null">
+        and nickName like concat('%', #{data.nickName}, '%')
+      </if>
+      <if test="data.userName !=null">
+        and userName like concat('%', #{data.userName}, '%')
+      </if>
+      <if test="data.phone !=null">
+        and phone like concat('%', #{data.phone}, '%')
+      </if>
+      <if test="data.userType !=null">
+        and regNO like concat('%', #{data.regNO}, '%')
+      </if>
+      <if test="data.companyName !=null">
+        and companyName like concat('%', #{data.companyName}, '%')
+      </if>
+    </where>
+  </select>
+
+
+
+  <select id="queryjwjxClientInfo" parameterType="hashmap" resultType="hashmap" >
+    select *
+    from jwjx.clientinfo
+    <where>
+      1=1
+      <if test="openid !=null">
+        and openid =#{openid}
+      </if>
+
+    </where>
+  </select>
+
+  <!-- 通过条件分页查询，返回数据集 -->
+  <select id="selectPageList" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *,(select memo from jwjx.weixin where appID = wxAppID) as wxName
+    from egt.egt_company
+    <where>
+    1=1
+      <if test="data.companyPK !=null">
+        and companyPK like concat('%', #{data.companyPK}, '%')
+      </if>
+      <if test="data.companyName !=null">
+        and companyName like concat('%', #{data.companyName}, '%')
+      </if>
+
+    </where>
+    order by companyID asc
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCount" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from egt.egt_company
+    <where>
+      1=1
+      <if test="data.companyPK !=null">
+        and companyPK like concat('%', #{data.companyPK}, '%')
+      </if>
+      <if test="data.companyName !=null">
+        and companyName like concat('%', #{data.companyName}, '%')
+      </if>
+    </where>
+  </select>
+
+  <insert id="insertEgtCompany" parameterType="EgtCompany">
+    insert into egt.egt_company(companyName,companyPK,adcode,type,validFlag,administrative,address,contactName,contactsTel,accredit,dbName,
+    dbName_LAN,sqlKey,sync,ip,port,networkIP,state,login,longitude,latitude,accuracy,radius,isInterior,indate,wxAppID,wxOpenids,menu,regNO)
+    values (
+     #{companyName}
+    ,#{companypk}
+    ,#{adcode}
+    ,#{type}
+    ,#{validflag}
+    ,#{administrative}
+    ,#{address}
+    ,#{contactname}
+    ,#{contactstel}
+    ,#{accredit}
+    ,#{dbname}
+    ,#{dbnameLan}
+    ,#{sqlkey}
+    ,#{sync}
+    ,#{ip}
+    ,#{port}
+    ,#{networkip}
+    ,#{state}
+    ,#{login}
+    ,#{longitude}
+    ,#{latitude}
+    ,#{accuracy}
+    ,#{radius}
+    ,#{isinterior}
+    ,#{indate}
+    ,#{wxappid}
+    ,#{wxopenids}
+    ,#{menu}
+    ,#{regNO}
+    )
+
+  </insert>
+
+
+  <update id="updateEgtCompany" parameterType="EgtCompany">
+    update egt.egt_company
+    <set>
+      <if test="companyName != null">
+        companyName = #{companyName},
+      </if>
+      <if test="companypk != null">
+        companyPK = #{companypk},
+      </if>
+      <if test="adcode != null">
+        adcode = #{adcode},
+      </if>
+      <if test="type != null">
+        `type` = #{type},
+      </if>
+      <if test="validflag != null">
+        validFlag = #{validflag},
+      </if>
+      <if test="administrative != null">
+        administrative = #{administrative},
+      </if>
+      <if test="address != null">
+        address = #{address},
+      </if>
+      <if test="contactname != null">
+        contactName = #{contactname},
+      </if>
+      <if test="contactstel != null">
+        contactsTel = #{contactstel},
+      </if>
+      <if test="accredit != null">
+        accredit = #{accredit},
+      </if>
+      <if test="dbname != null">
+        dbName = #{dbname},
+      </if>
+      <if test="dbnameLan != null">
+        dbName_LAN = #{dbnameLan},
+      </if>
+      <if test="sqlkey != null">
+        sqlKey = #{sqlkey},
+      </if>
+      <if test="sync != null">
+        sync = #{sync},
+      </if>
+      <if test="ip != null">
+        ip = #{ip},
+      </if>
+      <if test="port != null">
+        port = #{port},
+      </if>
+      <if test="networkip != null">
+        networkIP = #{networkip},
+      </if>
+      <if test="heartbeat != null">
+        heartbeat = #{heartbeat},
+      </if>
+      <if test="cpu != null">
+        CPU = #{cpu},
+      </if>
+      <if test="osname != null">
+        osName = #{osname},
+      </if>
+      <if test="macaddress != null">
+        MACAddress = #{macaddress},
+      </if>
+      <if test="state != null">
+        `state` = #{state},
+      </if>
+      <if test="login != null">
+        `login` = #{login},
+      </if>
+      <if test="fag != null">
+        fag = #{fag},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude},
+      </if>
+      <if test="accuracy != null">
+        accuracy = #{accuracy},
+      </if>
+      <if test="radius != null">
+        radius = #{radius},
+      </if>
+      <if test="isinterior != null">
+        isInterior = #{isinterior},
+      </if>
+      <if test="indate != null">
+        indate = #{indate},
+      </if>
+      <if test="wxappid != null">
+        wxAppID = #{wxappid},
+      </if>
+      <if test="wxopenids != null">
+        wxOpenids = #{wxopenids},
+      </if>
+      <if test="appletappid != null">
+        appletAppID = #{appletappid},
+      </if>
+      <if test="appletopenids != null">
+        appletOpenids = #{appletopenids},
+      </if>
+      <if test="messages != null">
+        messages = #{messages},
+      </if>
+      <if test="menu != null">
+        menu = #{menu},
+      </if>
+    </set>
+    where companyID = #{companyID}
+  </update>
+
+</mapper>

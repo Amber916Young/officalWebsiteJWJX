@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<div th:replace="fragments/headerPage :: headerPage"></div>-->
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>经纬捷迅在线咨询</title>
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/plugin/videojs/mui-player.min.css" media="all" />
+    <link rel="shortcut icon" href="/resources/img/index.ico" type="image/x-icon" />
+
+    <style>
+
+        body .layim-title{
+            font-size: 13px;
+        }
+        body .layim-chat-send #voiceInput {
+            padding: 0 6px;
+            margin-left: 0;
+            font-size: 24px;
+        }
+        body .layui-unselect .layui-layim-audio {
+            display: flex;
+        }
+        body .layui-unselect .layui-layim-audio .layui-icon {
+            top: 0;
+            right: 5px;
+        }
+        body .layui-unselect .layui-layim-audio p {
+             margin-top: 0;
+        }
+         body .layui-layim-tab li:nth-child(2)  {
+             display: none;
+         }
+         body .layui-layim-tab li:nth-child(3)  {
+             display: none;
+         }
+        body .layui-layim-tab li {
+            width: 100%;
+        }
+        body .layim-chat-main{
+            padding: 25px 8px 8px 8px;
+        }
+        body .refresh-bg{
+            position: absolute;
+            top: 0;
+            left: 0;
+            /*line-height: 50px;*/
+            z-index: 1;
+            width: 100%;
+            /*height: 300px;*/
+            background: #cccccc;
+            text-align: center;
+        }
+    </style>
+</head>
+<div th:replace="fragments/ChatFooter :: ChatFooter"></div>
+<input hidden="hidden" th:value="${name}" id="name"/>
+<input hidden="hidden" th:value="${openid}" id="openid"/>
+<input hidden="hidden" th:value="${mid}" id="mid"/>
+<input hidden="hidden" th:value="${company}" id="company"/>
+<input hidden="hidden" th:value="${userType}" id="userType"/>
+<input hidden="hidden" th:value="${avatar}" id="avatar"/>
+<!--<input id="videofile" name="videofile" type="file" capture="camera" accept="video/*" multiple="" />-->
+
+
+<body>
+<script>
+    var mid = $("#mid").val();
+    var openid=$("#openid").val();
+    var avatar=$("#avatar").val();
+    var name=$("#name").val();
+    var userCompany=$("#company").val();
+    var userType=$("#userType").val();
+    var autoReplay=[
+        '请关注公众号及时获取回复，马上帮您转接今日值班人员，请稍等...'
+    ]
+    layui.config({
+        base: '/resources/layui/css/modules/layim/lib/'
+        ,layimAssetsPath: '/resources/layui/css/modules/layim/' //layim 资源文件所在目录
+        ,version: true
+    }).extend({
+        'layer-mobile': 'layer-mobile'
+        ,'zepto': 'zepto'
+        ,'upload-mobile': 'upload-mobile'
+        ,'layim-mobile': 'layim-mobile'
+    }).use('layim-mobile', function(){
+        var layim = layui['layim-mobile'] //WebIM
+            ,layer = layui['layer-mobile']; //弹层
+        localStorage.clear();
+
+        var api = "/kefu/connect/websocket/visitor";
+        var res = postJsonNoParam(api)
+        var connectUrl = res.data.url+"?myid="+mid;
+        setMine(connectUrl);
+
+        function setMine(connectUrl) {
+            conncetWebSocket(layim,connectUrl,mid);
+            //基础配置
+            layim.config({
+                init: {
+                    //设置我的基础信息
+                    mine: {
+                        "username": name //我的昵称
+                        ,"id": mid //我的ID
+                        ,"avatar": avatar //我的头像
+                        ,"remark":userCompany+"——"+userType
+                    }
+                    //好友列表数据
+                    // ,friend: [] //见下文：init数据格式
+                },
+
+                tool: [{
+                    alias: 'recordclear' //工具别名
+                    ,title: '清空聊天' //工具名称
+                    ,iconClass: 'layui-icon layui-icon-delete' //图标字体的class类名
+                }]
+                ,title:"深圳经纬捷讯在线客服"
+                ,notice:true
+                ,brief:false
+                ,uploadImage: {
+                    url: '/image/chatImg/upload'
+                }
+                ,uploadFile: {
+                    url: '/image/chatFile/upload'
+                }
+            });
+
+            var api = "/kefu/duty/getKefu/nowDay";  //获取当天值班客服
+            var res = postJsonNoParam(api)
+            if(res.code==0) {
+                var dataList = res.data;
+                $.each(dataList, function (i, item) {
+                    var obj={};
+                    obj={
+                        username:item.nickname
+                        ,avatar:item.avatar
+                        ,type:'friend'
+                        ,id:item.dutyNumber
+                        ,content:autoReplay[0]
+                    }
+                    layim.getMessage(obj);
+                });
+            }
+
+
+            var str="<p>"+ name+":"+userCompany+"("+userType+")</p>";
+            $(".layim-title").html(str);
+            // initWx()
+            // initVoice();
+            unreadMsg(layim,mid);
+
+        }
+
+        function pageNo(curr,mid,toId,name,refresh){
+            var laytpl = layui.laytpl;
+            var jsonData={};
+            jsonData["mid"] =mid;
+            jsonData["toid"] =toId;
+            jsonData["curr"] =curr;
+            jsonData["limit"] =50;
+
+            $.ajax({
+                type: "POST",
+                processData: false,
+                contentType: "application/json",
+                url: "/kefu/mobile/loadHistoryMsgtest",
+                data: JSON.stringify(jsonData),
+                dataType: "json",
+                cache: false,
+                async: false, // 同步
+                success: function (result) {
+                    if (result.code == 0 ) {
+                        var dataes = result.data;
+                        if(dataes.length == 0){
+                            $("body .refresh-bg").css("display","none");
+                            return;
+                        }
+                        var mine = layim.cache().mine;
+                        if(refresh){
+                            var tpl =
+                                '<div class="layim-chat-main layim-chat-log" style="bottom: 0px">\n'+
+                                '<ul>\n'+
+                                '{{# layui.each(d.data.data, function(index, item){\n' +
+                                '  if(item.fromId == mine.id){ }}\n' +
+                                '    <li class="layim-chat-mine"><div class="layim-chat-user"><img src="{{ item.fromavatar }}"/><cite><i>{{layui.data.date(item.timestamp)}}</i>{{ item.fromUsername }}</cite></div>\n' +
+                                '        <div class="layim-chat-text">{{ layui.data.content(item.fromContent||"&nbsp;") }}</div>\n' +
+                                '    </li> \n' +
+                                '  {{# } else { }}\n' +
+                                '    <li><div class="layim-chat-user"><img src="{{ item.fromavatar }}"/><cite>{{ item.fromUsername }}<i>{{layui.data.date(item.timestamp)}}</i></cite></div>\n' +
+                                '        <div class="layim-chat-text">{{ layui.data.content(item.fromContent||"&nbsp;") }}</div>\n' +
+                                '    </li> \n' +
+                                '  {{# }\n' +
+                                '}); }}\n' +
+                                '</ul>\n'+
+                                '<div id="viewDiv"></div>\n'+
+                                '<div class="refresh-bg"></div>\n'+
+                                '</div>\n';
+                            layim.panel({
+                                title: '与 ' + name + ' 的聊天记录' //标题
+                                , tpl: tpl
+                                , data: dataes
+                            });
+                            var view = parent.$(document).find("#viewDiv");
+                            var html = laytpl(tpl).render({data: result});
+                            view.html(html);
+                        }else{
+                            var tpl =  '{{# layui.each(d.data.data, function(index, item){\n' +
+                                '  if(item.fromId == mine.id){ }}\n' +
+                                '    <li class="layim-chat-mine"><div class="layim-chat-user"><img src="{{ item.fromavatar }}"/><cite><i>{{layui.data.date(item.timestamp)}}</i>{{ item.fromUsername }}</cite></div>\n' +
+                                '        <div class="layim-chat-text">{{ layui.data.content(item.fromContent||"&nbsp;") }}</div>\n' +
+                                '    </li> \n' +
+                                '  {{# } else { }}\n' +
+                                '    <li><div class="layim-chat-user"><img src="{{ item.fromavatar }}"/><cite>{{ item.fromUsername }}<i>{{layui.data.date(item.timestamp)}}</i></cite></div>\n' +
+                                '        <div class="layim-chat-text">{{ layui.data.content(item.fromContent||"&nbsp;") }}</div>\n' +
+                                '    </li> \n' +
+                                '  {{# }\n' +
+                                '}); }}\n' ;
+                            var view = parent.$(document).find("#viewDiv");
+
+                            var html = laytpl(tpl).render({data: result});
+                            view.find('ul').prepend(html);
+                        }
+
+
+
+                        /*<![CDATA[*/
+                        //可滑动元素
+                        var scroller = document.querySelector('body .layim-chat-main .layim-chat-log');
+                        //下拉刷新那几个字
+                        var refreshBg = document.querySelector('.refresh-bg');
+                        var myScroll = new IScroll('body .layim-chat-main .layim-chat-log', {
+                            bounceTime: 500,
+                            probeType: 2
+                        })
+                        //scroll事件只在iscoll-probe版本可用
+                        myScroll.on('scroll', function(){
+                            console.log('scroll'+myScroll.y )
+                            //如果下拉超过100px就改变“下拉刷新”样式
+                            if(myScroll.y >= 100){
+                                refreshBg.innerText = '赶紧松手'
+                            }else if (myScroll.y>=0 && myScroll.y<100){
+                                refreshBg.innerText = '下拉刷新'
+                            }
+                        })
+
+                        //开始下拉滑块时去除滑块transition样式
+                        scroller.addEventListener('touchstart', function(){
+                            scroller.style.transition = '';
+                        })
+
+                        //下拉滑块松手后
+                        scroller.addEventListener('touchend', function(){
+                            console.log(myScroll.y)
+                            //如果松手时下拉超过了100px，那就ajax请求新数据
+                            if(myScroll.y == 0){
+                                scroller.style.marginTop = '0px'
+                                refreshBg.innerText = '加载中...'
+                                //这里用定时器模拟ajax
+                                setTimeout(() => {
+                                    scroller.style.marginTop = '0px';
+                                    scroller.style.transition = '0.3s';
+                                    refreshBg.innerText = '下拉刷新'
+                                    refresh=false;
+                                    num++;
+                                    pageNo(num,mid,toId,name,refresh)
+                                }, 2000);
+
+                            }
+                        })
+                        /*]]>*/
+                    } else {
+                        if(result.code!=0){
+                            layer.msg(result.msg, {time: 3000, icon: 5});
+                        }
+                    }
+                },
+                error: function (err) {
+                    console.log("err:", err);
+                }
+            });
+        }
+        //监听查看更多记录
+        layim.on('chatlog', function(data, ul){
+            console.log(data); //得到当前会话对象的基本信息
+            console.log(ul); //得到当前聊天列表所在的ul容器，比如可以借助他来实现往上插入更多记录
+            var refresh=true;
+            pageNo(1,layim.cache().mine.id,data.id,data.username,refresh)
+
+        });
+
+       //监听自定义工具栏点击，以添加代码为例
+        layim.on('tool(recordclear)', function(insert, send, obj){ //事件中的tool为固定字符，而code则为过滤器，对应的是工具别名（alias）
+            layer.open({
+                title: '清空聊天'
+                ,content: '确定清空聊天记录?'
+                ,btn: ['确定', '取消']
+                ,yes:function (index) {
+                    var friendId=parseInt("friend"+To.id);
+                    delete layim.cache().local.chatlog[0];
+                    // var api = "/api/user/duty/invited_bindingWX";
+                    // postJson(api, JSON.stringify(jsonData))
+                    layer.close(index);
+                }
+            });
+
+            console.log(this); //获取当前工具的DOM对象
+            console.log(obj); //获得当前会话窗口的DOM对象、基础信息
+        });
+        layim.on('tool(video)', function(insert, send, obj){
+            layer.open({
+                title: '拍摄视频'
+                ,content:'<input id="videofile" name="videofile" type="file" capture="camera" accept="video/*" multiple="" />'
+            });
+
+            // console.log(this); //获取当前工具的DOM对象
+            // console.log(obj); //获得当前会话窗口的DOM对象、基础信息
+        });
+
+
+        //监听发送消息
+        layim.on('sendMessage', function (res) {
+            //接收消息人员信息
+            // var str = $.cookie("sessionChat");
+            // var str1 = JSON.parse(str);
+            // var mid = str1.myid.toString();
+            res.mine.id=mid
+            var mine = JSON.stringify(res.mine);
+            var to = JSON.stringify(res.to);
+            var login_data = '{"type":"kefu","data":{"mine":'+mine+', "to":'+to+'}}';
+            try{
+                console.info(login_data);
+                socket.send( login_data );
+            }catch (e) {
+
+            }
+
+        });
+
+
+        //监听聊天窗口的切换
+        layim.on('chatChange', function (res) {
+            var type = res.data.type;
+            //选择发送的好友或群的信息
+            console.log(res.data)
+            if (type == 'friend') {
+                //模拟标注好友状态
+                layim.setChatStatus('<span style="color:#e20005;">在线</span>');
+                setTimeout(function () {
+                    layim.setChatStatus('<span style="color:#FF5722;">对方正在输入......</span>');
+                    var obj={};
+                    obj={
+                        username:res.data.name
+                        ,avatar:res.data.avatar
+                        ,type:res.data.type
+                        ,id:res.data.id
+                        ,content:autoReplay[0]
+                    }
+                    layim.setChatStatus('<span style="color:#e20005;">在线</span>');
+                    // layim.getMessage(obj);
+                },1000);
+            } else  {
+                //groupId = res.data.id;
+                //模拟系统消息
+                // layim.getMessage({
+                //    system: true
+                //    ,id: res.data.id
+                //    ,type: "kefu"
+                //    ,content: '模拟群员'+(Math.random()*100|0) + '加入群聊'
+                // });
+            }
+        });
+
+
+
+
+
+
+
+
+    });
+</script>
+</body>
+</html>

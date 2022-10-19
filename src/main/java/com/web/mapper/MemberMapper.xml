@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.web.mapper.MemberMapper">
+
+    <select id="queryKfViewTemUser" parameterType="hashmap" resultType="hashmap" >
+        select *
+        from jwjxinfo2.view_tmeplateuser
+        <where>
+            1=1
+            <if test="tid !=null">
+                and tid=#{tid}
+            </if>
+        </where>
+    </select>
+
+
+
+
+    <insert id="insertWxChat" parameterType="hashmap">
+        insert into  wxchat(openid,createtime,worker ,content,msgType,event,currtime)
+        values (
+        #{FromUserName}
+        ,#{CreateTime}
+        ,#{ToUserName}
+        ,#{Content}
+        ,#{MsgType}
+        ,#{Event}
+        ,#{currtime}
+       )
+    </insert>
+
+
+    <delete id="deleteUserinfo" parameterType="hashmap">
+        delete from userInfo
+        <where>
+            1=1
+            <if test="openid !=null">
+                and openid=#{openid}
+            </if>
+        </where>
+    </delete>
+
+
+    <update id="updateUserInfo"  parameterType="hashmap">
+    update userInfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="openid!=null">openid= #{openid},</if>
+            <if test="gender!=null">gender=#{gender},</if>
+        </trim>
+        where phone=#{phone}
+    </update>
+    <select id="queryUserInfoByParam" parameterType="hashmap" resultType="com.web.model.Wx.UserInfo" >
+        select *
+        from userInfo
+        <where>
+            1=1
+            <if test="openid !=null">
+                and openid=#{openid}
+            </if>
+            <if test="nickname !=null">
+                and nickname=#{nickname}
+            </if>
+        </where>
+    </select>
+
+
+
+    <update id="updateUserInfoWhenSubscribe"  parameterType="com.web.model.Wx.UserInfo">
+        update userInfo
+        <trim prefix="set" suffixOverrides=",">
+            subscribe= #{subscribe},
+            <if test="nickname!=null">nickname=#{nickname},</if>
+            <if test="headimgurl!=null">headimgurl=#{headimgurl},</if>
+            <if test="unionid!=null">unionid=#{unionid},</if>
+            <if test="language!=null">language=#{language},</if>
+            subscribe_scene=#{subscribe_scene},
+            sex=#{sex},
+            <if test="city!=null">city=#{city},</if>
+            <if test="country!=null">country=#{country},</if>
+            <if test="province!=null">province=#{province},</if>
+            <if test="subscribe_time!=null">subscribe_time=#{subscribe_time},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+           groupid=#{groupid},
+            <if test="tagid_listStr!=null">tagid_list=#{tagid_listStr},</if>
+            qr_scene=#{qr_scene},
+            <if test="qr_scene_str!=null">qr_scene_str=#{qr_scene_str},</if>
+            <if test="mid!=-1">mid=#{mid},</if>
+        </trim>
+        where openid=#{openid}
+    </update>
+
+
+    <insert id="insertUserInfoWhenSubscribe" parameterType="com.web.model.Wx.UserInfo" >
+        insert into userInfo(subscribe,openid,nickname ,headimgurl,unionid,
+        language,subscribe_scene,sex,city,country,province,subscribe_time,remark,groupid
+        ,tagid_list,qr_scene,qr_scene_str)
+        values (
+        #{subscribe}
+        ,#{openid}
+        ,#{nickname}
+        ,#{headimgurl}
+        ,#{unionid}
+        ,#{language}
+        ,#{subscribe_scene}
+        ,#{sex}
+        ,#{city}
+        ,#{country}
+        ,#{province}
+        ,#{subscribe_time}
+        ,#{remark}
+        ,#{groupid}
+        ,#{tagid_listStr}
+        ,#{qr_scene}
+        ,#{qr_scene_str}
+        )
+
+    </insert>
+
+
+
+    <insert id="insertUserInfo" parameterType="hashmap" useGeneratedKeys="true" keyProperty="id">
+        insert into userInfo(appid,mini_openid,nickName ,userName,userType,
+        userCompany,phone,regNO,dbName,type,appname)
+        values (
+        #{appID}
+        ,#{openid}
+        ,#{nickName}
+        ,#{userName}
+        ,#{userType}
+        ,#{companyName}
+        ,#{phone}
+        ,#{regNO}
+        ,#{dbName}
+        ,#{type}
+        ,#{appname}
+        )
+        on duplicate key update
+         nickName = VALUES(nickName),
+         userName = VALUES(userName),userType = VALUES(userType),
+         userCompany = VALUES(userCompany)
+         ,regNO = VALUES(regNO)
+         ,dbName = VALUES(dbName)
+    </insert>
+
+    <select id="queryVisitor" parameterType="hashmap" resultType="hashmap" >
+        select *
+        from view_userInfo
+        <where>
+            1=1
+            <if test="appname !=null">
+                and appname=#{appname}
+            </if>
+            <if test="userCompany !=null">
+                and userCompany=#{userCompany}
+            </if>
+            <if test="userType !=null">
+                and userType=#{userType}
+            </if>
+
+        </where>
+    </select>
+    <select id="queryUserVisitor" parameterType="hashmap" resultType="hashmap" >
+        select *
+        from visitor
+        <where>
+            1=1
+            <if test="openid !=null">
+                and openid=#{openid}
+            </if>
+            <if test="mid !=null">
+                and mid=#{mid}
+            </if>
+            <if test="id !=null">
+                and id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="queryUserInfo" parameterType="hashmap" resultType="hashmap" >
+        select *
+        from userInfo
+        <where>
+            1=1
+            <if test="phone !=null">
+                and phone=#{phone}
+            </if>
+            <if test="openid !=null">
+                and openid=#{openid}
+            </if>
+            <if test="mid !=null">
+                and mid=#{mid}
+            </if>
+            <if test="id !=null">
+                and id=#{id}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="queryUserJwjx" parameterType="hashmap" resultType="hashmap" >
+        select *,memo as appname
+        from jwjx.applet,jwjx.weixin
+        <where>
+            1=1
+            <if test="phone !=null">
+                and phone=#{phone}
+            </if>
+            <if test="userName !=null">
+                and userName=#{username}
+            </if>
+            <if test="nickName !=null">
+                and nickName=#{nickName}
+            </if>
+            <if test="userType !=null">
+                and userType=#{userType}
+            </if>
+            <if test="regNO !=null">
+                and regNO=#{regNO}
+            </if>
+            <if test="companyName !=null">
+                and companyName like concat('%', #{companyName}, '%')
+            </if>
+            and jwjx.applet.appID=jwjx.weixin.appID
+        </where>
+    </select>
+
+
+    <!-- 通过条件分页查询，返回数据集 -->
+    <!--<include refid="Base_Column_List" />-->
+    <select id="selectPageList" parameterType="com.web.utils.Page" resultType="Member" >
+        select *
+        from member
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and concat(phone,username,nickname,gender,loginPosition,adminName,jobPosition,kf_account,wxID)  like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+        order by id ASC
+        limit #{start},#{rows}
+    </select>
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="selectPageCount" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+        select count(1) from member
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and concat(phone,username,nickname,gender,loginPosition,adminName,jobPosition,kf_account,wxID)  like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+    </select>
+
+<!--    值班表！！！！-->
+    <select id="selectDutyList" parameterType="com.web.utils.Page"   resultType="hashmap">
+        select *
+        from view_duty
+        <where>
+            1=1
+            <if test="data.username !=null">
+                and username=#{data.username}
+            </if>
+            <if test="data.gender !=null">
+                and gender=#{data.gender}
+            </if>
+            <if test="data.email !=null">
+                and email like concat('%', #{data.email}, '%')
+            </if>
+            <if test="data.dutyNumber !=null">
+                and dutyNumber like concat('%', #{data.dutyNumber}, '%')
+            </if>
+        </where>
+        order by id DESC
+        limit #{start},#{rows}
+    </select>
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="selectDutyCount" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+        select count(1) from view_duty
+        <where>
+            1=1
+            <if test="data.username !=null">
+                and username=#{data.username}
+            </if>
+            <if test="data.gender !=null">
+                and gender=#{data.gender}
+            </if>
+            <if test="data.email !=null">
+                and email like concat('%', #{data.email}, '%')
+            </if>
+            <if test="data.dutyNumber !=null">
+                and dutyNumber like concat('%', #{data.dutyNumber}, '%')
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insertVisitor" parameterType="hashmap">
+        insert into  visitor(name ,phone) values(#{name},#{phone})
+    </insert>
+    <insert id="insertWorker" parameterType="com.web.model.Member">
+        insert into  member(username,phone,email,nickname ,avatar,gender,
+        password,dutyNumber,jobPosition,wxID,openid)
+        values (
+        #{username}
+        ,#{phone}
+        ,#{email}
+        ,#{nickname}
+        ,#{avatar}
+        ,#{gender}
+        ,#{password}
+        ,#{dutyNumber}
+        ,#{jobPosition}
+        ,#{wxID}
+        ,#{openid}
+        )
+    </insert>
+
+    <select id="queryMember" parameterType="hashmap" resultType="com.web.model.Member" >
+        select *
+        from member
+        <where>
+            1=1
+            <if test="status !=null">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="authenticate" parameterType="hashmap" resultType="com.web.model.Member" >
+        select *
+        from member
+        <where>
+            1=1
+            <if test="username !=null and password!=null">
+                and username=#{username} and password=#{password}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateWorker"  parameterType="hashmap">
+       update  member
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username!=null">username= #{username},</if>
+            <if test="phone!=null">phone=#{phone},</if>
+            <if test="email!=null">email=#{email},</if>
+            <if test="nickname!=null">nickname=#{nickname},</if>
+            <if test="avatar!=null">avatar=#{avatar},</if>
+            <if test="gender!=null">gender=#{gender},</if>
+            <if test="password!=null">password=#{password},</if>
+            <if test="jobPosition!=null">jobPosition=#{jobPosition},</if>
+            <if test="status!=-1">status=#{status},</if>
+            <if test="openid!=null">openid=#{openid},</if>
+            <if test="kf_account!=null">kf_account=#{kf_account},</if>
+            <if test="wxID!=null">wxID=#{wxID},</if>
+            <if test="adminName!=null">adminName=#{adminName},</if>
+        </trim>
+        where id=#{id}
+    </update>
+
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="queryUserLogin" parameterType="com.web.model.Member" resultType="com.web.model.Member">
+        select * from member
+        <where>
+            1=1
+            <if test="username !=null">
+                and username=#{username}
+            </if>
+            <if test="password !=null">
+                and password=#{password}
+            </if>
+            <if test="openid !=null">
+                and openid=#{openid}
+            </if>
+            <if test="id !=0">
+                and id=#{id}
+            </if>
+            <if test="dutyNumber !=null">
+                and dutyNumber=#{dutyNumber}
+            </if>
+        </where>
+    </select>
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="queryUserisAdmin" parameterType="com.web.model.Member" resultType="com.web.model.Member">
+        select * from member
+        <where>
+            1=1
+            <if test="username !=null">
+                and username=#{username}
+            </if>
+            <if test="status !=null">
+                and status=#{status}
+            </if>
+            <if test="openid !=null">
+                and openid=#{openid}
+            </if>
+
+            <if test="dutyNumber !=null">
+                and dutyNumber=#{dutyNumber}
+            </if>
+        </where>
+    </select>
+    <select id="queryMemberWithoutTemplate" resultType="com.web.model.Member"  parameterType="hashmap">
+        select * from member
+        <where>
+            1=1
+            <if test="status !=null">
+                and status=#{status} and id not in(select uid from jwjxinfo2.tmeplateuser where tid=#{tid})
+            </if>
+        </where>
+    </select>
+    <select id="queryMemberWithTemplate" resultType="com.web.model.Member"  parameterType="hashmap">
+        select * from member
+        <where>
+            1=1
+            <if test="status !=null">
+                and status=#{status} and id  in(select uid from jwjxinfo2.tmeplateuser where tid=#{tid})
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageCountVisitor" resultType="java.lang.Integer">
+        select count(1) from jwjxinfo2.visitor
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and concat(name)  like concat('%', #{keyWord}, '%')
+                or concat(phone)  like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+    </select>
+    <select id="selectPageListVisitor" resultType="java.util.HashMap">
+        select *
+        from jwjxinfo2.visitor
+        <where>
+            1=1
+            <if test="keyWord!=null">
+                and concat(name)  like concat('%', #{keyWord}, '%')
+                or concat(phone)  like concat('%', #{keyWord}, '%')
+
+            </if>
+        </where>
+        limit #{start},#{rows}
+    </select>
+    <update id="updateMember">
+        update  member
+        <trim prefix="set" suffixOverrides=",">
+            <if test="loginTime!=null">loginTime=#{loginTime},</if>
+            <if test="loginIp!=null">loginIp=#{loginIp},</if>
+            <if test="loginPosition!=null">loginPosition=#{loginPosition},</if>
+        </trim>
+        where id=#{id}
+    </update>
+</mapper>
+

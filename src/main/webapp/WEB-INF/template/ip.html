@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8"/>
+		<title>获取IP地址</title>
+		<meta name="description" content="particles.js is a lightweight JavaScript library for creating particles."/>
+		<meta name="author" content="Vincent Garreau" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<link rel="stylesheet" media="screen" href="/resources/css/istyle.css"/>
+		<link rel="stylesheet" type="text/css" href="/resources/css/reset.css" />
+		<style>
+			.login-ip {
+				z-index: 3;
+				position: relative;
+				
+				border-radius: 5px;
+				height: 500px;
+				background: white;
+				box-shadow: 0px 0px 5px #333333;
+				
+				transition: all 1s;
+				-moz-transition: all 1s;
+				-webkit-transition: all 1s;
+				-o-transition: all 1s;
+				
+				cursor: pointer;
+				text-align: center;
+				height: 40px;
+				line-height: 40px;
+				border-radius: 5px;
+				margin: 0 auto;
+				top:50%;
+			}
+		</style>
+	</head>
+
+
+	<body onload="load()">
+
+		<div id="particles-js">
+		<div class="login-ip" style="display:none" id="ip"></div>
+			<div id="login" class="login">
+			
+				<div class="login-top">
+					登录
+				</div>
+				<div class="login-center clearfix">
+					<div class="login-center-img"><img src="/resources/img/display/name.png" /></div>
+					<div class="login-center-input">
+						<input type="text" id="username" value="" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'" />
+						<div class="login-center-input-text">用户名</div>
+					</div>
+				</div>
+				<div class="login-center clearfix">
+					<div class="login-center-img"><img src="/resources/img/display/password.png" /></div>
+					<div class="login-center-input">
+						<input type="password" id="password" value="" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'" />
+						<div class="login-center-input-text">密码</div>
+					</div>
+				</div>
+				<div class="login-button">
+					登录
+				</div>
+				
+			</div>
+			
+			<div class="sk-rotating-plane"></div>
+			
+		</div>
+	</body>
+		<script src="/resources/js/jquery.min.js" type="text/javascript"></script>
+		<script src="/resources/js/myjs.js" type="text/javascript"></script>
+		<script src="/resources/js/particles.min.js"></script>
+		<script src="/resources/js/app.js"></script>
+		<script type="text/javascript">
+			function hasClass(elem, cls) {
+				cls = cls || '';
+				if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+				return new RegExp(' ' + cls + ' ').test(' ' + elem.className + ' ');
+			}
+
+			function addClass(ele, cls) {
+				if (!hasClass(ele, cls)) {
+					ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+				}
+			}
+
+			function removeClass(ele, cls) {
+				if (hasClass(ele, cls)) {
+					var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+					while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+						newClass = newClass.replace(' ' + cls + ' ', ' ');
+					}
+					ele.className = newClass.replace(/^\s+|\s+$/g, '');
+				}
+			}
+			document.querySelector(".login-button").onclick = function() {
+				addClass(document.querySelector(".login"), "active")
+				setTimeout(function() {
+					addClass(document.querySelector(".sk-rotating-plane"), "active")
+					document.querySelector(".login").style.display = "none"
+				}, 800)
+				setTimeout(function() {
+					removeClass(document.querySelector(".login"), "active")
+					removeClass(document.querySelector(".sk-rotating-plane"), "active")
+					document.querySelector(".login").style.display = "block"					
+					var u = document.getElementById('username').value;
+					var p = document.getElementById('password').value;
+					var sql = "SELECT username,password FROM egt.egt_user WHERE username='"+u+"' AND password ='"+p+"'";
+					var temp = Public("selectData", "sql=" + sql, "text", 1);
+					if (temp.length > 2) {
+						var sql1 = "SELECT networkIP FROM egt.egt_company WHERE regNO='800001'";
+						var temp1 = Public("selectData", "sql=" + sql1, "text", 1);
+						if(temp1.length > 2){
+							var Then = new Date();
+							Then.setTime(Then.getTime() + 1866240000000);
+							document.cookie = "username="+u+";expires=" + Then.toGMTString();
+							document.cookie = "password="+p+";expires=" + Then.toGMTString();
+							var newdiv = document.getElementById("ip");
+							var json = JSON.parse(temp1);
+							var ip = json[0].networkIP.replace("/", "");
+							newdiv.innerHTML = ip+":9231";
+							$("#login").hide();
+							$("#ip").show();
+							
+						}
+					}else{
+						alert("账号或密码错误。");
+					}
+				}, 1000)
+			}
+			
+			document.onkeydown = function (e) { // 回车提交表单
+			// 兼容FF和IE和Opera
+			    var theEvent = window.event || e;
+			    var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+			    if (code == 13) {
+			       addClass(document.querySelector(".login"), "active")
+			       setTimeout(function() {
+			       	addClass(document.querySelector(".sk-rotating-plane"), "active")
+			       	document.querySelector(".login").style.display = "none"
+			       }, 800)
+			       setTimeout(function() {
+			       	removeClass(document.querySelector(".login"), "active")
+			       	removeClass(document.querySelector(".sk-rotating-plane"), "active")
+			       	document.querySelector(".login").style.display = "block"					
+			       	var u = document.getElementById('username').value;
+			       	var p = document.getElementById('password').value;
+			       	var sql = "SELECT username,password FROM egt.egt_user WHERE username='"+u+"' AND password ='"+p+"'";
+			       	var temp = Public("selectData", "sql=" + sql, "text", 1);
+			       	if (temp.length > 2) {
+			       		var sql1 = "SELECT networkIP FROM egt.egt_company WHERE regNO='800001'";
+			       		var temp1 = Public("selectData", "sql=" + sql1, "text", 1);
+			       		if(temp1.length > 2){
+			       			var Then = new Date();
+			       			Then.setTime(Then.getTime() + 1866240000000);
+			       			document.cookie = "username="+u+";expires=" + Then.toGMTString();
+			       			document.cookie = "password="+p+";expires=" + Then.toGMTString();
+			       			var newdiv = document.getElementById("ip");
+			       			var json = JSON.parse(temp1);
+			       			var ip = json[0].networkIP.replace("/", "");
+			       			newdiv.innerHTML = ip+":9231";
+			       			$("#login").hide();
+			       			$("#ip").show();
+			       		}
+			       	}else{
+			       		alert("账号或密码错误。");
+			       	}
+			       }, 1000)
+			    }
+			}
+			
+			function load(){
+				var u = getCookie("username");
+				document.getElementById("username").value=u;
+				var p = getCookie("password");
+				document.getElementById("password").value=p;
+			}
+
+		</script>
+
+</html>

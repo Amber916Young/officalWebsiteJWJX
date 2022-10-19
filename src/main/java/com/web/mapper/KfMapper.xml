@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.web.mapper.KfMapper">
+
+    <select id="queryAllHistoryChatTO" parameterType="hashmap" resultType="com.web.model.EmpInfo" >
+        select *
+        from ChatInfo
+        <where>
+            1=1
+            <if test="fromId !=null">
+                and fromId in (select toId  from ChatInfo where fromId = #{fromId} )
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="queryAllHistoryChat" parameterType="hashmap" resultType="com.web.model.EmpInfo" >
+        select *
+        from ChatInfo
+        <where>
+            1=1
+            <if test="fromId !=null">
+                and fromId =#{fromId} or toId=#{fromId}
+            </if>
+
+        </where>
+        ORDER BY sendTime
+    </select>
+
+    <select id="queryAllHistoryChattest" parameterType="com.web.utils.Page" resultType="com.web.model.EmpInfo" >
+        select *,sendTime as timestamp
+        from ChatInfo
+        <where>
+            1=1
+            <if test="data.fromId !=null">
+                and fromId =#{data.fromId} and  toId=#{data.toId} or fromId = #{data.toId}  and toId=#{data.fromId}
+            </if>
+        </where>
+        ORDER BY id desc
+        limit #{start},#{rows}
+    </select>
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="selectHistoryCount" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+        select count(1) from ChatInfo
+        <where>
+            1=1
+            <if test="data.fromId !=null">
+                and fromId =#{data.fromId} and  toId=#{data.toId} or fromId = #{data.toId}  and toId=#{data.fromId}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertTransferChat"  parameterType="hashmap">
+        insert into transferChat(cid,transferId,create_time,ismineId)
+        values (#{cid},#{transferId},#{create_time},#{ismineId})
+    </insert>
+
+    <delete id="deleteByid" parameterType="java.lang.Integer">
+        delete from ChatInfo where id=#{eid}
+    </delete>
+
+
+    <!-- 通过条件分页查询，返回数据集 -->
+    <!--<include refid="Base_Column_List" />-->
+    <select id="selectPageList" parameterType="com.web.utils.Page" resultType="EmpInfo" >
+        select *
+        from ChatInfo
+        order by id asc
+        limit #{start},#{rows}
+    </select>
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="selectPageCount" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+        select count(1) from ChatInfo
+    </select>
+
+
+
+    <insert id="insertChatMessage"  parameterType="com.web.model.EmpInfo">
+        insert into ChatInfo(fromId,fromUsername,mime,fromContent,fromAvatar
+        ,toId,toAvatar,toType,remark,toUsername,toName,sendTime)
+        values (#{fromId},#{fromUsername},#{mine},#{fromContent},#{fromavatar}
+        ,#{toId},#{toAvatar},#{toType},#{remark},#{toUsername},#{toName},#{timestamp})
+    </insert>
+
+    <update id="updateChatStatus" parameterType="java.lang.String">
+        update ChatInfo  set status=1 where  toUsername=#{nickname} and status=0
+    </update>
+
+    <select id="queryChatList2" parameterType="hashmap"   resultType="java.util.Map">
+        select * from ChatInfo
+        <where>
+            1=1
+            <if test="toId!=null">
+              and  toId=#{toId}
+            </if>
+            <if test="toUsername!=null">
+                and  toUsername=#{toUsername}
+            </if>
+            and status=0
+        </where>
+    </select>
+    <update id="updateChatStatus2" parameterType="java.lang.String">
+        update ChatInfo  set status=1 where  toId=#{toId} and status=0
+    </update>
+
+    <update id="updateTranfer" parameterType="com.web.model.EmpInfo">
+        update ChatInfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="fromId!=null">fromId= #{fromId},</if>
+            <if test="toId!=null">toId=#{toId},</if>
+        </trim>
+        ,tranfernumber=tranfernumber+1
+        where  toId=#{toId}
+    </update>
+
+
+
+</mapper>
+

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/headerPage :: headerPage"></div>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>经纬捷讯后台登陆</title>
+</head>
+<body>
+<div class="login-main">
+    <header class="layui-elip">经纬捷讯客服后台登陆</header>
+    <form class="layui-form">
+        <div class="layui-input-inline">
+            <input type="text" name="username" id="username" required  lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-input-inline">
+            <input type="password" name="password" id="password" required  lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn layui-btn-primary" onclick="Userlogin(1)">游客模式</button>
+        </div>
+        <div class="layui-input-inline">
+            <button type="button" class="layui-btn layui-btn-normal"  onclick="Userlogin(2)">客服登陆</button>
+        </div>
+        <p><a href="javascript:;" class="fl">立即注册</a><a href="javascript:;" class="fr">忘记密码？</a></p>
+    </form>
+</div>
+<div th:replace="fragments/ChatFooter :: ChatFooter"></div>
+<script type="text/javascript">
+    layui.use(['form'], function () {
+        var form = layui.form(), $ = layui.jquery;
+        function Userlogin(e) {
+            if(e==1){
+                window.location.href="/kefu/wechat/visitor";
+            }else{
+                var pass = $("#password").val();
+                var username = $("#username").val();
+                window.location.href="/kefu/mobile/indexkefu?name=tothemoon&password=123";
+            }
+        }
+    });
+</script>
+</body>
+</html>
+

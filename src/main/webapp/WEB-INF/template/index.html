@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<body>
+<div th:replace="fragments/navigation :: navigation"></div>
+<div >
+    <div class="layui-row">
+        <div class="layui-carousel" id="test1" lay-filter="test1">
+            <div carousel-item="">
+                <div>条目1</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-container">
+        <div class="layui-row title_row">
+            <div class="title_container layui-col-xs6 layui-col-sm6 layui-col-md3">
+                <i class="layui-icon layui-icon-website"  style="font-size: 60px;" ></i>
+                <div class="title_section" >
+                    GPS定位服务
+                </div>
+                <div class="title_detial">
+                    卓越商砼云平台在企业原有的厂家生产管理系统或第三方ERP基础上增加了移动化管理模式，使管理不再受到时间、地域
+                </div>
+                <div class="title_btn">
+                    <button type="button" class="layui-btn">更多信息>></button>
+                </div>
+            </div>
+            <div class="title_container layui-col-xs6 layui-col-sm6 layui-col-md3">
+                <i class="layui-icon layui-icon-website"  style="font-size: 60px;" ></i>
+                <div class="title_section" >
+                    GPS定位服务
+                </div>
+                <div class="title_detial">
+                    卓越商砼云平台在企业原有的厂家生产管理系统或第三方ERP基础上增加了移动化管理模式，使管理不再受到时间、地域
+                </div>
+                <div class="title_btn">
+                    <button type="button" class="layui-btn">更多信息>></button>
+                </div>
+            </div>
+            <div class="title_container layui-col-xs6 layui-col-sm6 layui-col-md3">
+                <i class="layui-icon layui-icon-website"  style="font-size: 60px;" ></i>
+                <div class="title_section" >
+                    GPS定位服务
+                </div>
+                <div class="title_detial">
+                    卓越商砼云平台在企业原有的厂家生产管理系统或第三方ERP基础上增加了移动化管理模式，使管理不再受到时间、地域
+                </div>
+                <div class="title_btn">
+                    <button type="button" class="layui-btn">更多信息>></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="bgHr_row"><div class="bgHr"></div></div>-->
+    <div class="layui-row">
+        <div > 卓越商砼云平台在企业原有的厂家生产管理系统或第三方ERP基础上</div>
+        <div>
+            <div></div>
+            <div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+<div>
+    <footer th:replace="fragments/footerPage :: footerPage"></footer>
+</div>
+
+</body>
+<script>
+    //注意：导航 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //…
+    });
+    layui.use('carousel', function(){
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+            ,arrow: 'always' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+    });
+</script>
+
+
+</html>

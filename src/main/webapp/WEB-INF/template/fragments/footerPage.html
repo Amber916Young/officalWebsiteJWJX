@@ -1,0 +1,141 @@
+<footer  th:fragment="footerPage"  xmlns:th="http://www.thymeleaf.org"  >
+    <ul class="layui-fixbar">
+        <li class="layui-icon layui-fixbar-top" id="fix1" style="display: list-item;">
+            <div>&#xe677;</div>
+            <div class="fixText">扫码咨询</div>
+            <div><img id="fiximg1" src="https://fileserver.jwjxinfo.com//statics/webimg/qrcode.png"/></div>
+
+        </li>
+        <li class="layui-icon layui-fixbar-top" id="fix2" style="display: list-item;">
+            <div>&#xe626;</div>
+            <div class="fixText">联系我们</div>
+            <div><img id="fiximg2" src="https://fileserver.jwjxinfo.com//statics/webimg/contact.png"/></div>
+        </li>
+        <li class="layui-icon layui-fixbar-top"  id="fix3" style="display: list-item;margin-bottom: 10vw">
+            <div>&#xe63c;</div>
+            <div class="fixText">供需发布</div>
+        </li>
+    </ul>
+    <a  id="toTheTop" >
+        <ul class="layui-fixbar">
+            <li class="layui-icon layui-fixbar-top" lay-type="top" style="display: list-item;"></li>
+        </ul>
+    </a>
+    <footer>
+        <div class="container" id="footer">
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+<!--                    <div class="wow shake" data-wow-delay="0.4s">-->
+<!--                        <div class="page-scroll ">-->
+<!--                            &lt;!&ndash;marginbot-30&ndash;&gt;-->
+<!--                            <a href="#intro" id="totop" class="footerbtn footerbtn-circle">-->
+<!--                                <i class="fa fa-angle-double-up animated"></i>-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div class="footerRow">
+                        <div class="footerSection" style="text-align: left">
+                            <div class="footerTitle">
+                                <i class="fa fa-phone" style="font-size: 35px; color: #1E9FFF;margin-right: 0.5em"></i>
+                                <span style="font-size: 25px">联系我们</span></div>
+                            <div style="color: white;    margin-top: 1em;">
+                                <div>致电</div>
+                                <div style="font-size: 25px;color: whitesmoke"><b>0755-26675095</b></div>
+                                <div><a href="mailto:13392817612@jwjxinfo.com">邮箱：13392817612@jwjxinfo.com</a></div>
+                                <div>时间：8:00-21:00</div>
+                            </div>
+                        </div>
+                        <div class="footerSection">
+                            <div class="footerTitle">关于我们</div>
+                            <ul>
+                                <li><a>企业概况</a></li>
+                                <li><a>员工风采</a></li>
+                                <li><a>人才招聘</a></li>
+                            </ul>
+                        </div>
+                        <div class="footerSection">
+                            <div class="footerTitle">热点资讯</div>
+                            <ul>
+                                <li><a>企业新闻</a></li>
+                                <li><a>行业新闻</a></li>
+                                <li><a>友情链接</a></li>
+                            </ul>
+                        </div>
+<!--                        <div class="footerSection">-->
+<!--                            <div class="footerTitle"> 客户服务</div>-->
+<!--                            <ul>-->
+<!--                                <li><a>联系方式:0755-26675095</a></li>-->
+<!--                                <li><a>业务洽谈:0755-26675095</a></li>-->
+<!--                                <li><a>售后电话:0755-26675095</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+
+                        <div class="footerSection">
+                            <div><img src="/resources/img/jwjxcode.jpg" style="width: 36rem" /> </div>
+                        </div>
+
+                    </div>
+
+                    <p style="    margin: 9em 0 3em 0;">&copy;Copyright 2021 -版权归<b style="font-weight: 600">深圳经纬捷迅信息技术有限公司</b>所有.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="/resources/layui/layui.js"></script>
+    <!-- Core JavaScript Files -->
+    <script src="/resources/js/jquery.min.js"></script>
+    <script src="/resources/js/bootstrap.min.js"></script>
+    <script src="/resources/js/jquery.easing.min.js"></script>
+    <script src="/resources/js/jquery.scrollTo.js"></script>
+    <script src="/resources/js/wow.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="/resources/js/custom.js"></script>
+    <script>
+        var currentPosition,timer;
+        var speed=10;
+        toTheTop.onclick = function(){
+            // scrollTo(0,0);
+            timer=setInterval("runToTop()",1);
+        }
+        function runToTop(){
+            currentPosition=document.documentElement.scrollTop || document.body.scrollTop;
+            currentPosition-=speed; //speed变量
+            if(currentPosition>0)
+            {
+                window.scrollTo(0,currentPosition);
+            }
+            else
+            {
+                window.scrollTo(0,0);
+                clearInterval(timer);
+            }
+        }
+        $(document).ready(function(){
+            $('#fix2').hover(function() {
+                $("#fiximg2").css('display', 'block');
+            }, function() {
+                $("#fiximg2").css('display', 'none');
+            });
+            $('#fix1').hover(function() {
+                $("#fiximg1").css('display', 'block');
+            }, function() {
+                $("#fiximg1").css('display', 'none');
+            });
+
+            $('#l3').hover(function() {
+                $("#l3").addClass("open")
+            }, function() {
+                $("#l3").removeClass('open')
+            });
+
+            $('#l5').hover(function() {
+                $("#l5").addClass("open")
+            }, function() {
+                $("#l5").removeClass('open')
+            });
+
+        })
+
+
+    </script>
+</footer>

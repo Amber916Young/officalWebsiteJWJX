@@ -1,0 +1,251 @@
+
+<!--<link href="/resources/plugin/ztree/zTreeStyle.css" rel="stylesheet">-->
+
+<div class="layui-form" lay-filter="layuiadmin-form-role" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+
+        {{#  if(d.params.rolename==undefined||d.params.rolename==''){ }}
+        <input type="text" class="layui-input"  name="rolename"  placeholder="请输入需要新增的角色名称" lay-verify="required" />
+        {{#  } }}
+
+        {{#  if(d.params.rolename){ }}
+        <input type="text" class="layui-input" value="{{ d.params.rolename || '' }}"   name="rolename"     lay-verify="required" />
+        <input type="hidden"  value="{{ d.params.id || '' }}"   name="roleId"  />
+        {{#  } }}
+
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">权限范围</label>
+    <input type="hidden"  name="permission"  id="permission"  lay-verify="required"  />
+
+    <div class="layui-input-block">
+      <div id="LAY-tree-menu" class="demo-tree demo-tree-box" ></div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">具体描述</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <textarea type="text" name="descr" lay-verify="required" autocomplete="off" class="layui-textarea">{{ d.params.descr || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-role-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+<!--<script src="/resources/plugin/ztree/jquery.ztree.all-3.5.min.js"></script>-->
+
+<!--<script src="/resources/js/layui/user/userRole.js"></script>-->
+
+<script>
+
+layui.use(['admin', 'form','tree','jquery'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,$ = layui.jquery
+  , tree = layui.tree;
+  var menuTree=[]
+
+  loadtree();
+  function contains(obj) {
+    var i = menuTree.length;
+    while (i--) {
+      if (menuTree[i].id === obj) {
+        return true; // 返回的这个 i 就是元素的索引下标，
+      }
+    }
+    return false;
+  }
+  function deleteduplicateMenu2(elem) {
+    for(var i=0;i<menuTree.length;i++){
+      var flag=0;
+      if(menuTree[i].pid==1) {
+        for (var j = i; j < menuTree.length; j++) {
+          if (menuTree[i].id == menuTree[j].pid && menuTree[j].pid!=0) {
+            flag = 1;
+            break;
+          }
+        }
+        if(flag==0){
+          console.info(menuTree[i].id+"--"+menuTree[i].pid+"--"+menuTree[i].title);
+          menuTree.splice(i,1);
+        }
+      }
+    }
+    if(elem.pid!=0&&elem.pid!=1){
+      deleteduplicateMenuByid(elem);
+    }
+  }
+  function deleteduplicateMenuByid(elem) {
+    var id = elem.pid;
+    var flag = 0;
+    for (var i = 0; i < menuTree.length; i++) {
+      if (menuTree[i].id == id) {
+        for (var j = 0; j < menuTree.length; j++) {
+          if(menuTree[j].pid==id){
+            flag = 1;
+            break;
+          }
+        }
+        break;
+      }
+    }
+    if (flag == 0) {
+      console.info(menuTree[i].id+"--"+menuTree[i].pid+"--"+menuTree[i].title);
+
+      menuTree.splice(i, 1);
+    }
+  }
+  function deleteduplicateMenu() {
+    for(var i=0;i<menuTree.length;i++){
+      var flag=0;
+      for(var j=0;j<menuTree.length;j++) {
+        if(menuTree[i].pid!=0&&menuTree[i].pid!=1){
+          if(menuTree[i].pid==menuTree[j].id  ) {
+            flag=1;
+            break;
+          }
+        }
+      }
+      if(flag==0){
+
+        menuTree.splice(j,1);
+        console.info(menuTree);
+
+      }
+    }
+  }
+
+  function deleteMenuTree(elem){
+    var children=elem.children;
+    var id=elem.id;
+    var pid=elem.pid;
+    for(var k =0;k<menuTree.length;k++){
+      if(id===menuTree[k].id){
+        menuTree.splice(k,1);
+        break;
+      }
+    }
+
+    for(var i =0;i<children.length;i++){
+      if(children[i].children.length>0){
+        deleteMenuTree(children[i]);
+      }
+      for(var j =0;j<menuTree.length;j++){
+        if(children[i].id===menuTree[j].id){
+          menuTree.splice(j,1);
+          break;
+        }
+      }
+    }
+  }
+  function menutree(elem){
+    var children=elem.children;
+    var jsonData={};
+    var id=elem.id;
+    var title = elem.title;
+    var pid=elem.pid;
+    jsonData.id=id;
+    jsonData.title=title;
+    jsonData.pid=pid;
+    menuTree.push(jsonData);
+    if(pid!=1&&pid!=0){
+      jsonData={};
+      jsonData.id=pid;
+      jsonData.pid=1;
+      if(!contains(pid)){
+        menuTree.push(jsonData);
+      }
+    }
+    if(!contains(1)){
+      jsonData={};
+      jsonData.id=1;
+      jsonData.pid=0;
+      menuTree.push(jsonData);
+    }
+    for(var i =0;i<children.length;i++){
+      if(children[i].children.length>0){
+        menutree(children[i]);
+      }
+      jsonData={};
+      id=children[i].id;
+      title = children[i].title;
+      pid=children[i].pid;
+      jsonData.id=id;
+      jsonData.title=title;
+      jsonData.pid=pid;
+      if(!contains(id)){
+        menuTree.push(jsonData);
+      }
+    }
+  }
+  function loadtree(){
+    var api="/permission/web/menu/load";
+    var res = postJsonNoParam(api);
+    if(res.code==0){
+      tree.render({
+        elem: '#LAY-tree-menu'
+        ,data: res.data
+        ,showCheckbox:true
+        ,edit: false //操作节点的图标
+        ,click: function(obj){
+          // console.info(JSON.stringify(obj.data));
+        }
+        ,oncheck: function(obj){
+          console.log(obj.data); //得到当前点击的节点数据
+          var checked=obj.checked;
+          var elem = obj.data;
+          if(checked==true){
+            menutree(elem);
+          }else{
+            deleteMenuTree(elem);
+            deleteduplicateMenu();
+            deleteduplicateMenu2(elem);
+            if(menuTree.length==1){
+              if(menuTree[0].id==1&&menuTree[0].pid==0){
+                menuTree=[];
+              }
+            }
+          }
+          console.info(menuTree)
+          $("#permission").val(JSON.stringify(menuTree));
+        }
+      });
+    }
+
+  }
+
+
+
+
+  // loadrole();
+  function loadrole(){
+    var api="/api/useradmin/role/queryAll";
+    var result = postJsonNoParam(api);
+    if(result.code==0) {
+      var resultData = result.data;
+      var html1 = '<dd lay-value="-1" class="layui-select-tips layui-this">全部角色</dd>';
+      var html2 = '<option value="-1" >全部角色</option>';
+      for (var x in resultData) {
+        html1 += '<dd  {{ d.params.rolename === "'+resultData[x].rolename +'" ? "selected":"" }}  lay-value="' + resultData[x].id + '">' +  resultData[x].rolename  + '</dd>';
+        html2 += '<option   {{ d.params.rolename === "'+resultData[x].rolename +'" ? "selected":"" }}  id= "' + resultData[x].id + '" value="' + resultData[x].id + '">' +  resultData[x].rolename + '</option>';
+      }
+      $("#selectData").next().children().eq(1).html(html1);
+      $("#selectData").html(html2);
+      form.render('select');//没有写这个，操作后没有效果
+    }
+  }
+
+
+});
+</script>

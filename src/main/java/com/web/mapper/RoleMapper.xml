@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.web.mapper.RoleMapper">
+
+
+    <update id="updateRole" parameterType="hashmap">
+        update jwjxinfo2.role
+        <set>
+            <if test="rolename != null">
+                rolename = #{rolename},
+            </if>
+            <if test="descr != null">
+                descr = #{descr},
+            </if>
+        </set>
+        where id = #{roleid}
+    </update>
+
+
+
+
+    <insert id="insertRole"   parameterType="hashmap" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into jwjxinfo2.role(rolename,descr)
+        values (
+         #{rolename}
+        ,#{descr})
+    </insert>
+
+
+
+</mapper>
+

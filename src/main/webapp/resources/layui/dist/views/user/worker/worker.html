@@ -1,0 +1,287 @@
+<title>通讯录</title>
+  
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/template.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>页面</cite></a>
+    <a><cite>通讯录</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid layadmin-maillist-fluid">
+
+    <div class="layui-card">
+        <p><b>说明</b>现微信公众号客服使用【经纬捷讯小程序】客服，所有人员微信号是必须填写的。</p>
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">关键字</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="keyword" placeholder="模糊查询" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+            </div>
+
+
+            <table class="layui-hide" id="LAY_table_user" lay-filter="test"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container"></div>
+            </script>
+            <script type="text/html" id="buttonTpl">
+                {{#  if(d.status===0){ }}
+                <button class="layui-btn layui-btn-danger layui-btn-xs">未注册</button>
+                {{# } else if(d.status===1){ }}
+                <button class="layui-btn layui-btn-warm layui-btn-xs">已邀请</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-normal layui-btn-xs">已绑定</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                {{#  if(d.status===0){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="binding">添加客服</a>
+                {{# } else if(d.status===1){ }}
+                <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="invited_binding">邀请绑定</a>
+                {{#  } else { }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="cancel_binding">取消绑定</a>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+
+</div>
+
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+layui.use(['admin','table' ,'form', 'upload','jquery'], function(){
+    var $ = layui.$
+      ,form = layui.form
+        ,$=layui.jquery
+        ,upload = layui.upload
+        ,view = layui.view
+      ,admin = layui.admin;
+    var table = layui.table;
+    table.render({
+        elem: '#LAY_table_user'
+        ,url:'/api/user/worker/worker/queryAll'
+        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            ,layEvent: 'LAYTABLE_TIPS'
+            ,icon: 'layui-icon-tips'
+        }]
+        ,title: '用户数据表'
+        ,limit: 20
+        ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'id', title:'ID', width:70, fixed: 'left', unresize: true, sort: true}
+            ,{field:'username', title:'用户名', width:120, sort: true}
+            ,{field:'nickname', title:'昵称', width:120}
+            ,{field:'wxID', title:'微信号', width:120}
+            ,{field:'openid', title:'微信openid', width:120}
+            ,{field:'kf_account', title:'微信客服', width:120}
+            ,{field:'jobPosition', title:'职位', width:150}
+            ,{field:'adminName', title:'网站管理', width:150}
+            ,{field:'password', title:'密码', width:150}
+            ,{field:'email', title:'邮箱', width:150}
+            ,{field:'phone', title:'电话', width:150}
+            ,{field:'gender', title:'性别', width:80}
+            ,{field:'loginTime', title:'登陆时间', width:150}
+            ,{field:'loginPosition', title:'登陆位置', width:150}
+            ,{field:'loginMark', title:'登陆设备', width:150}
+            ,{field:'loginIp', title:'登陆ip', width:150}
+            // ,{field:'dutyNumber', title:'客服号', width:150, sort: true}
+            // ,{field:'authority', title:'权限', width:150}
+            ,{fixed: 'right',field: 'status', title: '绑定状态', templet: '#buttonTpl', minWidth: 100, align: 'center'}
+            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200, align: 'center'}
+        ]]
+        ,page: true //开启分页
+        ,text: '对不起，加载出现异常！'
+    });
+
+
+
+    //头工具栏事件
+    table.on('toolbar(test)', function(obj){
+        var checkStatus = table.checkStatus(obj.config.id);
+        switch(obj.event){
+            case 'getCheckData':
+                var data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+                break;
+            case 'getCheckLength':
+                var data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+                break;
+            case 'isAll':
+                layer.msg(checkStatus.isAll ? '全选': '未全选');
+                break;
+
+            //自定义头工具栏右侧图标 - 提示
+            case 'LAYTABLE_TIPS':
+                layer.alert('添加的客服需要关注经纬捷讯公众号，需要获取微信的openid；如果添加失败，请提醒该用户关注公众号;如果用户关注后还添加失败，请在标签管理--公众号人数--校验人数');
+                break;
+        };
+    });
+    //监听行工具事件
+    table.on('tool(test)', function(obj){
+        var data = obj.data;
+        console.info(data)
+        if(obj.event === 'del'){
+            layer.confirm('真的删除么', function(index){
+                console.info(obj);
+                var api = "/api/user/worker/newUser/delete";
+                postParam(api,data.id)
+                table.reload('LAY_table_user'); //重载表格
+                layer.close(index);
+            });
+        } else if(obj.event === 'edit'){
+            admin.popup({
+                title: '编辑用户'
+                ,area: ['500px', '450px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('user/worker/addform', data).done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/api/user/worker/newUser/edit";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                            layer.close(index); //执行关闭
+                        });
+                    });
+                }
+            });
+        } else if(obj.event === 'binding'){
+            var jsonData = {};
+            if(data.dutyNumber==""||data.dutyNumber==null){
+                data.dutyNumber=genID();
+            }
+            jsonData["dutyNumber"]=data.dutyNumber;
+            jsonData["username"]=data.username;
+            jsonData["wxID"]=data.wxID;
+            jsonData["id"]=data.id;
+            layer.confirm('确定添加此用户为微信客服？', function(index) {
+                var api = "/api/user/duty/bindingWX";
+                postJson(api, JSON.stringify(jsonData))
+                table.reload('LAY_table_user'); //重载表格
+            });
+        } else if(obj.event === 'invited_binding'){
+            layer.prompt({
+                formType: 2,
+                title: '请输入微信号',
+                area: ['250px', '50px'] //自定义文本域宽高
+            }, function(value, index, elem){
+                var jsonData = {};
+                jsonData["dutyNumber"]=data.dutyNumber;
+                jsonData["username"]=data.username;
+                jsonData["id"]=data.id;
+                jsonData["invite_wx"]=value;
+                layer.confirm('确定邀请此用户', function(index) {
+                    var api = "/api/user/duty/invited_bindingWX";
+                    postJson(api, JSON.stringify(jsonData))
+                    table.reload('LAY_table_user'); //重载表格
+                });
+                layer.close(index);
+            });
+        } else if(obj.event === 'cancel_binding'){
+            var jsonData = {};
+            jsonData["dutyNumber"]=data.dutyNumber;
+            jsonData["id"]=data.id;
+            layer.confirm('确定取消此用户为微信客服？', function(index) {
+                var api = "/api/user/duty/cancel_bindingWX";
+                postJson(api, JSON.stringify(jsonData))
+                table.reload('LAY_table_user'); //重载表格
+            });
+        }
+    });
+
+
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+        var field = data.field;
+        //执行重载
+        table.reload('LAY_table_user', {
+            where: field
+        });
+    });
+
+
+
+    //事件
+    var active = {
+        batchdel: function(){
+            var checkStatus = table.checkStatus('LAY-user-manage')
+                ,checkData = checkStatus.data; //得到选中的数据
+            var ids=new Array(),jsonData={};
+            if(checkData.length === 0){
+                return layer.msg('请选择数据');
+            }else {
+                for(var i = 0 ;i<checkData.length;i++){
+                    ids.push(checkData[i].id);
+                }
+                jsonData["ids"] = ids;
+            }
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/api/user/worker/newUser/deletes"
+                    postJson(api,JSON.stringify(jsonData))
+                    table.reload('LAY_table_user');
+                });
+            });
+        }
+        ,add: function(){
+            admin.popup({
+                title: '添加用户'
+                ,area: ['500px', '450px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('user/worker/addform').done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/api/user/worker/newUser/upload";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                        });
+                    });
+                }
+            });
+        }
+    };
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+});
+
+  $(function(){
+
+  })
+
+</script>

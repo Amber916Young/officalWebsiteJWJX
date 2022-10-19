@@ -1,0 +1,284 @@
+
+
+<title>常见问题列表</title>
+
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/template.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<style>
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+      <a lay-href="">主页</a>
+      <!--    <a><cite></cite></a>-->
+      <a><cite>常见问题</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid layadmin-maillist-fluid">
+
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">关键词查询</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="keyword" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+            </div>
+            <table class="layui-hide" id="LAY_table_user" lay-filter="test"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container"></div>
+            </script>
+
+            <script type="text/html" id="buttonTpl1">
+                {{#  if(d.status===0){ }}
+                <button class="layui-btn   layui-btn-xs">未发布</button>
+                {{#  } else { }}
+                <button class="layui-btn  layui-bg-red  layui-btn-xs">已发布</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+
+</div>
+
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+    var AllcheckTags=["GPS","test","css","test2"];
+    var checkTagsArr=[];
+
+
+    layui.use(['admin','table' ,'form', 'upload','jquery'], function(){
+    var $ = layui.$
+      ,form = layui.form
+        ,$=layui.jquery
+        ,upload = layui.upload
+        ,view = layui.view
+      ,admin = layui.admin;
+    var table = layui.table;
+    table.render({
+        elem: '#LAY_table_user'
+        ,url:'/web/question/queryAll'
+        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            ,layEvent: 'LAYTABLE_TIPS'
+            ,icon: 'layui-icon-tips'
+        }]
+        ,title: '常见问题列表'
+        ,limit: 30
+        ,limits:[20,30,40,50,60,70,80,90,100,150,200]
+        ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'id', title:'id', width:70, fixed: 'left', unresize: true, sort: true}
+            ,{field:'title', title:'标题', width:300, sort: true,align: 'center'}
+            ,{field:'content', title:'内容', width:400,align: 'center'}
+            , {
+                field: 'createTime', title: '创建时间', width: 200, align: 'center',
+                templet: function (d) {
+                    var CreateTime = layui.util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");
+                    return "<label id='" + d.LAY_INDEX + "'  >" + CreateTime + "</label>";
+                }
+            }
+            , {
+                field: 'categroy', title: '分类', width: 200, align: 'center',
+                templet: function (d) {
+                    var str = "";
+                    var categroy = d.categroy;
+                    if (categroy == null || categroy == "" || categroy == undefined || categroy == "undefined") {
+                        return str;
+                    } else {
+                        var categroys = d.categroy.split(",");
+                        var checkTags=[];
+
+                        for (var i = 0; i < categroys.length; i++) {
+                            checkTags.push(categroys[i]);
+                            str=str+"<button  class='layui-btn layui-bg-blue  layui-btn-xs' >" + categroys[i] + "</button>";
+                        }
+                        for(var n=0;n<AllcheckTags.length;n++){
+                            var flag=0;
+                            for(var m=0;m<checkTags.length;m++){
+                                if(checkTags[m]==AllcheckTags[n]){
+                                    flag=1;
+                                    var tmp={};
+                                    tmp.id=d.LAY_INDEX;
+                                    tmp.type=1;
+                                    tmp.name=checkTags[m];
+                                    checkTagsArr.push(tmp)
+                                    break;
+                                }
+                            }
+                            if(flag==0){
+                                var tmp={};
+                                tmp.id=d.LAY_INDEX;
+                                tmp.type=0;
+                                tmp.name=AllcheckTags[n];
+                                checkTagsArr.push(tmp)
+                            }
+                        }
+
+                        return str;
+                    }
+
+                }
+            }
+            // ,{field:'categroy', title:'分类', width:200, align: 'center'}
+            ,{field:'status', title:'状态', width:150, align: 'center',templet: '#buttonTpl1'}
+            ,{title:'操作',width:200,align: 'center', toolbar: '#barDemo',fixed: 'right'}
+        ]]
+        ,page: true //开启分页
+        ,text: '对不起，加载出现异常！'
+    });
+
+
+
+    //监听行工具事件
+    table.on('tool(test)', function(obj){
+        var data = obj.data;
+        console.info(data)
+        if(obj.event === 'del'){
+            var jsonData={};
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/web/question/delete";
+                    jsonData["id"]=data.id;
+                    postJson(api, JSON.stringify(jsonData))
+                    table.reload('LAY_table_user'); //重载表格
+                    layer.close(index);
+                });
+            });
+        } else if(obj.event === 'edit'){
+            admin.popup({
+                title: '编辑问题信息'
+                ,area: ['500px', '700px']
+                ,id: 'LAY-popup-user-add'
+                ,type: 1
+                ,success: function(layero, index){
+                    console.info(checkTagsArr);
+                    var checkArr=[];
+                    var tagsArr=[];
+                    for(var i=0;i<checkTagsArr.length;i++){
+                        if(checkTagsArr[i].id==data.id){
+                            checkArr.push(checkTagsArr[i]);
+                            if(checkTagsArr[i].type==1){
+                                tagsArr.push(checkTagsArr[i].name);
+                            }
+                        }
+
+                    }
+                    data.checkTagsArr=checkArr;
+                    data.tagsArr=tagsArr;
+                    view(this.id).render('web/problem/addform', data).done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/web/question/edit";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                            layer.close(index); //执行关闭
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+        var field = data.field;
+        //执行重载
+        table.reload('LAY_table_user', {
+            where: field
+        });
+    });
+
+
+
+    //事件
+    var active = {
+        batchdel: function(){
+            var checkStatus = table.checkStatus('LAY_table_user')
+                ,checkData = checkStatus.data; //得到选中的数据
+            var ids=new Array(),jsonData={};
+            if(checkData.length === 0){
+                return layer.msg('请选择数据');
+            }else {
+                for(var i = 0 ;i<checkData.length;i++){
+                    ids.push(checkData[i].id);
+                }
+                jsonData["ids"] = ids;
+            }
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/web/question/deletes"
+                    postJson(api,JSON.stringify(jsonData))
+                    table.reload('LAY_table_user');
+                });
+            });
+        }
+        ,add: function(){
+            admin.popup({
+                title: '新增问题'
+                ,area: ['500px', '700px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('web/problem/addform').done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/web/question/upload";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                        });
+                    });
+                }
+            });
+        }
+    };
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+
+    function addTags(){
+        var str="";
+        for (var i = 0; i < checkTags.length; i++) {
+          str +='<input type="checkbox" name="categroy" title="'+checkTags[i]+'" lay-skin="primary" checked>';
+        }
+        $("#Tags").html(str);
+    }
+});
+
+</script>

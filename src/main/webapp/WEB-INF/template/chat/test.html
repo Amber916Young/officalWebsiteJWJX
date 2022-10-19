@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<div th:replace="fragments/headerPage :: headerPage"></div>-->
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>经纬捷迅在线咨询</title>
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <style>
+        /*body .layim-title{display: none;}*/
+        /*body .layim-chat-main, body .layim-content, body .layui-layim{top: 0}*/
+         body .layim-title .layim-chat-back{
+            display: none;
+        }
+        body .layim-title{
+            font-size: 13px;
+        }
+        body .layim-chat-send #voiceInput{
+
+        }
+
+    </style>
+</head>
+<div th:replace="fragments/ChatFooter :: ChatFooter"></div>
+
+
+
+
+<input hidden="hidden" th:value="${name}" id="name"/>
+<input hidden="hidden" th:value="${openid}" id="openid"/>
+<input hidden="hidden" th:value="${mid}" id="mid"/>
+<input hidden="hidden" th:value="${company}" id="company"/>
+<input hidden="hidden" th:value="${userType}" id="userType"/>
+<input hidden="hidden" th:value="${avatar}" id="avatar"/>
+
+<body>
+<script>
+    var autoReplay=[
+        '请关注公众号及时获取回复，马上帮您转接今日值班人员，请稍等...'
+    ]
+    layui.config({
+        base: '/resources/layui/css/modules/layim/lib/'
+        ,layimAssetsPath: '/resources/layui/css/modules/layim/' //layim 资源文件所在目录
+        ,version: true
+    }).extend({
+        'layer-mobile': 'layer-mobile'
+        ,'zepto': 'zepto'
+        ,'upload-mobile': 'upload-mobile'
+        ,'layim-mobile': 'layim-mobile'
+    }).use('layim-mobile', function(){
+        var layim = layui['layim-mobile'] //WebIM
+            ,layer = layui['layer-mobile']; //弹层
+
+        initWx();
+
+
+
+    });
+</script>
+</body>
+</html>

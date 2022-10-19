@@ -1,0 +1,232 @@
+
+
+<title>值班系统</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>用户</cite></a>
+    <a><cite>值班表</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-card-header">安排值班后会自动推送消息给值班人员</div>
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">ID</label>
+          <div class="layui-input-block">
+            <input type="text" name="dutyNumber" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">用户名</label>
+          <div class="layui-input-block">
+            <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">邮箱</label>
+          <div class="layui-input-block">
+            <input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">性别</label>
+          <div class="layui-input-block">
+            <select name="gender">
+              <option value="car">car</option>
+              <option value="soldier">soldier</option>
+              <option value="rescue team">rescue</option>
+              <option value="tank">tank</option>
+              <option value="truck">truck</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">日期</label>
+          <div class="layui-input-block">
+            <input type="text" class="layui-input" id="dateCheck">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layui-card-body">
+      <div style="padding-bottom: 10px;">
+        <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+        <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加值班人员</button>
+      </div>
+      
+      <table id="LAY-user-manage-duty" lay-filter="LAY-user-manage-duty"></table>
+      <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+        </div>
+      </script>
+
+      <script type="text/html" id="table-useradmin-webuser">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+      </script>
+    </div>
+  </div>
+</div>
+
+
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/ajaxHandle.js"></script>
+
+<script>
+layui.use('useradmin', layui.factory('useradmin')).use(['admin', 'useradmin', 'table','laydate'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,view = layui.view
+  ,table = layui.table
+  ,form = layui.form;
+  var laydate = layui.laydate;
+  laydate.render({
+    elem: '#dateCheck' //指定元素
+    ,range: true
+    ,format: 'yyyy年MM月dd日' //可任意组合
+  });
+  form.render(null, 'layadmin-userfront-formlist');
+
+  //监听搜索
+  form.on('submit(LAY-user-front-search)', function(data){
+    var field = data.field;
+    
+    //执行重载
+    table.reload('LAY-user-manage-duty', {
+      where: field
+    });
+  });
+  //事件
+  var active = {
+    batchdel: function(){
+      var checkStatus = table.checkStatus('LAY-user-manage-duty')
+      ,checkData = checkStatus.data; //得到选中的数据
+      var ids=new Array(),jsonData={};
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }else {
+        for(var i = 0 ;i<checkData.length;i++){
+          ids.push(checkData[i].id);
+        }
+        jsonData["ids"] = ids;
+      }
+      
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        layer.confirm('确定删除吗？', function(index) {
+          layer.close(index);
+          jsonData["code"]=value;
+            var api = "/api/user/duty/deletes"
+            postJson(api,JSON.stringify(jsonData))
+            table.reload('LAY-user-manage-duty');
+        });
+      });
+    }
+    ,add: function(){
+
+
+
+      admin.popup({
+        title: '添加值班用户'
+        ,area: ['700px', '500px']
+        ,id: 'LAY-popup-user-add'
+        ,success: function(layero, index){
+          view(this.id).render('user/duty/userform').done(function(){
+            form.render(null, 'layuiadmin-form-useradmin');
+            //监听提交
+            form.on('submit(LAY-user-front-submit)', function(data){
+              console.log(data);
+              var field = data.field; //获取提交的字段
+              postJson("/api/user/duty/addDutyUser",JSON.stringify(field))
+              table.reload('LAY-user-manage-duty'); //重载表格
+              layer.close(index); //执行关闭
+            });
+          });
+        }
+      });
+    }
+
+  };
+  //监听工具条
+  table.on('tool(LAY-user-manage-duty)', function(obj){
+    var data = obj.data;
+    if(obj.event === 'del'){
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        layer.confirm('真的删除行么', function(index){
+          var jsonData = {};
+          jsonData["id"] =data.id;
+          jsonData["code"] = value;
+          postJson("/api/user/duty/delete",JSON.stringify(jsonData));
+          table.reload('LAY-user-manage-duty');
+          layer.close(index);
+        });
+      });
+    } else if(obj.event === 'edit'){
+      admin.popup({
+        title: '编辑值班信息'
+        ,area: ['700px', '500px']
+        ,id: 'LAY-popup-user-add'
+        ,success: function(layero, index){
+          view(this.id).render('user/duty/userform', data).done(function(){
+            form.render(null, 'layuiadmin-form-useradmin');
+            //监听提交
+            form.on('submit(LAY-user-front-submit)', function(data){
+              var field = data.field; //获取提交的字段
+              layer.confirm('真的删除行么', function(index){
+                $.ajax({
+                  type: "POST",
+                  processData: false,
+                  contentType: "application/json",
+                  url: '/api/user/duty/edit',
+                  data: JSON.stringify(field),
+                  dataType: "json",
+                  cache: false,
+                  success: function (result) {
+                    if (result.errcode == 0) {
+                      layer.msg("修改成功", {time: 3000, icon: 6});
+                      obj.del();
+                    } else {
+                      layer.msg(result.errmsg, {time: 3000, icon: 5});
+                    }
+                  },
+                  error: function () {
+                    layer.msg("ajax请求失败", {time: 3000, icon: 5});
+                  }
+                });
+                layer.close(index);
+              });
+
+              layui.table.reload('LAY-user-manage'); //重载表格
+              layer.close(index); //执行关闭
+            });
+          });
+        }
+      });
+    }
+  });
+
+
+  $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>

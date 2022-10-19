@@ -1,0 +1,122 @@
+
+
+<title>权限菜单</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>网站维护</cite></a>
+    <a><cite>权限菜单</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">  
+  <div class="layui-card">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="app-content-workorder">
+      <div class="layui-form-item">
+        <p><h3><b>注意：</b>如果父菜单被删除，相应的子菜单也会被删除</h3></p>
+        <button class="layui-btn " data-type="all" data-events="add" >分配权限</button>
+
+      </div>
+    </div>
+    <div class="layui-card-body">
+      <div id="LAY-tree-menu" class="demo-tree demo-tree-box" ></div>
+
+    </div>
+  </div>
+</div>
+
+
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+  layui.use(['admin', 'table', 'util','form','layer','tree'], function() {
+    var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , form = layui.form
+            ,view = layui.view
+            , layer = layui.layer
+            , tree = layui.tree;
+
+
+    //模拟数据1
+  var data1 = [{
+      title: '江西'
+      ,id: 1
+      ,children: [{
+        title: '南昌'
+        ,id: 1000
+        ,children: [{
+          title: '青山湖区'
+          ,id: 10001
+        },{
+          title: '高新区'
+          ,id: 10002
+        }]
+      },{
+        title: '九江'
+        ,id: 1001
+      },{
+        title: '赣州'
+        ,id: 1002
+      }]
+    },{
+      title: '广西'
+      ,id: 2
+      ,children: [{
+        title: '南宁'
+        ,id: 2000
+      },{
+        title: '桂林'
+        ,id: 2001
+      }]
+    },{
+      title: '陕西'
+      ,id: 3
+      ,children: [{
+        title: '西安'
+        ,id: 3000
+      },{
+        title: '延安'
+        ,id: 3001
+      }]
+    }]
+
+    var api="/permission/web/menu/load";
+    var res = postJsonNoParam(api);
+    if(res.code==0){
+      tree.render({
+        elem: '#LAY-tree-menu'
+        ,data: res.data
+        ,edit: ['add', 'update', 'del'] //操作节点的图标
+        ,click: function(obj){
+          console.info(JSON.stringify(obj.data));
+        }
+        ,operate: function(obj) {
+          var type = obj.type; //得到操作类型：add、edit、del
+          var data = obj.data; //得到当前节点的数据
+          var elem = obj.elem; //得到当前节点元素
+          console.info(obj);
+
+          //Ajax 操作
+          var id = data.id; //得到节点索引
+          if (type === 'add') { //增加节点
+            //返回 key 值
+            return 123;
+          } else if (type === 'update') { //修改节点
+            api="/permission/web/menu/update";
+            postJson(api,JSON.stringify(data));
+            console.log(elem.find('.layui-tree-txt').html()); //得到修改后的内容
+          } else if (type === 'del') { //删除节点
+            api="/permission/web/menu/delete";
+            postParam(api,data.id);
+          }
+        }
+      });
+    }
+
+
+
+
+  });
+</script>

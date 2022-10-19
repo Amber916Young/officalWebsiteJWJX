@@ -1,0 +1,38 @@
+<style>
+  body .layui-form-label {
+    width: 112px;
+  }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">客服账号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="kf_account" value="{{ d.params.kf_account || '' }}" lay-verify="required" readonly="readonly" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">客服昵称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="nickname" value="{{ d.params.kf_nick || '' }}"  placeholder="客服昵称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+
+})
+</script>

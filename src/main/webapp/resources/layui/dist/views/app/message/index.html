@@ -1,0 +1,290 @@
+
+<title>消息中心</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>消息中心</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-app-message">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">网站消息</li>
+        <li>客服消息列表<span class="layui-badge" id="unread"></span></li>
+        <li>私信</li>
+      </ul>
+      <div class="layui-tab-content">
+      
+        <div class="layui-tab-item layui-show">
+          <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all"
+                    data-events="del">删除</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all"
+                    data-events="ready">标记已读</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="all"
+                    data-events="readyAll">全部已读</button>
+          </div>
+          <table id="LAY-app-message-all" lay-filter="LAY-app-message-all"></table>
+        </div>
+
+
+
+        <div class="layui-tab-item">
+        
+          <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="del">删除</button>
+<!--            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="ready">标记已读</button>-->
+<!--            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="notice" data-events="readyAll">全部已读</button>-->
+          </div>
+          
+          <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
+          <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container"></div>
+          </script>
+        </div>
+        <div class="layui-tab-item">
+        
+          <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="del">删除</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="ready">标记已读</button>
+            <button class="layui-btn layui-btn-primary layui-btn-sm" data-type="direct" data-events="readyAll">全部已读</button>
+          </div>
+          
+          <table id="LAY-app-message-direct" lay-filter="LAY-app-message-direct"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'table', 'util'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,table = layui.table
+  ,element = layui.element;
+
+  
+  var DISABLED = 'layui-btn-disabled'
+  
+  //区分各选项卡中的表格
+  ,tabs = {
+    all: {
+      text: '全部消息'
+      ,id: 'LAY-app-message-all'
+    }
+    ,notice: {
+      text: '客服聊天记录'
+      ,id: 'LAY-app-message-notice'
+    }
+    ,direct: {
+      text: '私信'
+      ,id: 'LAY-app-message-direct'
+    }
+  };
+  
+  //标题内容模板
+  var tplTitle = function(d){
+    return '<a lay-href="app/message/detail/id='+ d.id +'">'+ d.nickName;
+  };
+  
+  //全部消息
+  table.render({
+    elem: '#LAY-app-message-all'
+    ,url: '/message/message/queryAll?type=question' //模拟接口
+    ,page: true
+    ,cols: [[
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', width: 50, title: 'ID', sort: true}
+      ,{field: 'nickName', title: '用户昵称', minWidth: 50, templet: tplTitle}
+      ,{field: 'msgContent', title: '消息内容', minWidth: 250}
+      ,{field: 'email', title: '邮箱', minWidth: 100}
+      ,{field: 'phone', title: '联系方式', minWidth: 100}
+      ,{field: 'createTime', title: '时间', width: 170, sort: true}
+    ]]
+    // ,skin: 'line' , templet: '<div>{{ layui.util.timeAgo(d.time) }}</div>'
+    ,limit: 10
+    ,limits: [10, 15, 20, 25, 30]
+    ,text: '对不起，加载出现异常！'
+  });
+  var unread=0;
+  //通知
+  table.render({
+    elem: '#LAY-app-message-notice'
+    ,url: '/message/kefu/chat/queryAll'
+    ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+    ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+      title: '提示'
+      ,layEvent: 'LAYTABLE_TIPS'
+      ,icon: 'layui-icon-tips'
+    }]
+    ,title: '聊天记录表'
+    ,page: true
+    ,cols: [[
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', title: 'id', width: 80}
+      ,{field: 'fromId', title: '发送用户id', minWidth: 80}
+      ,{field: 'fromContent', title: '内容', minWidth: 400}
+      ,{field: 'sendTime', title: '发送时间', minWidth: 200, sort: true, templet:function(data){
+          return layui.util.toDateString(data.timestamp, "yyyy-MM-dd HH:mm:ss");
+        }}
+      ,{field: 'toId', title: '接收方id', width: 170}
+      ,{field: 'toUsername', title: '接收用户', width: 170}
+      , {
+        field: 'status', title: '消息状态', width: 100, templet: function (data) {
+          if (data.status == 1) {
+            return "已读";
+          } else {
+            unread++;
+            return "未读";
+          }
+        }
+      }
+    ]]
+    ,limit: 20
+    ,limits: [20,30,50,100,200]
+    ,text: '对不起，加载出现异常！'
+    ,done: function(res, curr, count){
+      //如果是异步请求数据方式，res即为你接口返回的信息。
+      //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+      console.log(res);
+      //得到当前页码
+      console.log(curr);
+      //得到数据总量
+      console.log(count);
+      console.log(unread);
+      $("#unread").text(unread);
+
+    }
+  });
+  // //通知
+  // table.render({
+  //   elem: '#LAY-app-message-notice'
+  //   ,url: '/message/detail/queryAll'
+  //   ,page: true
+  //   ,cols: [[
+  //     {type: 'checkbox', fixed: 'left'}
+  //     ,{field: 'title', title: '回复标题', minWidth: 300, templet: tplTitle}
+  //     ,{field: 'msgContent', title: '回复内容', minWidth: 300}
+  //     ,{field: 'processor', title: '处理人', minWidth: 300}
+  //     ,{field: 'createTime', title: '处理时间', width: 170, sort: true, templet: '<div>{{ layui.util.timeAgo(d.createTime) }}</div>'}
+  //   ]]
+  //     ,limit: 10
+  //     ,limits: [10, 15, 20, 25, 30]
+  //     ,text: '对不起，加载出现异常！'
+  // });
+
+
+  //
+  // //私信
+  // table.render({
+  //   elem: '#LAY-app-message-direct'
+  //   ,url: '/api/message/queryAll' //模拟接口
+  //   ,page: true
+  //   ,cols: [[
+  //     {type: 'checkbox', fixed: 'left'}
+  //     ,{field: 'title', title: '标题内容', minWidth: 300, templet: tplTitle}
+  //     ,{field: 'time', title: '时间', width: 170, templet: '<div>{{ layui.util.timeAgo(d.time) }}</div>'}
+  //   ]]
+  //   ,skin: 'line'
+  // });
+  //
+  //事件处理
+  var events = {
+    del: function(othis, type){
+      var thisTabs = tabs[type]
+      ,checkStatus = table.checkStatus(thisTabs.id)
+      ,data = checkStatus.data; //获得选中的数据
+        console.info(checkStatus);
+      var jsonData={},ids="";
+      var api="",type=null;
+      layer.confirm('确定删除选中的数据吗？', function(){
+        if(thisTabs.id=="LAY-app-message-notice"){
+          if(data.length === 0){
+            return layer.msg('未选中行');
+          }else {
+            for(var i = 0 ;i<data.length;i++){
+              ids+=data[i].id+",";
+            }
+            jsonData.id = ids;
+          }
+          type="notice";
+          api='/message/kefu/deleteByid';
+        }else if(thisTabs.id=="LAY-app-message-all"){
+          if(data.length === 0){
+            return layer.msg('未选中行');
+          }else {
+            for(var i = 0 ;i<data.length;i++){
+              ids+=data[i].id+",";
+            }
+            jsonData.id = ids;
+            jsonData.type = "question";
+          }
+          type="message";
+          api='/message/message/deleteByid';
+        }
+        if(api!=""){
+          admin.req({
+            url: api //实际使用请改成服务端真实接口
+            , data: jsonData//这里把数据封装成json的了，在springmvc里面会自己解析。
+            , done: function (res) {
+              if(res.code==0){
+                layer.msg('删除成功', {
+                  icon: 1
+                });
+                if(type=="notice"){
+                  table.reload('LAY-app-message-notice');
+                }else if(type=="message"){
+                  table.reload('LAY-app-message-all');
+                }else{
+
+                }
+
+              }else{
+                layer.msg('删除失败', {
+                  icon: 5
+                });
+              }
+            }
+
+          });
+
+        }
+
+        table.reload(thisTabs.id); //刷新表格
+      });
+    }
+    ,ready: function(othis, type){
+      var thisTabs = tabs[type]
+      ,checkStatus = table.checkStatus(thisTabs.id)
+      ,data = checkStatus.data; //获得选中的数据
+      if(data.length === 0) return layer.msg('未选中行');
+      
+      //此处只是演示
+      layer.msg('标记已读成功', {
+        icon: 1
+      });
+      table.reload(thisTabs.id); //刷新表格
+    }
+    ,readyAll: function(othis, type){
+      var thisTabs = tabs[type];
+      
+      //do somethin
+      
+      layer.msg(thisTabs.text + '：全部已读', {
+        icon: 1
+      });
+    }
+  };
+  
+  $('.LAY-app-message-btns .layui-btn').on('click', function(){
+    var othis = $(this)
+    ,thisEvent = othis.data('events')
+    ,type = othis.data('type');
+    events[thisEvent] && events[thisEvent].call(this, othis, type);
+  });
+});
+</script>

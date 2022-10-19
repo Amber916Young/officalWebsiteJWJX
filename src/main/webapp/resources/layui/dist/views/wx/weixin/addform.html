@@ -1,0 +1,201 @@
+<style>
+  body .layui-form-label {
+    width: 112px;
+  }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">appID</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        {{#  if(d.params.appID===undefined||d.params.appID==''){ }}
+        <input type="text" name="appID" value="{{ d.params.appID || '' }}" lay-verify="required" placeholder="appID"
+               autocomplete="off" class="layui-input">
+        {{#  } else{ }}
+        <input type="text" name="appID" value="{{ d.params.appID }}" readonly="readonly" lay-verify="required" placeholder="appID" autocomplete="off" class="layui-input">
+        {{#  } }}
+
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="memo" value="{{ d.params.memo || '' }}" placeholder="名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">微信公众号原始id</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="originalID" value="{{ d.params.originalID || '' }}"  placeholder="originalID" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">token</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="token" value="{{ d.params.token || '' }}"  placeholder="token" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">loginName</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="loginName" value="{{ d.params.loginName || '' }}"  placeholder="loginName" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">loginPass</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="loginPass" value="{{ d.params.loginPass || '' }}"  placeholder="loginPass" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">access_token</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="access_token" value="{{ d.params.access_token || '' }}"  placeholder="access_token" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">appSecret</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="appSecret" value="{{ d.params.appSecret || '' }}"  placeholder="appSecret" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">jsapi_ticket</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="jsapi_ticket" value="{{ d.params.jsapi_ticket || '' }}"  placeholder="jsapi_ticket" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">nonceStr</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="nonceStr" value="{{ d.params.nonceStr || '' }}"  placeholder="nonceStr" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">url</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="url" value="{{ d.params.url || '' }}"  placeholder="url" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">signature</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="signature" value="{{ d.params.signature || '' }}"  placeholder="signature" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">userDBname</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="userDBname" value="{{ d.params.userDBname || '' }}"  placeholder="userDBname" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+<!--  <div class="layui-form-item">-->
+<!--    <label class="layui-form-label">timestamp</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--      <script type="text/html" template>-->
+<!--        <input type="text" name="timestamp" value="{{ d.params.timestamp || '' }}"  placeholder="timestamp" autocomplete="off" class="layui-input">-->
+<!--      </script>-->
+<!--    </div>-->
+<!--  </div>-->
+  <div class="layui-form-item">
+    <label class="layui-form-label">小程序是否发布</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <select name="isPublish">
+          <option value="0" {{ d.params.isPublish === '0' ? 'selected' : '' }} >0</option>
+          <option value="1" {{ d.params.isPublish === '1' ? 'selected' : '' }} >1</option>
+        </select>
+<!--        <input type="checkbox" lay-filter="switch" name="isPublish"  value="true" {{ d.params.isPublish ? '1' : '' }}  lay-skin="switch" lay-text="使用|未使用">-->
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">小程序对应公众号AppID</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="gzhAppID" value="{{ d.params.gzhAppID || '' }}"  placeholder="gzhAppID" autocomplete="off" class="layui-input">
+
+        <!--        <input type="text" name="gzhAppID" class="layui-input" id="gzhAppID" value="{{ layui.util.toDateString(d.params.indate, 'yyyy-MM-dd HH:mm:ss') || '' }}" >-->
+      </script>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">对应数据库名</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="sqlDbName" value="{{ d.params.sqlDbName || '' }}"  placeholder="sqlDbName" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否审核</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <select name="isAudit" lay-verify="validFlagSelect">
+          <option value="0" {{ d.params.isAudit === 0 ? 'selected' : '' }} >0</option>
+          <option value="1" {{ d.params.isAudit === 1 ? 'selected' : '' }} >1</option>
+        </select>
+      </script>
+    </div>
+  </div>
+
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form','laydate'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+  var laydate = layui.laydate;
+  laydate.render({
+    elem: '#dateCheck' //指定元素
+    ,type: 'datetime'
+    // ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+  });
+
+})
+</script>

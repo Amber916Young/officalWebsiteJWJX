@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.web.mapper.OrderMapper">
+
+
+
+
+    <insert id="insertWorkorder" keyProperty="id" useGeneratedKeys="true" parameterType="com.web.model.MessageWorkorder">
+    insert into messageworkorder
+    (nickName,processor,phone,email,msgContent,createTime,type,title,process,status,finishTime,priority,attachment)
+    values(#{nickName}
+            ,#{processor}
+            ,#{phone}
+            ,#{email}
+            ,#{msgContent}
+            ,#{createTime}
+            ,#{type}
+            ,#{title}
+            ,#{process}
+            ,#{status}
+            ,#{finishTime}
+            ,#{priority}
+            ,#{attachment}
+            )
+    </insert>
+
+
+
+
+    <!-- 通过条件分页查询，返回数据集 -->
+    <!--<include refid="Base_Column_List" />-->
+    <select id="selectPageList" parameterType="com.web.utils.Page" resultType="MessageWorkorder" >
+        select *
+        from messageworkorder
+        <where>
+            <choose>
+                <when test="data.type!=null">
+                    type=#{data.type}
+                </when>
+                <otherwise>
+                    <if test="data.type==null">
+                        type!='question'
+                    </if>
+                    <if test="data.title!=null">
+                        and title=#{data.title}
+                    </if>
+                    <if test="data.processor!=null">
+                        and  processor=#{data.processor}
+                    </if>
+                    <if test="data.id!=-1">
+                        and   id=#{data.id}
+                    </if>
+                </otherwise>
+
+            </choose>
+        </where>
+        order by id DESC
+        limit #{start},#{rows}
+    </select>
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="selectPageCount" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+        select count(1) from messageworkorder
+        <where>
+            <choose>
+                <when test="data.type!=null">
+                    type=#{data.type}
+                </when>
+                <otherwise>
+                    <if test="data.type==null">
+                        type!='question'
+                    </if>
+                    <if test="data.title!=null">
+                        and title=#{data.title}
+                    </if>
+                    <if test="data.processor!=null">
+                        and  processor=#{data.processor}
+                    </if>
+                    <if test="data.id!=-1">
+                        and   id=#{data.id}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+
+
+
+    <!-- 根据id和type来查找-->
+    <select id="queryMessageByid" parameterType="com.web.model.MessageWorkorder" resultType="MessageWorkorder">
+        select * from messageworkorder
+        <where>
+            type=#{type} and id=#{id}
+        </where>
+    </select>
+    
+    <delete id="deleteByid"  parameterType="com.web.model.MessageWorkorder">
+        delete  from messageworkorder
+        <where>
+            type=#{type} and id=#{id}
+        </where>
+    </delete>
+
+
+    <!--更新工单处理进程-->
+    <update id="updateOrder" parameterType="com.web.model.MessageWorkorder">
+        UPDATE messageworkorder
+        <trim prefix="set" suffixOverrides=",">
+            <if test="processor!=null">processor=#{processor},</if>
+            <if test="process!=null">process=#{process},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="finishTime!=null">endTime=#{finishTime},</if>
+        </trim>
+        WHERE id=#{id}
+    </update>
+
+    <!--更新工单的状态  频繁操作  所以单独一个接口-->
+    <update id="updateStatus" parameterType="com.web.model.MessageWorkorder">
+        update messageworkorder set status=#{status} , process=#{process} where id= #{id}
+    </update>
+
+    <!--使用工单编号，创建时间，关键字查询工单-->
+</mapper>
+

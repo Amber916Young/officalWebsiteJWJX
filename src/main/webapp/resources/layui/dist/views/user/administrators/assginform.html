@@ -1,0 +1,73 @@
+
+<!--<link href="/resources/plugin/ztree/zTreeStyle.css" rel="stylesheet">-->
+
+<div class="layui-form" lay-filter="layuiadmin-form-role" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">角色</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <input type="text" readonly="readonly" class="layui-input" value="{{ d.params.rolename || '' }}"   name="rolename"     lay-verify="required" />
+        <input id="roleid"  name="roleid" value="{{ d.params.id || '' }}"   hidden="hidden" />
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户列表</label>
+    <div class="layui-input-block">
+      <div id="userList"   ></div>
+      <input id="dutyList"  name="dutyList" hidden="hidden" />
+      <input id="dutyName"  name="dutyName" hidden="hidden" />
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-role-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+
+<script>
+
+layui.use(['admin', 'form','jquery','transfer'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,$ = layui.jquery;
+  var transfer = layui.transfer;
+  loadAssgin();
+  function loadAssgin(){
+    var api="/permission/web/user/load";
+    var res = postJsonNoParam(api);
+    if(res.code==0){
+      var data = res.data;
+      transfer.render({
+        elem: '#userList'  //绑定元素
+        ,data:data
+        ,onchange: function(data, index){
+          var getData = transfer.getData('transferId');
+          console.log("getData"+getData);
+          var itemData ="";
+          var itemData2 ="";
+          for(var i = 0 ;i<getData.length;i++){
+            itemData+=getData[i].value+',';
+            itemData2+=getData[i].title+',';
+          }
+          $("#dutyList").val(itemData);
+          $("#dutyName").val(itemData2);
+        }
+        ,width:200
+        ,height:250
+        ,showSearch:true
+        ,id: 'transferId' //定义索引
+      });
+    }
+
+  }
+
+
+
+
+
+});
+</script>

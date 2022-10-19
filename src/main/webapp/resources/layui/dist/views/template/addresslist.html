@@ -1,0 +1,174 @@
+
+
+<title>通讯录</title>
+  
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/template.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>页面</cite></a>
+    <a><cite>通讯录</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid layadmin-maillist-fluid">
+  <table class="layui-hide" id="LAY_table_user" lay-filter="test"></table>
+
+
+
+  <!--<div class="layui-row layui-col-space15">-->
+    <!--<div class="layui-col-md4 layui-col-sm6">-->
+      <!--<div class="layadmin-contact-box" > -->
+          <!--<div class="layui-col-md4 layui-col-sm6">-->
+            <!--<a href="javascript:;">-->
+              <!--<div class="layadmin-text-center">-->
+                <!--<script type="text/html" template>-->
+                  <!--<img src="{{ layui.setter.base }}style/res/template/character.jpg">-->
+                <!--</script>-->
+                <!--<div class="layadmin-maillist-img layadmin-font-blod">演员</div>-->
+              <!--</div>-->
+            <!--</a>-->
+          <!--</div>-->
+        <!---->
+        <!--<div class="layui-col-md12 layadmin-padding-left20 layui-col-sm12" id="itemData">-->
+          <!--<a href="javascript:;">-->
+            <!--<h3 class="layadmin-title">-->
+              <!--<strong>胡歌</strong>-->
+            <!--</h3>-->
+            <!--<p class="layadmin-textimg">-->
+              <!--<i class="layui-icon layui-icon-location"></i>-->
+              <!--上海-->
+            <!--</p>-->
+          <!--</a>-->
+          <!--<div class="layadmin-address">-->
+            <!--<a href="javascript:;">-->
+              <!--<strong>Hu Ge studio</strong>-->
+              <!--<br>-->
+              <!--E-mail:xxx@baidu.com-->
+              <!--<br>-->
+              <!--<addr title="phone">联系方式:</addr>-->
+              <!--(123) 456-7890-->
+            <!--</a>-->
+          <!--</div>-->
+        <!--</div>-->
+
+      <!--</div>-->
+      <!--<div class="layui-col-md12 layadmin-padding-left20 layui-col-sm12" id="page"></div>-->
+    <!--</div>-->
+
+  <!--</div>-->
+
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <!--<button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>-->
+            <!--<button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+            <!--<button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
+        </div>
+    </script>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</div>
+
+
+<script src="/resources/js/jquery.min.js"></script>
+<script>
+layui.use(['admin'], function(){
+  var $ = layui.$
+  ,admin = layui.admin;
+
+});
+
+
+layui.use('table', function(){
+    var table = layui.table;
+    table.render({
+        elem: '#LAY_table_user'
+        ,url:'/api/template/addresslist/queryAll'
+        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            ,layEvent: 'LAYTABLE_TIPS'
+            ,icon: 'layui-icon-tips'
+        }]
+        ,title: '用户数据表'
+        ,limit: 5
+        ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'id', title:'ID', width:70, fixed: 'left', unresize: true, sort: true}
+            ,{field:'username', title:'用户名', width:120, sort: true}
+            ,{field:'nickname', title:'昵称', width:120, edit: 'text'}
+            ,{field:'password', title:'密码', width:150, edit: 'text'}
+            ,{field:'email', title:'邮箱', width:150, edit: 'text'}
+            ,{field:'phone', title:'电话', width:150, edit: 'text'}
+            ,{field:'gender', title:'性别', width:80, edit: 'text'}
+            ,{field:'loginTime', title:'登陆时间', width:150}
+            ,{field:'loginPosition', title:'登陆位置', width:150}
+            ,{field:'loginMark', title:'登陆设备', width:150}
+            ,{field:'loginIp', title:'登陆ip', width:150}
+            ,{field:'dutyNumber', title:'值班次数', width:150, sort: true}
+            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+        ]]
+        ,page: true //开启分页
+        ,text: '对不起，加载出现异常！'
+    });
+
+    //头工具栏事件
+    table.on('toolbar(test)', function(obj){
+        var checkStatus = table.checkStatus(obj.config.id);
+        switch(obj.event){
+            case 'getCheckData':
+                var data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+                break;
+            case 'getCheckLength':
+                var data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+                break;
+            case 'isAll':
+                layer.msg(checkStatus.isAll ? '全选': '未全选');
+                break;
+
+            //自定义头工具栏右侧图标 - 提示
+            case 'LAYTABLE_TIPS':
+                layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                break;
+        };
+    });
+
+    //监听行工具事件
+    table.on('tool(test)', function(obj){
+        var data = obj.data;
+        //console.log(obj)
+        if(obj.event === 'del'){
+            layer.confirm('真的删除行么', function(index){
+                obj.del();
+                layer.close(index);
+            });
+        } else if(obj.event === 'edit'){
+            layer.prompt({
+                formType: 2
+                ,value: data.email
+            }, function(value, index){
+                obj.update({
+                    email: value
+                });
+                layer.close(index);
+            });
+        }
+    });
+});
+
+
+
+
+  $(function(){
+
+  })
+
+</script>

@@ -1,0 +1,70 @@
+<style>
+  body .layui-form-label {
+    width: 112px;
+  }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">公司名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="companyName" value="{{ d.params.companyName || '' }}" lay-verify="required" placeholder="公司名称(必填)" autocomplete="off" class="layui-input">
+        <input type="text" name="id" value="{{ d.params.id || '' }}" hidden="hidden">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">控制对象</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="controlledMember" value="{{ d.params.controlledMember || '' }}" placeholder="控制对象"   lay-verify="required" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">类型</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <select name="remoteType" lay-verify="typeSelect" >
+          <option value="向日葵" {{ d.params.remoteType === '向日葵' ? 'selected' : '' }} >向日葵</option>
+          <option value="ToDesk" {{ d.params.remoteType === 'ToDesk' ? 'selected' : '' }} >ToDesk</option>
+          <option value="桌面远程" {{ d.params.remoteType === '桌面远程' ? 'selected' : '' }} >桌面远程</option>
+          <option value="锁屏" {{ d.params.remoteType === '锁屏' ? 'selected' : '' }} >锁屏</option>
+        </select>
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">账户</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="account" value="{{ d.params.account || '' }}"  lay-verify="required"   placeholder="账户" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="password" value="{{ d.params.password || '' }}"  lay-verify="required"  placeholder="密码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form
+
+})
+</script>

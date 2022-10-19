@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.web.mapper.PermissionMapper">
+    <update id="updateWebMenu" parameterType="hashmap">
+        update jwjxinfo2.permission
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="icon != null">
+                icon = #{icon},
+            </if>
+            <if test="jump != null">
+                jump = #{jump},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWebMenu" parameterType="java.lang.Integer">
+        delete from jwjxinfo2.permission where id =#{id}
+    </delete>
+    <insert id="insertRolePermission" parameterType="hashmap">
+        insert into jwjxinfo2.permission_role( permissionid,roleid)
+        values (
+         #{id}
+        ,#{roleid})
+    </insert>
+    <delete id="deleteRolePermissions" parameterType="hashmap">
+        delete from jwjxinfo2.permission_role where roleid = #{roleid}
+    </delete>
+
+    <select id="queryPermissionsByUser"  resultType="PermissionMenu">
+        select * from permission where id in(
+          select permissionid from permission_role where roleid in(
+            select roleid from role_user where  username=#{username}
+          )
+        )
+    </select>
+
+    <select id="queryPermissionsByDefault"  resultType="PermissionMenu">
+        select * from permission where id in(
+          select permissionid from permission_role where roleid =2
+        )
+    </select>
+
+</mapper>
+

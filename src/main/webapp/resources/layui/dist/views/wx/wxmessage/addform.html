@@ -1,0 +1,104 @@
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">模板标题</label>
+    <div class="layui-input-block" >
+      <script type="text/html" template>
+        <input type="text" name="title" id="title" value="{{ d.params.title || '' }}"  readonly=readonly  class="layui-input" >
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">用户列表</label>
+    <div class="layui-input-block" >
+      <input id="dutyList"  name="dutyList" hidden="hidden" />
+      <div id="userList"   ></div>
+    </div>
+  </div>
+
+  <script type="text/html" template>
+    <input type="text" name="id" id="id" value="{{ d.params.id || '' }}"  hidden="hidden" >
+  </script>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+
+<script>
+
+
+layui.use(['admin', 'form', 'upload','transfer'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+  var transfer = layui.transfer;
+  waitId();
+  function waitId(){
+    console.info("test");
+    setTimeout(function(){
+      var tid = $("#id").val();
+      if(tid==""||tid==null||tid==undefined||tid=="undefined"){
+        waitId();
+      }else{
+        getUserList(tid);
+      }
+    }, 1000);
+  }
+
+
+
+
+
+  function getUserList(tid){
+    var api = "/api/user/kefu/queryUserList";
+    tid = parseInt(tid);
+    var res = postParam(api,tid);
+    if(res.errcode==0){
+      var data = res.data;
+      var rightvalue=[];
+      //渲染
+      transfer.render({
+        elem: '#userList'  //绑定元素
+        ,data:data
+        ,title: ['可选接收消息客服', '已选客服']  //自定义标题
+        ,onchange: function(data, index){
+          console.info(data,index);
+          var getData = transfer.getData('transferId');
+          var itemData ="";
+          var itemData2 ="";
+          for(var i = 0 ;i<getData.length;i++){
+            itemData+=getData[i].value+',';
+          }
+          $("#dutyList").val(itemData);
+
+        }
+        ,parseData: function(data){
+
+          if(data.checked=="checked"){
+            rightvalue.push(data.value);
+          }
+          return {
+            "value": data.value //数据值
+            ,"title": data.title //数据标题
+            ,"disabled": data.disabled  //是否禁用
+            ,"checked": data.checked //是否选中
+          }
+        }
+        ,value:rightvalue
+        ,width:200
+        ,height:250
+        ,showSearch:true
+        ,id: 'transferId' //定义索引
+      });
+      //获得右侧数据
+    }
+
+  }
+
+})
+</script>

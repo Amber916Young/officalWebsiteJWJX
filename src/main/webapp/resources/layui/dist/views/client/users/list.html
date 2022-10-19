@@ -1,0 +1,442 @@
+
+
+<title>客户管理</title>
+  
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/template.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<style>
+    .layui-border-green{
+
+    }
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">客户管理</a>
+    <a><cite>用户维护</cite></a>
+    <a><cite>applet</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid layadmin-maillist-fluid">
+
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+            <div class="layui-form-item">
+<!--                <div class="layui-inline">-->
+<!--                    <label class="layui-form-label">微信appID</label>-->
+<!--                    <div class="layui-input-block">-->
+<!--                        <select name="appID" lay-verify="wxAppIDSelect">-->
+<!--                            <option value="wx66861739dbbd59b1" >经纬捷讯公众号</option>-->
+<!--                            <option value="wxeffb62b611ce734d"  >卓越商砼公众号</option>-->
+<!--                            <option value="wx226095662f8b0c51" >港佳检测公众号</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
+                <div class="layui-inline">
+                    <label class="layui-form-label">昵称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="nickName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户类型</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userType" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">regNO</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="regNO" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">公司名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="companyName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+            </div>
+
+
+            <table class="layui-hide" id="LAY_table_user" lay-filter="test"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container"></div>
+            </script>
+            <script type="text/html" id="buttonTpl">
+                {{#  if(d.type==="0"){ }}
+                <button class="layui-btn  layui-bg-blue layui-btn-xs">未知</button>
+                {{# } else if(d.type==="1"){ }}
+                <button class="layui-btn  layui-bg-black layui-btn-xs">自有</button>
+                {{# } else if(d.type==="2"){ }}
+                <button class="layui-btn layui-bg-red layui-btn-xs">思徽</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="buttonTpl2">
+                <img src="{{ d.avatarUrl }}" height="46px" width="46px"/>
+            </script>
+            <script type="text/html" id="buttonTpl3">
+                {{#  if(d.isInterior===false){ }}
+                <button class="layui-btn layui-bg-red layui-btn-xs">已连接</button>
+                {{#  } else { }}
+                <button class="layui-btn  layui-bg-cyan layui-btn-xs">未连接</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="buttonTpl4">
+                {{#  if(d.isAdmin===true){ }}
+                <button class="layui-btn  layui-bg-red layui-btn-xs">管理员</button>
+                {{#  } else { }}
+                <label ></label>
+                {{#  } }}
+            </script>
+
+
+            <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+
+</div>
+
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+layui.use(['admin','table' ,'form', 'upload','jquery'], function(){
+    var $ = layui.$
+      ,form = layui.form
+        ,$=layui.jquery
+        ,upload = layui.upload
+        ,view = layui.view
+      ,admin = layui.admin;
+    var table = layui.table;
+    table.render({
+        elem: '#LAY_table_user'
+        ,url:'/client/applet/queryAll'
+        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            ,layEvent: 'LAYTABLE_TIPS'
+            ,icon: 'layui-icon-tips'
+        }]
+        ,title: '用户数据表'
+        ,limit: 20
+        ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'appID', title:'小程序appID', unresize: true, sort: true, width:150,templet:function (d) {
+                    var str = "";
+                    var appID = d.appID;
+                    if (appID == null || appID == "" || appID == undefined || appID == "undefined") {
+                        return str;
+                    }else{
+                        return "<label id='" + d.LAY_INDEX + "'  onclick=\"showTitle('" + d.appID + "," + d.appName + "');\" >" + d.appName + "</label>";
+                    }
+                    return "<label id='" + d.LAY_INDEX + "'  onclick=\"showTitle('" + d.appID + "," + d.appName + "');\" >" + d.appName + "</label>";
+                }}
+
+            ,{field:'nickName', title:'昵称', width:120, sort: true,align: 'center'}
+            ,{field:'userName', title:'用户名', width:100}
+            ,{field:'userType', title:'用户类型', width:100}
+            ,{field:'phone', title:'手机号', width:100}
+            ,{field:'regNO', title:'regNO', width:150}
+            ,{field:'openid', title:'openid', width:120,align: 'center'}
+            ,{field:'adcode', title:'adcode', width:120,align: 'center'}
+            ,{field:'administrative', title:'所在省市', width:150,align: 'center'}
+            ,{field:'latitude', title:'纬度', width:100,align: 'center'}
+            ,{field:'altitude', title:'经度', width:100}
+            ,{field:'plateCode', title:'车牌号', width:150}
+            ,{field:'capacity', title:'装载容量', width:150}
+            ,{field:'dbName', title:'dbName', width:150, sort: true}
+            ,{field:'type', title:'类型', width:100, templet: '#buttonTpl', align: 'center'}
+            ,{field:'companyName', title:'公司名称', width:150}
+            ,{field:'isAdmin', title:'管理员', width:100, templet: '#buttonTpl4'}
+            ,{field:'authority', title:'authority', width:150,templet:function (d) {
+                    var str = "";
+                    var authority = d.authority;
+                    if (authority == null || authority == "" || authority == undefined || authority == "undefined") {
+                        return str;
+                    } else {
+                        str = "<div id='" + d.LAY_INDEX + "'   onclick=\"showauthority('"+authority+"');\">";
+                        str += "<p >" + authority + "</p>";
+                        str += "</div>";
+                        return str;
+                    }
+                }}
+            ,{field:'direction', title:'direction', width:150}
+            ,{field:'gpsTime', title:'gpsTime', width:150,
+                templet:function(d){
+                    var gpsTime =layui.util.toDateString(d.gpsTime, "yyyy-MM-dd HH:mm:ss");
+                    return "<label id='" + d.LAY_INDEX + "'  >" + gpsTime + "</label>";
+                }}
+            ,{field:'indate', title:'indate', width:150,
+                templet:function(d){
+                console.info(d)
+                    if(d.indate==null){
+                        return "";
+                    }else{
+                        var indate =layui.util.toDateString(d.indate, "yyyy-MM-dd HH:mm:ss");
+                        return "<label id='" + d.LAY_INDEX + "'  >" + indate + "</label>";
+                    }
+                }}
+
+            ,{field:'site', title:'site', width:150}
+            ,{field:'concreteTruckNO', title:'搅拌车车牌', width:150}
+            ,{field:'groupID', title:'groupID', width:150}
+            ,{field:'avatarUrl', title:'用户头像', width:150,templet: '#buttonTpl2', align: 'center'}
+            ,{field:'state', title:'是否连线GPS', width:100, templet: '#buttonTpl3', align: 'center'}
+            ,{field:'stateStr', title:'stateStr', width:100}
+            ,{field:'mixStationName', title:'mixStationName', width:150}
+            ,{field:'KH_BM', title:'客户编码:（搅拌站客户）', width:150}
+            ,{field:'GC_BM', title:'工地编码', width:150}
+            ,{field:'atRegNO', title:'atRegNO', width:150}
+            ,{field:'wxOpenid', title:'wxOpenid', width:150}
+            ,{field:'regNOList', title:'regNOList', width:150,templet:function (d) {
+                    var str = "";
+                    var regNOList = d.regNOList;
+                    if (regNOList == null || regNOList == "" || regNOList == undefined || regNOList == "undefined") {
+                        return str;
+                    } else {
+                        str = "<div id='" + d.LAY_INDEX + "'   onclick=\"showregNOList('"+regNOList+"');\">";
+                            str += "<p >" + regNOList+ "</p>";
+                        str += "</div>";
+                        return str;
+                    }
+                }}
+            ,{field:'tempAuthority', title:'暂存权限', width:150}
+            ,{field:'companyType', title:'企业类型', width:150}
+            ,{field:'mysqlDb', title:'mysqlDb', width:150}
+            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200, align: 'center'}
+        ]]
+        ,page: true //开启分页
+        ,text: '对不起，加载出现异常！'
+    });
+
+
+
+    //监听行工具事件
+    table.on('tool(test)', function(obj){
+        var data = obj.data;
+        console.info(data)
+        if(obj.event === 'del'){
+            var jsonData={};
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/client/applet/delete";
+                    jsonData["id"]=data.openid;
+                    postJson(api, JSON.stringify(jsonData))
+                    table.reload('LAY_table_user'); //重载表格
+                    layer.close(index);
+                });
+            });
+        } else if(obj.event === 'edit'){
+            admin.popup({
+                title: '编辑客户信息'
+                ,area: ['500px', '700px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('client/company/addform', data).done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/client/applet/edit";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                            layer.close(index); //执行关闭
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+        var field = data.field;
+        //执行重载
+        table.reload('LAY_table_user', {
+            where: field
+        });
+    });
+
+
+
+    //事件
+    var active = {
+        batchdel: function(){
+            var checkStatus = table.checkStatus('LAY_table_user')
+                ,checkData = checkStatus.data; //得到选中的数据
+            var ids=new Array(),jsonData={};
+            if(checkData.length === 0){
+                return layer.msg('请选择数据');
+            }else {
+                for(var i = 0 ;i<checkData.length;i++){
+                    ids.push(checkData[i].openid);
+                }
+                jsonData["ids"] = ids;
+            }
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/client/applet/deletes"
+                    postJson(api,JSON.stringify(jsonData))
+                    table.reload('LAY_table_user');
+                });
+            });
+        }
+        ,add: function(){
+            admin.popup({
+                title: '新增客户'
+                ,area: ['500px', '700px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('client/company/addform').done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/client/applet/upload";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                        });
+                    });
+                }
+            });
+        }
+    };
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+});
+
+var tipsVal;
+function showauthority(obj) {
+    //搅拌站管理：0:系统维护;1:一般查询;2:合同查询;3:配合比查询;4:订单确认;
+    // 5:合同审批;6:工地管理;7:调度管理;8:合同提交;9:过磅管理;10:业务主管;
+    // 11:生产情况查询;12:实验室管理;13:原材料管理;14:辅材管理
+    var authoritys =obj.split(",");
+    var str="<div>";
+    for (var i = 0; i < authoritys.length; i++) {
+        switch (parseInt(authoritys[i])) {
+            case 0:
+                str += "<p >【" + authoritys[i] + "】系统维护</p>";
+                break;
+            case 1:
+                str += "<p >【" + authoritys[i] + "】一般查询</p>";
+                break;
+            case 2:
+                str += "<p >【" + authoritys[i] + "】合同查询</p>";
+                break;
+            case 3:
+                str += "<p >【" + authoritys[i] + "】配合比查询</p>";
+                break;
+            case 4:
+                str += "<p >【" + authoritys[i] + "】订单确认</p>";
+                break;
+            case 5:
+                str += "<p >【" + authoritys[i] + "】合同审批</p>";
+                break;
+            case 6:
+                str += "<p >【" + authoritys[i] + "】工地管理</p>";
+                break;
+            case 7:
+                str += "<p >【" + authoritys[i] + "】调度管理</p>";
+                break;
+            case 8:
+                str += "<p >【" + authoritys[i] + "】合同提交</p>";
+                break;
+            case 9:
+                str += "<p >【" + authoritys[i] + "】过磅管理</p>";
+                break;
+            case 10:
+                str += "<p >【" + authoritys[i] + "】业务主管</p>";
+                break;
+            case 11:
+                str += "<p >【" + authoritys[i] + "】生产情况查询</p>";
+                break;
+            case 12:
+                str += "<p >【" + authoritys[i] + "】实验室管理</p>";
+                break;
+            case 13:
+                str += "<p >【" + authoritys[i] + "】原材料管理</p>";
+                break;
+            case 14:
+                str += "<p >【" + authoritys[i] + "】辅材管理</p>";
+                break;
+        }
+    }
+    str+="</div>"
+    layer.open({
+        title: '当前用户拥有权限'
+        ,content: str
+    });
+
+}
+function showregNOList(obj) {
+    var JsonData = {};
+    JsonData["regNOList"]=obj;
+    var api = "/client/applet/egt_company/queryegt_company";
+    var res = postJson(api, JSON.stringify(JsonData))
+    if(res.errcode==0){
+        var dataList = res.data;
+        var str="";
+        $.each(dataList, function (i, item) {
+            str +="<p>"+item+"</p>"
+        })
+        layer.open({
+            title: '当前用户可查看的搅拌站'
+            ,content: str
+        });
+    }
+
+}
+function showTitle(obj) {
+    var strList = obj.split(",")
+    var appID = strList[0];
+    var appName = strList[1];
+    tipsVal= layer.open({
+        title: appID+'（小程序appID）'
+        ,content: appName
+    });
+
+}
+
+</script>

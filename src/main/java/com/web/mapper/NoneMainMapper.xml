@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.web.mapper.NoneMainMapper">
+
+
+
+    <select id="selectPageCountWxchat" parameterType="com.web.utils.Page" resultType="int">
+        select count(1) from jwjxinfo2.wxchat
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and   concat(
+                IFNULL(openid,'')
+                ,IFNULL(content,'')
+                ,IFNULL(worker,'')
+                ,IFNULL(msgType,'')
+                ,IFNULL(event,'')
+                ,IFNULL(sessionFrom,''))
+                like concat('%', #{keyWord}, '%')
+            </if>
+            and msgType =#{data.msgType}
+            <if test="data.event !=null">
+                and event =#{data.event}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageListWxchat" parameterType="com.web.utils.Page" resultType="java.util.HashMap">
+        select * from jwjxinfo2.wxchat
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and   concat(
+                IFNULL(openid,'')
+                ,IFNULL(content,'')
+                ,IFNULL(worker,'')
+                ,IFNULL(msgType,'')
+                ,IFNULL(event,'')
+                ,IFNULL(sessionFrom,''))
+                like concat('%', #{keyWord}, '%')
+            </if>
+            <if test="data.event !=null">
+                and event =#{data.event}
+            </if>
+            and msgType =#{data.msgType}
+        </where>
+        order by id DESC
+        limit #{start},#{rows}
+    </select>
+
+
+
+    <update id="updatetemplatemsg"  parameterType="hashmap">
+        update  jwjxinfo2.templatemsg
+        <trim prefix="set" suffixOverrides=",">
+            <if test="templateID!=null">templateID= #{templateID},</if>
+            <if test="memo!=null">memo=#{memo},</if>
+            <if test="remark!=null">remark=#{remark},</if>
+        </trim>
+        where id=#{id}
+    </update>
+    <select id="queryTemplate" parameterType="hashmap" resultType="hashmap">
+        select * from jwjxinfo2.templatemsg
+        <where>
+            1=1
+            <if test="title !=null">
+                and title=#{title}
+            </if>
+            <if test="id !=null">
+                and id=#{id}
+            </if>
+            <if test="templateID !=null">
+                and templateIDtemplateID}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insertWxkf" parameterType="map">
+        insert into wxkf (openid)
+        values (
+        #{FromUserName}
+       )
+    </insert>
+
+    <update id="updateJwjxWeixin"  parameterType="hashmap">
+        update  jwjx.weixin
+        <trim prefix="set" suffixOverrides=",">
+            <if test="access_token!=null">access_token= #{access_token},</if>
+            <if test="jsapi_ticket!=null">jsapi_ticket=#{jsapi_ticket},</if>
+            <if test="timestamp!=null">timestamp=#{timestamp},</if>
+        </trim>
+        where appID=#{appID}
+    </update>
+
+    <!--根据条件查询egt.company-->
+    <select id="queryCompany" parameterType="hashmap" resultType="hashmap">
+        select * from egt.egt_company
+        <where>
+            1=1
+            <if test="regNO !=null">
+                and regNO=#{regNO}
+            </if>
+
+        </where>
+    </select>
+
+    <insert id="insertWxfeedBack" parameterType="hashmap">
+        insert into wxfeedback (openid,KfAccount,CreateTime,event,type)
+        values (
+        #{FromUserName},
+        #{KfAccount},
+        #{CreateTime},
+        #{Event},
+        #{CloseType})
+    </insert>
+    <select id="selectWxfeedBack" parameterType="hashmap" resultType="hashmap">
+        select * from wxfeedback
+        <where>
+            1=1
+            <if test="openid !=null">
+                and openid=#{openid}
+            </if>
+            <if test="KfAccount !=null">
+                and KfAccount=#{KfAccount}
+            </if>
+            <if test="type !=null">
+                and type=#{type}
+            </if>
+        </where>
+        order by id desc limit 1
+    </select>
+
+
+    <update id="updateWxfeedBack" parameterType="hashmap">
+        update  wxfeedback
+        <trim prefix="set" suffixOverrides=",">
+            <if test="openid!=null">openid= #{openid},</if>
+            <if test="Content!=null">Content=#{Content},</if>
+            <if test="finishTime!=null">finishTime=#{finishTime},</if>
+        </trim>
+        where id=#{id}
+
+    </update>
+
+    <select id="selectPageCount_templateuser" parameterType="com.web.utils.Page" resultType="int">
+        select count(1) from jwjxinfo2.view_tmeplateuser
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and   concat(
+                IFNULL(nickname,'')
+                ,IFNULL(username,'')
+                ,IFNULL(openid,'')
+                ,IFNULL(templateID,'')
+                ,IFNULL(title,''))
+                like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageList_templateuser" parameterType="com.web.utils.Page" resultType="java.util.HashMap">
+        select * from jwjxinfo2.view_tmeplateuser
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and   concat(
+                IFNULL(nickname,'')
+                ,IFNULL(username,'')
+                ,IFNULL(openid,'')
+                ,IFNULL(templateID,'')
+                ,IFNULL(title,''))
+                like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+        limit #{start},#{rows}
+    </select>
+    <select id="selectPageCount_template" parameterType="com.web.utils.Page" resultType="int">
+        select count(1) from jwjxinfo2.templatemsg
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and   concat(
+                IFNULL(memo,'')
+                ,IFNULL(title,'')
+                like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageList_template" parameterType="com.web.utils.Page" resultType="java.util.HashMap">
+        select * from jwjxinfo2.templatemsg
+        <where>
+            1=1
+            <if test="keyWord !=null">
+                and   concat(
+                IFNULL(memo,'')
+                ,IFNULL(title,'')
+                like concat('%', #{keyWord}, '%')
+            </if>
+        </where>
+        limit #{start},#{rows}
+    </select>
+
+</mapper>
+

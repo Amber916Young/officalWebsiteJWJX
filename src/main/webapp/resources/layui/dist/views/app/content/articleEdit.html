@@ -1,0 +1,333 @@
+  <title>修改文章</title>
+  <div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+      <a lay-href="">主页</a>
+      <a lay-href="app/content/list"><cite>文章列表</cite></a>
+      <a><cite>修改文章</cite></a>
+    </div>
+  </div>
+  <div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="app-content-list">
+        <div class="layui-form-item">
+             <div class="layui-inline">
+            <label class="layui-form-label">作者</label>
+            <div class="layui-input-inline">
+              <input type="text" name="author" id="author" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">产品名称</label>
+            <div class="layui-input-inline">
+              <input type="text" name="title" id="shortTitle" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">文章类型</label>
+            <div class="layui-input-inline">
+              <select name="label" id="articleType">
+                <option value="-1">请选择</option>
+                <option value="product">产品介绍</option>
+                <option value="news">行业新闻</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">子文章</label>
+            <div class="layui-input-inline">
+              <select name="label" id="flag" lay-filter="flagSelect">
+                <option value="0">普通类</option>
+                <option value="1">子文章</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="layui-inline"  id="fatherDiv" style="display:none">
+            <label class="layui-form-label">父文章名称</label>
+            <div class="layui-input-inline">
+              <input type="text" name="fatherTitle" id="fatherTitle" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <br/>
+          <div class="layui-inline" style="width: 100%;">
+            <label class="layui-form-label">简介</label>
+            <div class="layui-input-inline" style="width: 80%;">
+              <textarea name="detail" id="detail" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+          </div>
+          <br/>
+          <div class="layui-inline">
+            <label class="layui-form-label">发布时间</label>
+            <div class="layui-input-inline">
+              <input type="text" class="layui-input" id="dateSelect">
+            </div>
+          </div>
+          <div class="layui-inline" style="display: flex">
+            <label class="layui-form-label" style="margin: auto 0;">封面上传</label>
+            <div class="layui-input-inline" style="margin: auto 0;">
+              <button type="button" class="layui-btn" id="uploadimg">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+              </button>
+            </div>
+            <div id="imgSection" style="width: 10em;border: black solid 1px;">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="layui-card-body" id="editor" style="z-index: 8">
+
+      </div>
+      <div class="layui-inline">
+        <button class="layui-btn layuiadmin-btn-list" data-type="add">新增</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="/resources/js/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+  <script>
+
+
+
+      layui.use('contlist', layui.factory('contlist')).use(['admin', 'contlist', 'table','laydate','layer',"upload"], function(){
+          var $ = layui.$
+            ,admin = layui.admin
+            ,view = layui.view
+            ,table = layui.table
+            ,layer =layui.layer
+            ,form = layui.form;
+          var laydate = layui.laydate;
+          var upload = layui.upload;
+
+
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#dateSelect' //指定元素
+              ,calendar: true
+          });
+
+        form.on('select(flagSelect)', function(data){
+          if(data.value==1){
+            $("#fatherDiv").css("display","block");
+          }else{
+            $("#fatherDiv").css("display","none");
+          }
+        });
+          const E = window.wangEditor;
+          const editor = new E('#editor');
+          // 默认情况下，显示所有菜单
+          editor.config.menus = [
+              'head',
+              'bold',
+              'fontSize',
+              'fontName',
+              'italic',
+              'underline',
+              'strikeThrough',
+              'indent',
+              'lineHeight',
+              'foreColor',
+              'backColor',
+              'link',
+              'list',
+              'justify',
+              'quote',
+              'emoticon',
+              'image',
+              // 'video',
+              'table',
+              'code',
+              'splitLine',
+              'undo',
+              'redo',
+          ];
+          editor.config.height = 400;
+          editor.config.uploadImgMaxSize = 3 * 1024 * 1024; // 将图片大小限制为 3M
+          editor.config.uploadFileName = 'upload';
+          editor.config.uploadImgServer ="/image/uploadImage.do/";
+          editor.config.uploadImgHooks = {
+              error: function(xhr, editor, resData) {
+                  console.log('error', xhr, resData);
+                  alert('error'+xhr+"====" +resData);
+              },
+              customInsert: function(insertImgFn, result) {
+                  // result 即服务端返回的接口
+                  console.log('customInsert', result)
+                  if(result.uploaded=="true"){
+                      insertImgFn(result.url)
+                  }else{
+                      layer.msg("图片插入失败", {time:3000, icon:5});
+                  }
+              }
+          };
+          editor.create();
+          var cover=null;
+
+          //上传图片
+          //执行实例
+          var uploadInst = upload.render({
+              elem: '#uploadimg' //绑定元素
+              ,url: '/image/cover/upload' //上传接口
+              ,done: function(result){
+                  if ( result.uploaded=="true" ) {
+                      cover = result.url;
+                      var str = '<img src="'+cover+'" style="width: 100%;" >';
+                      $("#imgSection").html(str)
+
+                  }  else {
+                      layer.msg("上传失败", {time:3000, icon:5});
+                  }
+              }
+              ,error: function(){
+                  layer.msg("ajax请求失败", {time:3000, icon:5});
+              }
+          });
+
+
+          var router = layui.router();
+          var id = router.search.id;
+          initial(id);
+          var active = {
+              add: function() {
+                var jsonData = {};
+                var con = editor.txt.html();
+                var loadingIndex = null;
+                var detail = $("#detail").val();
+                var shortTitle = $("#shortTitle").val();
+                var author = $("#author").val();
+                var date = $("#dateSelect").val();
+                var articleType = $("#articleType").val();
+                var fatherTitle = $("#fatherTitle").val();
+                var flag = $("#flag").val();
+                jsonData["content"] = con;
+                jsonData["detail"] = detail;
+                jsonData["shortTitle"] = shortTitle;
+                jsonData["author"] = author;
+                jsonData["date"] = date;
+                jsonData["cover_url"] = cover;
+                jsonData["id"] = id;
+                jsonData["articleType"] = articleType;
+                jsonData["fatherTitle"] = fatherTitle;
+                jsonData["flag"] = flag;
+                if (author == "") {
+                  layer.msg("作者不能为空，请输入", {time: 2000, icon: 5, shift: 6});
+                  return;
+                }
+                if (shortTitle == "") {
+                  layer.msg("产品名称不能为空，请输入", {time: 2000, icon: 5, shift: 6});
+                  return;
+                }
+                if (flag == 1) {
+                  if (fatherTitle == "") {
+                    layer.msg("父文章名称不能为空，请输入", {time: 2000, icon: 5, shift: 6});
+                    return;
+                  }
+                }
+                if (detail == "") {
+                  layer.msg("简介不能为空，请输入", {time: 2000, icon: 5, shift: 6});
+                  return;
+                }
+                if (articleType == -1) {
+                  layer.msg("文章类型未选择", {time: 2000, icon: 5, shift: 6});
+                  return;
+                }
+                if (date == "") {
+                  layer.msg("发布日期不能为空，请输入", {time: 2000, icon: 5, shift: 6});
+                  return;
+                }
+
+                if (con == "") {
+                  layer.msg("文本内容不能为空，请输入", {time: 2000, icon: 5, shift: 6});
+                  return;
+                }
+                layer.confirm("新增, 是否继续", {icon: 3, title: '提示'}, function (cindex) {
+                  // 删除选择的用户信息
+                  $.ajax({
+                    type: "POST",
+                    processData: false,
+                    contentType: "application/json",
+                    url: "/api/app/content/articleUpdate",
+                    data: JSON.stringify(jsonData),
+                    dataType: "json",
+                    cache: false,
+                    beforeSend: function () {
+                      loadingIndex = layer.msg('处理中', {icon: 16});
+                    },
+                    success: function (result) {
+                      layer.close(loadingIndex);
+                      if (result.code == 0) {
+                        window.location.href = "admin#/app/content/list";
+                      } else {
+                        layer.msg("更新失败", {time: 3000, icon: 5});
+                      }
+                    },
+                    error: function () {
+                      layer.msg("ajax请求失败", {time: 3000, icon: 5});
+                    }
+                  });
+                  layer.close(cindex);
+                }, function (cindex) {
+                  layer.close(cindex);
+                });
+
+              }
+
+          };
+
+
+
+          $('.layui-btn.layuiadmin-btn-list').on('click', function(){
+              var type = $(this).data('type');
+              active[type] ? active[type].call(this) : '';
+          });
+
+
+          function initial(id) {
+            $.ajax({
+              type: "POST",
+              url: "/api/app/content/articleEdit/id/" + id,
+              cache: false,
+              success: function (result) {
+                if (result.code == 0) {
+                  console.info(result)
+                  var data = result.data;
+                  $("#author").val(data.author);
+                  $("#shortTitle").val(data.shortTitle);
+                  $("#detail").val(data.detail);
+                  $("#dateSelect").val(data.publishTime);
+                  $("#fatherTitle").val(data.fatherTitle);
+                  $("#flag").val(data.flag);
+                  var str = '<img src="' + data.cover_url + '" style="width: 100%;" >';
+                  $("#imgSection").html(str)
+                  cover = data.cover_url;
+                  editor.txt.html(data.content) // 重新设置编辑器内容
+                } else {
+                  layer.msg("上传失败", {time: 3000, icon: 5});
+                }
+              },
+              error: function () {
+                layer.msg("ajax请求失败", {time: 3000, icon: 5});
+              }
+            });
+          }
+      });
+
+
+
+
+
+  $(function(){
+
+
+
+
+  });
+
+
+
+  </script>

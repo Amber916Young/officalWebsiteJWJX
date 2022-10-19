@@ -1,0 +1,60 @@
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">模板标题</label>
+    <div class="layui-input-block" >
+      <script type="text/html" template>
+        <input type="text" name="title" id="title" value="{{ d.params.title || '' }}"  readonly=readonly class="layui-input" >
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">模板ID</label>
+    <div class="layui-input-block" >
+      <script type="text/html" template>
+        <input type="text" name="templateID" id="templateID" value="{{ d.params.templateID || '' }}" class="layui-input" >
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">模板格式</label>
+    <div class="layui-input-block" >
+      <script type="text/html" template>
+        <input type="text" name="memo" id="memo" value="{{ d.params.memo || '' }}" class="layui-input" >
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">模板备注</label>
+    <div class="layui-input-block" >
+      <script type="text/html" template>
+        <input type="text" name="remark" id="remark" value="{{ d.params.remark || '' }}" class="layui-input" >
+      </script>
+    </div>
+  </div>
+
+
+  <script type="text/html" template>
+    <input type="text" name="id" id="id" value="{{ d.params.id || '' }}"  hidden="hidden" >
+  </script>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+
+<script>
+
+
+layui.use(['admin', 'form', 'upload','transfer'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+
+})
+</script>

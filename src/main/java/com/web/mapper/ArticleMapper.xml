@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.web.mapper.ArticleMapper">
+
+
+
+
+    <!-- 通过条件分页查询，返回数据集 -->
+    <!--<include refid="Base_Column_List" />-->
+    <select id="selectPageList" parameterType="com.web.utils.Page" resultType="Article" >
+        select *
+        from article
+        <where>
+            1=1
+            <if test="data.category !=null">
+                and category=#{data.category}
+            </if>
+            <if test="data.id !=-1">
+                and id=#{data.id}
+            </if>
+            <if test="data.author !=null">
+                and author like concat('%', #{data.author}, '%')
+            </if>
+            <if test="data.title !=null">
+                and title like concat('%', #{data.title}, '%')
+            </if>
+        </where>
+        order by id DESC
+        limit #{start},#{rows}
+    </select>
+
+    <!-- 通过条件分页查询，返回总记录数 -->
+    <select id="selectPageCount" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+        select count(1) from article
+        <where>
+             1=1
+            <if test="data.category !=null">
+                and category=#{data.category}
+            </if>
+            <if test="data.id !=-1">
+                and id=#{data.id}
+            </if>
+            <if test="data.author !=null">
+                and author like concat('%', #{data.author}, '%')
+            </if>
+            <if test="data.title !=null">
+                and title like concat('%', #{data.title}, '%')
+            </if>
+        </where>
+    </select>
+
+
+
+
+        <!--查找文章  根据分类  可以输入数量-->
+    <select id="queryAllByType" parameterType="hashMap" resultType="Article" >
+        select *
+        from article
+        <where>
+            category=#{type} and status=1
+        </where>
+        order by publishTime DESC
+        limit #{rows},#{num}
+    </select>
+
+    <!--后台pageHelper查询-->
+    <select id="queryProduct"  resultType="Article" >
+        select * from article
+        <where>
+            1=1
+
+            <if test="category !=null">
+                and  category=#{category}
+            </if>
+            <if test="status !=null">
+                and   status=#{status}
+            </if>
+            <if test="flag !=null">
+                and    flag=#{flag}
+            </if>
+            <if test="fatherTitle !=null">
+                and    fatherTitle=#{fatherTitle}
+            </if>
+        </where>
+        order by orderNum asc
+    </select>
+
+    <select id="queryProductAllNum" resultType="int">
+        select count(*) from article
+        <where>
+        1=1
+            <if test="category !=null">
+                and  category=#{category}
+            </if>
+            <if test="status !=null">
+                and  status=#{status}
+            </if>
+            <if test="flag !=null">
+                and   flag=#{flag}
+            </if>
+            <if test="fatherTitle !=null">
+                and    fatherTitle=#{fatherTitle}
+            </if>
+        </where>
+   </select>
+
+
+
+
+</mapper>
+

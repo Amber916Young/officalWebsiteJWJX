@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<style>
+	.bgNavigation{
+		background-image: url('/resources/img/aboutus/timgb.jpg');
+
+	}
+	#intro{
+		height: auto;
+		padding: 20% 0 0 0;
+		background-attachment: fixed;
+	}
+	.home-section{
+		padding-top: 0;
+	}
+    #zoomOut{
+        height: 12em;
+        width: 80%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    #zoomOut:hover{
+
+    }
+
+</style>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+	<div th:replace="fragments/navigation :: navigation"></div>
+    <section  class=" bgNavigation"  ></section>
+	<div class="container">
+		<p>
+			<blockquote class="layui-elem-quote">
+				<span class="layui-breadcrumb">
+				  <a href="/#newslist">行业新闻</a>
+				  <a><cite th:text="${article?.shortTitle}"></cite></a>
+				</span>
+			</blockquote>
+		</p>
+
+	</div>
+    <section id="about2" class="home-section ">
+		<div class="container">
+			<div  class="col-xs-12 col-sm-12 col-md-12 text-center" >
+				<th:block th:if="${not #strings.isEmpty(article?.cover_url)}">
+                    <img id="zoomOut" th:src="@{${article?.cover_url}}" />
+                </th:block>
+			</div>
+			<div  class="col-xs-12 col-sm-12 col-md-12" th:utext="${article?.content}"></div>
+		</div>
+	</section>
+
+
+
+	<div>
+		<footer th:replace="fragments/footerPage :: footerPage"></footer>
+	</div>
+
+</body>
+
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+
+
+</script>
+
+</html>

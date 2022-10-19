@@ -1,0 +1,285 @@
+
+
+<title>微信客服</title>
+  
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/template.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<style>
+
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">微信客服</a>
+    <a><cite>客服管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid layadmin-maillist-fluid">
+
+
+    <div class="layui-card">
+
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">小程序客服列表</li>
+                <li>客服聊天记录</li>
+<!--                <li>客服接入记录</li>-->
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <h3>完整客服帐号，格式为：帐号前缀@小程序appid</h3>
+                    <p style="font-weight: 600;color: #FD482C">注意：这是固定格式</p>
+                    <p style="font-weight: 600;color: #FD482C">添加客服请到【员工维护】</p>
+                    <hr>
+                    <div style="padding-bottom: 10px;">
+                        <a  class="layui-btn layuiadmin-btn-useradmin" target="_blank"  href="https://mpkf.weixin.qq.com/cgi-bin/kfloginpage">进入客服</a>
+                    </div>
+                    <table class="layui-hide" id="LAY_table_user" lay-filter="test"></table>
+                    <script type="text/html" id="toolbarDemo">
+                        <div class="layui-btn-container"></div>
+                    </script>
+                    <script type="text/html" id="buttonTpl">
+                        <img src="{{ d.kf_headimgurl }}" style="display: inline-block"/>
+                    </script>
+                </div>
+
+                <div class="layui-tab-item">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">关键字查询</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="keyword" placeholder="模糊查询" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">类型</label>
+                                <div class="layui-input-block">
+                                    <select name="msgType">
+                                        <option >不限</option>
+                                        <option value="kf_create_session">客服接入记录</option>
+                                        <option value="kf_switch_session">客服转接记录</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>聊天记录获取的内容都是在客服未接入之前存储的，一旦会话创建，聊天内容不再经过服务器</h3>
+                    <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+                        <button class="layui-btn layuiadmin-btn-tags" data-type="notice" data-events="dels" >删除</button>
+                    </div>
+                    <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
+                    <script type="text/html" id="barDemo">
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+layui.use(['admin','table' ,'form', 'upload','jquery'], function(){
+    var $ = layui.$
+      ,form = layui.form
+        ,$=layui.jquery
+        ,upload = layui.upload
+        ,view = layui.view
+      ,admin = layui.admin;
+    var table = layui.table;
+    var DISABLED = 'layui-btn-disabled'
+    ,tabs = {
+        all: {
+            text: '客服列表'
+            ,id: 'LAY_table_user'
+        }
+        ,notice: {
+            text: '聊天消息'
+            ,id: 'LAY-app-message-notice'
+        }
+    };
+    //区分各选项卡中的表格
+
+
+    table.render({
+        elem: '#LAY_table_user'
+        ,url:'/kefu/wxkefu/queryAll'
+        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            ,layEvent: 'LAYTABLE_TIPS'
+            ,icon: 'layui-icon-tips'
+        }]
+        ,title: '微信客服表'
+        ,limit: 25
+        ,limits: [25,30,40,45,50,60,70,100,150,200]
+        ,cols: [[
+            {field:'kf_id', title:'ID', fixed: 'left', unresize: true, sort: true}
+            ,{field:'kf_account', title:'客服账号', minWidth:200, sort: true,align: 'center'}
+            ,{field:'kf_nick', title:'客服昵称', minWidth:150,align: 'center'}
+            ,{field:'kf_wx', title:'客服微信号', minWidth:150,align: 'center'}
+            ,{field:'kf_headimgurl', title:'客服头像', minWidth:150,align: 'center',templet: '#buttonTpl'}
+        ]]
+        ,page: true //开启分页
+        ,text: '对不起，加载出现异常！'
+    });
+
+    table.render({
+        elem: '#LAY-app-message-notice'
+        ,url:'/kefu/wxchat/queryAll'
+        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            ,layEvent: 'LAYTABLE_TIPS'
+            ,icon: 'layui-icon-tips'
+        }]
+        ,title: '微信聊天记录表'
+        ,page: true //开启分页
+        ,limit: 25
+        ,limits: [25,30,40,45,50,60,70,100,150,200]
+        ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'id', width:80,title:'ID', fixed: 'left', unresize: true, sort: true}
+            ,{field:'openid', title:'openid', minWidth:200, sort: true,align: 'center'}
+            ,{field:'content', title:'消息内容', minWidth:150,align: 'center'}
+            , {
+                field: 'currtime', title: '消息时间', minWidth: 150, align: 'center', sort: true,
+                templet: function (d) {
+                    var currtime = layui.util.toDateString(d.currtime, "yyyy-MM-dd HH:mm:ss");
+                    return "<label id='" + d.LAY_INDEX + "'  >" + currtime + "</label>";
+                }
+            }
+            ,{field:'msgType', title:'消息类型', minWidth:150,align: 'center', sort: true}
+            ,{field:'event', title:'消息事件', minWidth:150,align: 'center', sort: true}
+            ,{title:'操作', toolbar: '#barDemo', width:150, align: 'center', fixed: 'right'}
+        ]]
+        ,text: '对不起，加载出现异常！'
+    });
+
+
+    //监听行工具事件
+    table.on('tool(LAY-app-message-notice)', function(obj){
+        var data = obj.data;
+        console.info(data)
+        if(obj.event === 'del'){
+            var jsonData={};
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/kefu/wxkefu/delete";
+                    jsonData["id"]=data.companyID;
+                    postJson(api, JSON.stringify(jsonData))
+                    table.reload('LAY_table_user'); //重载表格
+                    layer.close(index);
+                });
+            });
+        } else if(obj.event === 'edit'){
+            admin.popup({
+                title: '编辑客户信息'
+                ,area: ['400px', '300px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('senior/im/addform', data).done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/kefu/wxkefu/edit";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                            layer.close(index); //执行关闭
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+        var field = data.field;
+        //执行重载
+        table.reload('LAY-app-message-notice', {
+            where: field
+        });
+    });
+
+
+
+
+    //事件
+    var active = {
+        batchdel: function(){
+            var checkStatus = table.checkStatus('LAY_table_user')
+                ,checkData = checkStatus.data; //得到选中的数据
+            var ids=new Array(),jsonData={};
+            if(checkData.length === 0){
+                return layer.msg('请选择数据');
+            }else {
+                for(var i = 0 ;i<checkData.length;i++){
+                    ids.push(checkData[i].companyID);
+                }
+                jsonData["ids"] = ids;
+            }
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/client/company/deletes"
+                    postJson(api,JSON.stringify(jsonData))
+                    table.reload('LAY_table_user');
+                });
+            });
+        }
+        ,add: function(){
+            admin.popup({
+                title: '新增客户'
+                ,area: ['500px', '700px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('client/company/addform').done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/client/newCompany/upload";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                        });
+                    });
+                }
+            });
+        }
+
+    };
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+
+
+
+});
+
+
+
+</script>

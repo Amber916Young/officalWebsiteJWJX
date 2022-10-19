@@ -1,0 +1,134 @@
+<script type="text/html" template >
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/login.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<style>
+  .boxContent{
+    display: flex;
+    border-radius: 5px;
+  }
+  .layui-header{
+    display: none;
+  }
+  .unActive{
+    background-color: #a9a9a9!important;
+    color: #fff!important;
+  }
+  .boxh1{
+    margin-right: 0.5em;
+    padding: 0.5em 0.3em;
+    background: #009688;
+    width: 4em;
+  }
+  .boxh2{
+    margin: auto;
+  }
+</style>
+<div class="layadmin-user-login layadmin-user-display-show"
+     id="LAY-user-login" style="display: none;padding-top: 0;"  xmlns:th="http://www.thymeleaf.org">
+
+  <div class="layadmin-user-login-main">
+    <div class="layadmin-user-login-box layadmin-user-login-header">
+      <h2>选择登陆</h2>
+      <p>您绑定了多个小程序，请选择其一登陆进行客服对话</p>
+    </div>
+    <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+      <div class="layui-form-item">
+        <div class="boxContent unActive" id="1" onclick="selectedT(this)">
+          <div class="boxh1">经纬捷讯小程序</div>
+          <div class="boxh2" >深圳市港嘉工程检测有限公司</div>
+        </div>
+      </div>
+
+      <div class="layui-form-item"  id="2" onclick="selectedT(this)">
+        <div class="boxContent layui-bg-cyan " >
+          <div class="boxh1">卓越商砼小程序</div>
+          <div class="boxh2" >陆川县恒峰混凝土有限公司</div>
+        </div>
+      </div>
+
+
+      <div class="layui-form-item"  id="3"  onclick="selectedT(this)">
+        <div class="boxContent unActive" >
+          <div class="boxh1" >经纬商砼小程序</div>
+          <div class="boxh2" >陕西西安容大天盛</div>
+        </div>
+      </div>
+
+<!--      <th:block  th:each="user,userStat : ${userinfors}">-->
+<!--        <div class="layui-form-item">-->
+<!--          <div class="boxContent layui-bg-cyan" >-->
+<!--            <div th:text="${user?.appname}"></div>-->
+<!--            <div th:text="${user?.userCompany}"></div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </th:block>-->
+      <div class="layui-form-item">
+        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-login-submit">确 认</button>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="layui-trans layadmin-user-login-footer">
+    <p>© 2021 <a href="https://www.jwjxinfo.com/" target="_blank">深圳经纬捷讯信息技术有限公司</a></p>
+  </div>
+<!--  <input type="text" th:value="${name}" id="name"/>-->
+<!--  <input type="text" th:value="${openid}" id="openid"/>-->
+<!--  <input type="text" th:value="${mid}" id="mid"/>-->
+  <input hidden="hidden" value="tothemoon" id="name"/>
+  <input hidden="hidden" value="oTeKzwI4_mJSKovEirIeY2dvzfvA" id="openid"/>
+<!--  <input hidden="hidden" value="85" id="mid"/>-->
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+<!--<script	src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>-->
+
+<script>
+  var userCompany=null;
+  var userType=null;
+  var appname=null;
+  layui.use(['admin', 'form', 'user'], function(){
+  var $ = layui.$
+  ,setter = layui.setter
+  ,admin = layui.admin
+  ,form = layui.form
+  ,router = layui.router()
+  ,search = router.search;
+
+  form.render();
+
+  //提交
+  form.on('submit(LAY-user-login-submit)', function(obj){
+    if(userCompany==null||userType==null||appname==null){
+      layer.msg("请选择登陆角色", {time: 2000, icon: 5, shift: 6});
+      return;
+    }
+    var param = obj.field;
+    param.name=$("#name").val();
+    param.openid=$("#openid").val();
+
+    window.location.href="/kefu/mobile/kehu/index/" +
+            "name/"+param.name
+            +"/openid/"+param.openid+"/userCompany/"+userCompany
+            +"/userType/"+userType+"/appname/"+appname;
+
+
+
+    // console.info(obj.field);
+    // var api = "/kefu/mobile/kehu/index";
+    // postJson(api,JSON.stringify(obj.field));
+  });
+
+  
+});
+
+
+function selectedT(e) {
+  var id = $(e).attr("id");
+  userCompany="陆川县恒峰混凝土有限公司";
+  userType="搅拌站管理";
+  appname="卓越商砼小程序";
+}
+
+
+</script>

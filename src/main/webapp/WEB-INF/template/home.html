@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<link rel="stylesheet" href="/resources/plugin/swiper/swiper-bundle.min.css"/>
+
+<!--<link rel="stylesheet" href="/resources/plugin/3D/style.css"/>-->
+<style>
+
+	.txtimgSec{
+		text-align: center;
+	}
+
+	h3
+	 {
+		margin: 10px;
+
+	}
+	.services-content{
+		text-align: center;
+	}
+	.skill-area .testmonial-slide2{
+		margin: 0 1em;
+		box-sizing: border-box;
+		border: 1px solid #ddd;
+		border-radius: 2px;
+		background: white;
+		padding: 0;
+	}
+	.skill-area .flex3{
+		display: inline-flex;
+		width: 100%;
+		justify-content: center;
+	}
+	.layui-carousel{
+		background-color: rgba(255, 255, 255, 0);
+	}
+	.service-icon img{
+		width: 4em;
+	}
+	.service-desc{
+		margin: auto 0;
+	}
+	.btn_url{
+		width: 6em;
+		height: 7em;
+		background-size: 100%;
+		background-color: transparent;
+		border-style: none;
+		background-repeat: no-repeat;
+		margin: 0.5em;
+	}
+	.btn_url:hover {
+		-webkit-transform: translateY(-8px);
+		transform: translateY(-20px);
+		-webkit-transition: -webkit-transform .5s;
+		transition: -webkit-transform .5s;
+		transition: transform .5s;
+		transition: transform .5s,-webkit-transform .5s;
+	}
+	.fontweight{
+		font-weight: 600;
+		font-size: 16px;
+		color: #0C0C0C;
+		margin-left: 2em;
+	}
+	.testmonial-slide2:hover .fontweight{
+		color: #0099ff;
+	}
+	/*新闻*/
+	li{
+		list-style: none; /*取消列表前面的小点 */
+	}
+
+
+	.layui-card-body li{
+		/*height: 38px;*/
+		/*line-height: 38px;*/
+		border-bottom: 1px dashed #cccccc ; /*下边框虚线*/
+		text-indent: 2em;/*首行缩进*/
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.layui-card-body a{
+		text-size: 14px;
+		/*display: flex;*/
+		color: #333333;
+		float: left;
+		text-decoration: none;
+	}
+
+	.layui-card-body li:hover{
+		box-shadow: 0 10px 10px rgba(0,0,0,.1);
+		transform: scale(1.005);
+		transition-duration: .5s;
+		transition: transform .5s;
+		transition-property: all;
+		transition-timing-function: ease;
+		transition-delay: 0s;
+	}
+	.layui-card-body a:hover{
+		/*background-color: darkgrey;*/
+
+		color: #0099ff;
+		text-decoration: underline; /*鼠标触发时添加下划线*/
+	}
+	.news_time{
+		text-align: end;
+		width: 100%;
+	}
+	.input-group{
+		margin: 1em  2em;
+	}
+	.input-group-addon{
+		width: 7em;
+	}
+	.right{
+		float: right;
+		position: relative;
+
+	}
+	.five{
+		position: absolute;
+		top: 185px;
+		left: 212px;
+		font-size: 16px;
+		color: white;
+		z-index: 3;
+		font-weight: 600;
+	}
+	.right .img{
+		background: url(https://fileserver.jwjxinfo.com/statics/webimg/bg12.png);
+		background-size: cover;
+		margin: auto;
+		position: relative;
+		z-index: 2;
+
+	}
+	.right .imga {
+		background: url(https://fileserver.jwjxinfo.com/statics/webimg/bg22.png);
+		background-size: cover;
+		position: absolute;
+		left: 0;
+		top: 0;
+
+		animation: mymove 7s infinite linear;
+		-webkit-animation: mymove 7s infinite linear;
+
+		-webkit-transform: rotate(360deg);
+		animation: rotation 3s linear infinite;
+		-moz-animation: rotation 3s linear infinite;
+		-webkit-animation: rotation 3s linear infinite;
+		-o-animation: rotation 3s linear infinite;
+	}
+	.right .piao {
+		position: absolute;
+		z-index: 4;
+		font-size: 14px;
+		color: #505363;
+	}
+
+	.right .dl1{
+		top: 55px;
+		left: 44px;
+	}
+
+	.right .dl2{
+		top: 66.6px;
+		right: 78px;
+	}
+
+	.right .dl3{
+		top: 207px;
+		right: 0;
+	}
+
+
+	.right .dl4{
+		right: 436px;
+		top: 365px;
+	}
+
+
+	@-webkit-keyframes rotation {
+		from {
+			-webkit-transform: rotate(0deg);
+		}
+		to {
+			-webkit-transform: rotate(360deg);
+		}
+	}
+	.right .active {
+		font-weight: 600;
+		color: #233c85;
+		font-size: 19px;
+	}
+	.left .xun{
+		display: none;
+	}
+	.left .xun h3{
+		margin-bottom: 2em;
+		color: #0C0C0C;
+	}
+	.left .xun p{
+		font-size: 18px;
+		color: #0C0C0C;
+	}
+	.left .xsqua{
+		width: 6px;
+		height: 6px;
+		display: inline-block;
+		margin-right: 8px;
+		background: #233c85
+	}
+	/*.intro {*/
+	/*	width:100%;*/
+	/*	position:relative;*/
+	/*	background-attachment:fixed;*/
+	/*	background-repeat: repeat;*/
+	/*	background-size: contain;*/
+	/*	background-image: url(/resources/img/index/cover2.jpg);*/
+	/*}*/
+
+
+
+	.swiper-container {
+		width: 100%;
+		height: 100%;
+	}
+
+	.swiper-slide {
+		text-align: center;
+		font-size: 18px;
+		background: #fff;
+
+		/* Center slide text vertically */
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		-webkit-justify-content: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+	}
+
+</style>
+
+<body>
+	<div id="page-top" data-spy="scroll" data-target=".navbar-custom">
+	<div th:replace="fragments/navigation :: navigation"></div>
+    <section id="intro" class="intro">
+		<div class="col-lg-6 col-md-12 col-xs-12 info wow fadeInRight " data-wow-delay="0.3s">
+			<div class="site-heading"  >
+				<div style="text-align: center">
+					<h2 class="section-title" style="color: #ffffff;border-left: 0;">工业互联网●经纬捷迅的解决方案</h2>
+					<p style="color: #ffffff;">工业互联网平台是指以云服务、人机互联、数据采集等模块为核心</p>
+					<p style="color: #ffffff;">为客户提供数据采集、传输、控制、显示和数据分析等服务的系统性平台</p>
+					<hr/>
+					<h2 class="section-title" id="carouselTitle" style="color: #4dd0e1;border-left: 0;text-shadow: 5px 5px 5px #3f51b5;">企业中台</h2>
+					<p id="carouselTxT" style="color: #4dd0e1; font-weight: 600;">承接前端销售和生产售后，为企业提供多种技术和数据支撑</p>
+				</div>
+			</div>
+		</div>
+		<div id="video" >
+			<div class="col-lg-6 col-md-12 col-xs-12   wow fadeInRight  "  data-wow-delay="0.3s">
+					<div style="position: relative;height: 100%;width:100%;">
+<!--									<img src="https://fileserver.jwjxinfo.com/statics/webimg/img2.png" style="-->
+<!--						 transform:translate(-50%,-42%);position: absolute;height: 53vw;-->
+<!--						 width: 59vw;"/>-->
+<!--									<img src="/resources/img/index/img1.png" style="-->
+<!--						 transform:translate(-50%,-50%);position: absolute;height: 33vw;width: 59vw;"/>-->
+<!--									<video  poster="/resources/img/index/videocover.png" style="position:absolute;-->
+<!--									transform:translate(-50%,-50%);height: 28.5vw;width: 45vw;" controls="">-->
+<!--										<source src="https://fileserver.jwjxinfo.com//statics/webVideo/1.mp4"  type="video/mp4"/>-->
+<!--									</video>-->
+
+						<style>
+							#test1 img{
+								 width: 100%;
+								height: auto;
+							}
+							#test1{
+								position:absolute;
+							}
+							.layui-carousel>*[carousel-item] {
+								overflow: unset;
+								height: 96%;
+							}
+						</style>
+
+						<div class="layui-carousel" id="test1" lay-filter="test1" style="" >
+							<div carousel-item="" id="layer-photos">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/c1.jpg"/>
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/c2.jpg"/>
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/c3.jpg"/>
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/c4.jpg"/>
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+    </section>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="myModalLabel">了解软件定制</h4>
+				</div>
+				<div class="modal-body">
+					<div class="input-group">
+						<div class="input-group-addon">昵称</div>
+						<input id="name" style="padding-right: 12px;width: 15em"  placeholder="您希望我们如何称呼您" class="form-control has-success" type="text"  required="required"  data-error="请输入您的姓名（我该如何称呼您）"/>
+						<label class="label label-danger">我们如何称呼您？</label>
+					</div>
+					<div class="input-group">
+						<div class="input-group-addon">联系方式</div>
+						<input id="phone" style="padding-right: 12px;width: 15em"  placeholder="电话" class="form-control has-success" type="text" required="required"  data-error="请输入手机号码" />
+						<label class="label label-danger">我们希望能尽快联系您</label>
+					</div>
+						<div class="input-group">
+						<div class="input-group-addon">邮箱</div>
+						<input id="email" style="padding-right: 12px;width: 15em"  placeholder="邮箱" class="form-control has-success" type="text" />
+						<label class="label label-warning">可不填写</label>
+					</div>
+					<div class="input-group">
+						<div class="input-group-addon">软件内容</div>
+						<textarea class="form-control" rows="3" id="message" name="message" required="required"  data-error="请输入您的需求或者想了解的内容"></textarea>
+						<label class="label label-success">您希望我们了解软件应该具有哪些功能？</label>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button"  onclick="SubmitCustom_make()" class="btn btn-primary">提交</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="feature">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-6 col-md-12 col-sm-12">
+					<div class="text-wrapper">
+						<div>
+							<h2 class="title-hl wow fadeInLeft" data-wow-delay="0.3s">让您的企业管理更高效</h2>
+							<p class="text-indent" style="text-indent: 2em;">
+								深圳经纬捷讯信息技术有限公司主要从事软件、物联网和通讯技术的开发、升级，为企业提供高效的企业信息化管理系统。
+							</p>
+							<p class="mb-4 text-indent" style="text-indent: 2em;">
+								公司软件开发团队具有丰富的企业信息化管理软件的开发经验，公司主要业务是以<b>互联网、移动互联网、云计算、大数据</b>为基础，为客户提供
+								<a href="#custom_make" style="color: #1E9FFF" title="定制软件，提交需求" data-toggle="modal" data-target="#myModal"><b>定制开发</b></a>的互联网+服务。
+
+							</p>
+							<p class="text-indent" style="text-indent: 2em;">
+								公司秉承“<b style="color: #ff3366">包容</b>、<b style="color: #ff8a04">开放</b>、<b style="color: #2f4db9">合作</b>、<b style="color: #5e00b0">共赢</b>”理念，针对不同客户的需求，
+								致力于定制云计算的软件系统，
+								将有价值的数据同步到广域网，使数据的访问不再受地理位置和时间的限制，为企业管理、经营决策提供全方位的信息技术支持。
+							</p>
+
+							<a href="/aboutus" class="btn btn-common">更多关于我们</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 col-md-12 col-sm-12 padding-none feature-bg">
+					<div class="feature-thumb">
+						<div class="feature-item wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="300ms">
+							<div class="icon">
+								<i class="layui-icon layui-icon-website"></i>
+							</div>
+							<div class="feature-content">
+								<h3>工业互联网平台</h3>
+								<p >
+									工业互联网平台是指以云服务、人机互联、数据采集等模块为核心，
+									为客户提供数据采集、传输、控制、显示和数据分析等服务的系统性平台。
+									经纬捷讯工业互联网实际应用场景有以下几个:
+										<p>①工业控制系统</p>
+										<p>②传感器与视频传输技术</p>
+										<p>③LBS基于位置服务系统</p>
+
+								</p>
+							</div>
+						</div>
+						<div class="feature-item wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="500ms">
+							<div class="icon">
+								<i class="layui-icon layui-icon-upload-drag"></i>
+							</div>
+							<div class="feature-content">
+								<h3>云计算『移动互联网、移动终端』</h3>
+								<p>云技术是解决大数据和海量计算的一种有效的手段，为企业商业智能的发展奠定了基础。利用云技术是企业提升信息管理水平的好方法。	</p>
+								<p><b>经纬捷讯边缘云技术</b>即打通了设备上云和数据场景的应用和对外提供服务的限制，又合理的防止了企业数据的外泄。</p>
+							</div>
+						</div>
+						<div class="feature-item wow fadeInDown" data-wow-duration="1000ms" data-wow-delay="700ms">
+							<div class="icon">
+								<i class="layui-icon layui-icon-star"></i>
+							</div>
+							<div class="feature-content">
+								<h3>核心业务与服务流程</h3>
+								<p><b>云数据转载</b><span>——『私人定制专属您的云梯』</span></p>
+								<p><b>手机PC设备三合一</b><span>——『助你全方位占领移动手机平台』</span></p>
+								<p><b>完善的售后</b><span>——『快速便捷高效』</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div style="background-image: url('https://fileserver.jwjxinfo.com/statics/webimg/bg3.jpg');background-repeat: no-repeat;    background-attachment:fixed;background-size: cover">
+		<div class="skill-area section-padding ">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-xs-12 info wow fadeInRight " data-wow-delay="0.3s">
+						<div class="site-heading" >
+							<div class="sec-headin-left">
+								<h2 class="section-title">工业互联网与实际应用</h2>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-12 col-xs-12  wow fadeInRight left">
+						<div class="xun" style="display: block">
+							<div style="width: 100%;text-align: center">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/ui1.png"  />
+							</div>
+							<h3> <span class="xsqua"></span>工业互联网的定义</h3>
+
+							<p >工业互联网平台是指以云服务、人机互联、数据采集等模块为核心，为客户提供数据采集、传输、控制、显示和数据分析等服务的系统性平台</p>
+						</div>
+						<div  class="xun">
+							<div style="width: 100%;text-align: center">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/ui2.png"  />
+							</div>
+							<h3> <span class="xsqua"></span>大型企业落地应用</h3>
+							<p >大到国际港口、机场、制造企业等，把人、环境、工艺、设备整体智能化，相互链接</p>
+						</div>
+						<div  class="xun ">
+							<div style="width: 100%;text-align: center">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/ui3.png"  />
+							</div>
+							<h3> <span class="xsqua"></span>公共区域管理应用</h3>
+							<p >公共区域管理、智慧公园、写字楼租户管理、企业门禁打卡等都是工业互联网的一部分</p>
+						</div>
+						<div class="xun ">
+							<div style="width: 100%;text-align: center">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/ui4.png"  />
+							</div>
+							<h3> <span class="xsqua"></span>生活应用场景</h3>
+							<p >米家智能家电是工业互联网的一个生活应用，把日常生活中电器设备、智能手机有效结合起来</p>
+						</div>
+
+					</div>
+					<div class="col-lg-6 col-md-12 col-xs-12  wow fadeInRight">
+						<div class="right">
+							<div class="five"><div>工业互联网</div><div>与实际应用</div></div>
+							<div class="img"></div>
+							<div class="imga"></div>
+							<div id="rtxt">
+								<div class="piao dl1 active">工业互联网的定义</div>
+								<div class="piao dl2">大型企业落地应用</div>
+								<div class="piao dl3">公共区域管理应用</div>
+								<div class="piao dl4">生活应用场景</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<style>
+
+			.img_div {
+				/*margin: 20px 400px 0 400px;*/
+				position: relative;
+				width: 26em;
+				height: auto;
+			}
+			.mask2 {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: #2196f394;
+				color: #ffffff;
+				opacity: 0;
+				transition: opacity .5s;
+				-moz-transition: opacity .5s; /* Firefox 4 */
+				-webkit-transition: opacity .5s; /* Safari 和 Chrome */
+				-o-transition: opacity .5s; /* Opera */
+				transition: all 1s
+			}
+			.mask2 p {
+				height: 100%;
+				display: flex;
+				align-content: center;
+				justify-content: center;
+				align-items: center;
+				margin: 0;
+				text-align: center;
+				padding: 0 2em;
+				font-weight: 600;
+			}
+			.img_div img{
+				transition: all 1s
+			}
+
+			.img_div a:hover .mask2 {
+				opacity: 1;
+				transform: scale(1.1);
+			}
+			.img_div:hover img{
+				transform: scale(1.1);
+			}
+		</style>
+
+
+		<div  class="skill-area section-padding " >
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-xs-12 info wow fadeInRight " data-wow-delay="0.3s">
+						<div class="site-heading" >
+							<div class="sec-headin-left">
+								<h2 class="section-title" >核心业务与服务流程</h2>
+							</div>
+						</div>
+					</div>
+					<div class="flex3">
+						<div class="col-lg-4 col-md-6 col-xs-12   wow fadeInRight  " data-wow-delay="0.3s">
+							<div class="img_div">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/h1.jpg" style="width: 100%"/>
+								<a>
+									<div class="mask2">
+										<p>通过云技术数据采集、数据传输、数据分析、数据导出</p>
+									</div>
+								</a>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6 col-xs-12  wow fadeInRight "   data-wow-delay="0.3s">
+
+							<div class="img_div">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/h2.jpg" style="width: 100%"/>
+								<a>
+									<div class="mask2">
+										<p>手机PC设备三合一，让您的工作不受时间和地域限制</p>
+									</div>
+								</a>
+							</div>
+
+
+						</div>
+						<div class="col-lg-4 col-md-6 col-xs-12   wow fadeInRight "   data-wow-delay="0.3s">
+							<div class="img_div">
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/h3.jpg" style="width: 100%"/>
+								<a>
+									<div class="mask2">
+										<p>定制开发、联合开发、成品系统，服务永不止步</p>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div  style="background-image: url('https://www.rootcloud.com/repository/image/dedff879-2b7e-453e-bdf6-89cf914e017c.png');background-repeat: no-repeat;background-size: contain  ; background-attachment:fixed;">
+		<div class="skill-area section-padding ">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-xs-12 info wow fadeInRight " data-wow-delay="0.3s">
+						<div class="site-heading" >
+							<div class="sec-headin-left">
+								<h2 class="section-title">我们的优势</h2>
+							</div>
+						</div>
+					</div>
+					<div class="flex3">
+						<div class="col-lg-4 col-md-6 col-xs-12   wow fadeInRight testmonial-slide2 " data-wow-delay="0.3s">
+							<div style="width: 100%;text-align: center;height: 14em;overflow: hidden;" >
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/ly1.jpg" style="width: 100%"/>
+							</div>
+							<div style="padding: 0.3em 1em 1em 1em" >
+								<h3 style="text-align: center">强大的技术研发团队</h3>
+								<p>
+									业内人士开发、对症下药、多年的软硬件融合经验、海量成功案例和企业客户
+								</p>
+							</div>
+
+						</div>
+						<div class="col-lg-4 col-md-6 col-xs-12  wow fadeInRight testmonial-slide2" data-wow-delay="0.3s">
+							<div style="width: 100%;text-align: center;height: 14em;overflow: hidden;" >
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/ly2.png" style="width: 100%"/>
+							</div>
+							<div style="padding: 0.3em 1em 1em 1em" >
+								<h3 style="text-align: center">云计算应用</h3>
+								<p>
+									云技术、设备互联、移动终端互联技术，帮助企业完善管理制度、提高效率，节省成本
+								</p>
+							</div>
+						</div>
+						<div class="col-lg-4 col-md-6 col-xs-12  wow fadeInRight testmonial-slide2" data-wow-delay="0.3s">
+							<div style="width: 100%;text-align: center;height: 14em;overflow: hidden;" >
+								<img src="https://fileserver.jwjxinfo.com/statics/webimg/index/ly3.jpg" style="width: 100%"/>
+							</div>
+							<div style="padding: 0.3em 1em 1em 1em" >
+								<h3 style="text-align: center">完善的客户服务</h3>
+								<p>
+									完善的售前、售中、售后服务，给客户提供科技带来的便利
+								</p>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	<section id="counter" class="section-padding">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row justify-content-between" style="padding: 2em 0;">
+				<div class="col-lg-12 col-md-12 col-xs-12">
+					<div class="row">
+						<div class="col-lg-3 col-md-6 col-xs-12">
+							<div class="counter-box wow fadeInUp" data-wow-delay="0.2s">
+								<div class="icon-o"><i class="fa fa-users" style="font-size: 6em"></i></div>
+								<div class="fact-count">
+									<h3><span class="counter">20</span></h3>
+									<p>服务企业</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-md-6 col-xs-12">
+							<div class="counter-box wow fadeInUp" data-wow-delay="0.4s">
+								<div class="icon-o"><i class="fa fa-smile-o" style="font-size: 6em"></i></div>
+								<div class="fact-count">
+									<h3><span class="counter">2124</span></h3>
+									<p>客户评价</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-md-6 col-xs-12">
+							<div class="counter-box wow fadeInUp" data-wow-delay="0.6s">
+								<div class="icon-o"><i class="fa fa-download" style="font-size: 6em"></i></div>
+								<div class="fact-count">
+									<h3><span class="counter">54598</span></h3>
+									<p>每日使用量</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-3 col-md-6 col-xs-12">
+							<div class="counter-box wow fadeInUp" data-wow-delay="0.8s">
+								<div class="icon-o"><i class="fa fa-thumbs-o-up" style="font-size: 6em"></i></div>
+								<div class="fact-count">
+									<h3><span class="counter">3212</span></h3>
+									<p>支持</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+		<section class="home-section text-center "  id="newslist" >
+			<div class="container">
+				<div class="col-xs-12 col-sm-6 col-md-6 ">
+					<img src="/resources/img/index/indxe.jpg" alt=""  style="width: 100%;margin-top: 3em"/>
+				</div>
+				<div  class="col-md-12 col-lg-6 col-xs-12  wow fadeInRight " data-wow-delay="0.3s" >
+					<div class="swiper-container">
+						<div class="swiper-wrapper" id="articleData">
+
+						</div>
+					</div>
+
+					<div class="swiper-pagination"></div>
+				</div>
+			</div>
+		</section>
+	</div>
+</div>
+	<footer th:replace="fragments/footerPage :: footerPage"></footer>
+</body>
+<script src="/resources/js/waypoints.min.js"></script>
+<script src="/resources/js/jquery.counterup.min.js"></script>
+<script src="/resources/plugin/swiper/swiper-bundle.min.js"></script>
+
+<script>
+	// $(function(){
+		var a=0;
+
+		function lunbo(){
+			$('.piao').removeClass('active')
+			$('.piao').eq(a).addClass("active")
+			$(".xun").hide();
+			$('.xun').eq(a).show()
+			a++;
+			if(a==4){
+				a=0
+			}
+		};
+		var intervalId = setInterval('lunbo()', 2000);
+		$(".piao").mouseenter(function () {
+			$('.piao').removeClass('active')
+			$(this).addClass("active")
+
+			var _index=$(this).index();
+			$(".xun").hide();
+			$('.xun').eq(_index).show()
+			clearInterval(intervalId);
+		})
+		$(".piao").mouseleave(function () {
+			a=$(this).index();
+			intervalId = setInterval('lunbo()', 2000);
+		});
+
+
+	// });
+
+
+
+        //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element', 'layer','carousel'] , function(){
+        var element = layui.element
+            ,layer = layui.layer;
+        var carousel = layui.carousel;
+		layer.photos({
+			photos: '#layer-photos'
+			,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+		});
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+			,height:'30em'
+            ,arrow: 'none' //始终显示箭头
+            ,indicator	:'none'
+            ,anim: 'fade' //切换动画方式
+			,autoplay:'false'
+			,interval:'4000'
+        });
+
+
+
+		//触发轮播切换事件
+		carousel.on('change(test1)', function(obj){ //test1来源于对应HTML容器的 lay-filter="test1" 属性值
+			var str='';
+			var str2='';
+			switch (obj.index) {
+				case 0:
+					str="以云服务、人机互联、数据采集等模块为核心，实现万物互联";
+					str2="工业互联网";
+					break;
+				case 1:
+					str="集成多种识别算法，实现视频智能化分析和边端云协同";
+					str2="边缘云技术";
+					break;
+				case 2:
+					str="海量数据的处理分析和导出，让您清楚了解公司生产经营情况";
+					str2="数据处理技术";
+					break;
+				case 3:
+					str="承接前端销售和生产售后，为企业提供多种技术和数据支撑";
+					str2="企业中台";
+					break;
+			}
+			$("#carouselTitle").text(str2);
+			$("#carouselTxT").text(str);
+		});
+
+		layui.element.render();
+        loadNews(1);
+
+
+    });
+
+
+		$('.counter').counterUp({
+			time: 1000
+		});
+
+        function SubmitCustom_make() {
+            var name = $("#name");
+            var email = $("#email");
+            var phone = $("#phone");
+            var message = $("#message");
+
+            var jsonData = {};
+            jsonData["name"] = name.val();
+            jsonData["email"] = email.val();
+            jsonData["phone"] = phone.val();
+            jsonData["message"] = message.val();
+            jsonData["type"] = "Custom_make";
+            if (name.val() == "") {
+                layer.msg("您的称呼为空，请输入", {time: 2000, icon: 5, shift: 6});
+                return;
+            }
+            if (email.val() == "") {
+                layer.msg("您的邮箱为空，请输入", {time: 2000, icon: 5, shift: 6});
+                return;
+            }
+            if (phone.val() == "") {
+                layer.msg("您的联系方式为空，请输入", {time: 2000, icon: 5, shift: 6});
+                return;
+            }
+            if (message.val() == "") {
+                layer.msg("输入内容为空", {time: 2000, icon: 5, shift: 6});
+                return;
+            }
+            var loadingIndex = null;
+            layer.confirm('是否发送？', function (index) {
+                $.ajax({
+                    type: "POST",
+                    processData: false,
+                    contentType: "application/json",
+                    url: '/index/about/userMsgSend', //用戶發送消息到後臺  消息中心
+                    data: JSON.stringify(jsonData),
+                    dataType: "json",
+                    cache: false,
+                    beforeSend: function () {
+                        loadingIndex = layer.msg('处理中', {icon: 16});
+                    },
+                    success: function (result) {
+                        layer.close(loadingIndex);
+                        if (result.code == 0) {
+                            layer.msg('发送成功，我们会尽快回复！', {time: 3000, icon: 6});
+                            name.val("");
+                            email.val("");
+                            phone.val("");
+                            message.val("");
+                        } else {
+                            layer.msg("发送失败", {time: 3000, icon: 5});
+                        }
+                    },
+                    error: function () {
+                        layer.msg("ajax请求失败", {time: 3000, icon: 5});
+                    }
+                });
+            });
+        }
+        function loadNews(pageno){
+            var loadingIndex = null;
+            var jsonData = {"pageno" : pageno, "pagesize" : 10};
+            $.ajax({
+                type : "GET",
+                url  : "/index/news/queryAll",
+                data : jsonData,
+                beforeSend : function(){
+                    loadingIndex = layer.msg('处理中', {icon: 16});
+                },
+                success : function(result) {
+                    layer.close(loadingIndex);
+                    if ( result.errcode==200 ) {
+                        // 局部刷新页面数据
+                        var tableContent = "";
+                        var pageContent = "";
+                        var articlePage = result.datas;
+                        $.each(articlePage, function(i, item){
+                        	pageContent+=
+									//'<div class="col-lg-3 col-md-6 col-xs-6  wow fadeInRight testmonial-slide2"   data-wow-delay="0.3s">\n' +
+									'\t\t\t\t\t\t\t<div class="swiper-slide" style="padding:1em;background: #9e9e9e14;display: block">' +
+									// '<div  class="newscontent ">\n' +
+									'\t\t\t\t\t\t\t\t<div >\n' +
+									'\t\t\t\t\t\t\t\t\t<h4 style="height: 3em;margin-bottom: 0.5em">'+item.title.substring(0, 30)+'...' +'</h4>\n' +
+									'\t\t\t\t\t\t\t\t\t<p style="font-size: 14px;color: #3f51b5">'+item.publishTime.substring(0, 10) +'</p>\n' +
+									'\t\t\t\t\t\t\t\t</div>\n' +
+									'\t\t\t\t\t\t\t\t<p style="text-align: left;height: 10.5em;font-size: 16px;">'+item.detail.substring(0, 90)+'...' +'</p>\n' +
+									'\t\t\t\t\t\t\t\t<a  href="'+ item.url + '" class="btn btn-common">查看</a>\n' +
+									// '\t\t\t\t\t\t\t</div>' +
+									'</div>\n'
+									// '\t\t\t\t\/t\t</div>'
+
+
+
+                            // pageContent +=
+							// 	"           <li>\n" +
+							// 	"               <a  href="+ item.url + " >" + item.title + "</a>\n" +
+                            //     '               <div  class="news_time"   >' + item.publishTime.substring(0, 10) +'</div>\n' +
+                            //     "           </li>";
+                        });
+                        $("#articleData").html(pageContent);
+
+
+						var swiper = new Swiper('.swiper-container', {
+							pagination: '.swiper-pagination',
+							slidesPerView: 1,
+							paginationClickable: true,
+							spaceBetween: 20,
+							loop: true,
+							loopFillGroupWithBlank: true,
+							freeMode: true,
+							autoplay:true,
+							pagination: {
+								el: '.swiper-pagination',
+								clickable: true,
+							},
+							breakpoints: {
+								//当宽度大于等于320
+								320: {
+									slidesPerView: 1,
+									spaceBetween: 10
+								},
+								//当宽度大于等于480
+								480: {
+									slidesPerView: 1,
+									spaceBetween: 20
+								},
+								//当宽度大于等于640
+								1080: {
+									slidesPerView:2,
+									spaceBetween: 30
+								},
+								1280: {
+									slidesPerView:2,
+									spaceBetween: 30
+								}
+							}
+						});
+                    } else {
+                        var nonecontent = "";
+                        var nonepage = "";
+                        nonecontent += '<tr>';
+                        nonecontent += '<td colspan="8" align="center">无记录</td>';
+                        nonecontent += '</tr>';
+                        $("#articleData").html(nonecontent);
+                    }
+
+                }
+
+            });
+
+        }
+
+
+
+
+
+
+
+</script>
+
+</html>

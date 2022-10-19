@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<link rel="stylesheet" href="/resources/plugin/swiper/swiper-bundle.min.css"/>
+
+<style>
+	.bgNavigation{
+		background-image: url('/resources/img/aboutus/timgb.jpg');
+
+	}
+	#intro{
+		height: auto;
+		padding: 20% 0 0 0;
+		background-attachment: fixed;
+	}
+	.home-section{
+		padding-top: 0;
+	}
+	img{
+		width: 100%;
+	}
+
+	.padding_2{
+		padding: 1em 2em;
+		background: whitesmoke;
+	}
+	.zoomout{
+
+	}
+	.zoomout:hover{
+		box-shadow: 0 10px 10px rgba(0,0,0,.1);
+		transform: scale(1.005);
+		transition-duration: .5s;
+		transition: transform .5s;
+		transition-property: all;
+		transition-timing-function: ease;
+		transition-delay: 0s;
+	}
+	@media screen and (max-width:1000px){
+		#sideMenu { display:none; }
+	}
+	@media(max-width:767px) {
+		#video{
+			height: 38vw;
+		}
+		#video img{
+			display: none;
+		}
+		#test1 {
+			display: none;
+		}
+	}
+	.swiper-container {
+		width: 100%;
+		height: 300px;
+		margin: 20px auto;
+	}
+	.swiper-slide:hover{
+		/*background-size: 120% 130% ;    !* 通过百分比设置 *!*/
+		/*-moz-background-size:  120% 130% ;*/
+		/*-o-background-size:  120%  130% ;*/
+		/*-webkit-background-size: 120% 130% ;*/
+	}
+	.section-padding .container{
+		margin-top: 8em;
+	}
+	body .swiper-slide {
+		text-align: center;
+		font-size: 18px;
+		/*background: #fff;*/
+		width: 454.667px;
+		/*-webkit-transition:0.5s;*/
+		/*-webkit-transition: background-size .5s linear;*/
+		/*transition: background-size .5s linear;*/
+		transition: all 0.3s ease-out; /*ease-out 减速、慢慢结束*/
+		-webkit-transition: all 0.3s ease-out;
+		/* Center slide text vertically */
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		-webkit-justify-content: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+	}
+
+</style>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+	<div th:replace="fragments/navigation :: navigation"></div>
+    <section  id="intro" class="intro"  >
+		<div class="col-lg-6 col-md-12 col-xs-12 info wow fadeInRight " data-wow-delay="0.3s">
+			<div class="site-heading"  >
+				<div style="text-align: center">
+<!--					<h2 class="section-title" style="color: #ffffff;font-size:2vw">工业互联网●经纬捷迅的解决方案</h2>-->
+
+					<p style="color: #ffffff;">卓越商砼平台包含工控系统、视像技术、传感器技术，LBS技术、边缘云技术和数据分析等多种技术的应用，结合移动端操作，让办公不受时间和地域的限制。
+						数据处理和分析，让企业管理者完全自主了解、掌握公司运情况。</p>
+<!--					<p style="color: #ffffff;font-size:1.2vw">为客户提供数据采集、传输、控制、显示和数据分析等服务的系统性平台</p>-->
+				</div>
+			</div>
+		</div>
+		<div id="video" >
+			<div class="col-lg-6 col-md-12 col-xs-12   wow fadeInRight  "  data-wow-delay="0.3s">
+				<div style="position: relative;height: 100%;width:100%;">
+					<img src="https://fileserver.jwjxinfo.com/statics/webimg/img2.png" style="
+						 transform:translate(-50%,-42%);position: absolute;height: 53vw;
+						 width: 59vw;"/>
+					<!--									<img src="/resources/img/index/img1.png" style="-->
+					<!--						 transform:translate(-50%,-50%);position: absolute;height: 33vw;width: 59vw;"/>-->
+					<!--									<video  poster="/resources/img/index/videocover.png" style="position:absolute;-->
+					<!--									transform:translate(-50%,-50%);height: 28.5vw;width: 45vw;" controls="">-->
+					<!--										<source src="https://fileserver.jwjxinfo.com//statics/webVideo/1.mp4"  type="video/mp4"/>-->
+					<!--									</video>-->
+
+					<style>
+						#test1 img{
+							width: 100%;
+						}
+						#test1{
+							position:absolute;
+							height: 28.5vw;
+							width: 45vw;
+						}
+						.layui-carousel>*[carousel-item] {
+							overflow: unset;
+							height: 96%;
+						}
+
+					</style>
+
+					<div class="layui-carousel" id="test1" style="" >
+						<div carousel-item="" id="layer-photos">
+							<img src="https://fileserver.jwjxinfo.com/statics/webimg/c1.jpg"/>
+							<img src="https://fileserver.jwjxinfo.com/statics/webimg/c2.jpg"/>
+							<img src="https://fileserver.jwjxinfo.com/statics/webimg/c3.jpg"/>
+							<img src="https://fileserver.jwjxinfo.com/statics/webimg/c4.jpg"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="padding_2 breadFont layui-col-xs12 layui-col-sm12 layui-col-md12" >
+		<i class="layui-icon layui-icon-home"></i>
+		<span class="layui-breadcrumb">
+		  <a href="/">首页</a>
+			<!--<a href="javascript:void(0)"></a>-->
+		  <a><cite>产品中心</cite></a>
+		</span>
+	</section>
+
+	<div  style="background-image: url('https://fileserver.jwjxinfo.com/statics/webimg/bg2.png');background-repeat: no-repeat;
+	background-size: cover">
+		<section   class="section-padding " >
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-xs-12 info wow fadeInRight " data-wow-delay="0.3s">
+						<div class="site-heading " >
+							<div class="sec-headin-left">
+								<h2 class="section-title">应用场景</h2>
+							</div>
+						</div>
+					</div>
+					<div  class="col-md-12 col-lg-12 col-xs-12  wow fadeInRight " data-wow-delay="0.3s" >
+						<div class="swiper-container">
+							<div class="swiper-wrapper">
+								<div class="swiper-slide     "  >
+									<img src="https://fileserver.jwjxinfo.com/statics/webimg/product/y1.jpg" style="width: 100%;"/>
+									<div class="mask">
+										<p class="p2">智慧商场</p>
+									</div>
+								</div>
+								<div class="swiper-slide ">
+									<img src="https://fileserver.jwjxinfo.com/statics/webimg/product/y2.jpg" style="width: 100%;"/>
+									<div class="mask">
+										<p class="p2">智慧医疗</p>
+									</div>
+								</div>
+								<div class="swiper-slide  " >
+									<img src="https://fileserver.jwjxinfo.com/statics/webimg/product/y3.jpg" style="width: 100%;"/>
+									<div class="mask">
+										<p class="p2">智慧办公</p>
+									</div>
+								</div>
+								<div class="swiper-slide  " >
+									<img src="https://fileserver.jwjxinfo.com/statics/webimg/product/y4.jpg" style="width: 100%;"/>
+									<div class="mask">
+										<p class="p2">智慧服务</p>
+									</div>
+								</div>
+								<div class="swiper-slide  ">
+									<img src="https://fileserver.jwjxinfo.com/statics/webimg/product/y5.jpg" style="width: 100%;"/>
+									<div class="mask">
+										<p class="p2">智慧城市</p>
+									</div>
+								</div>
+								<div class="swiper-slide " >
+									<img src="https://fileserver.jwjxinfo.com/statics/webimg/product/y6.jpg"  style="width: 100%;"/>
+									<div class="mask">
+										<p class="p2">智慧零售</p>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-pagination"></div>
+						</div>
+
+						<div class="swiper-button-prev"></div><!--左箭头。如果放置在swiper-container外面，需要自定义样式。-->
+						<div class="swiper-button-next"></div><!--右箭头。如果放置在swiper-container外面，需要自定义样式。-->
+					</div>
+				</div>
+			</div>
+		</section>
+		<section id="services"  class="section-padding " >
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-xs-12 info wow fadeInRight " data-wow-delay="0.3s">
+						<div class="site-heading " >
+							<div class="sec-headin-left">
+								<h2 class="section-title">真实案例</h2>
+							</div>
+						</div>
+					</div>
+
+					<th:block  th:switch="${listTab?.errcode}" >
+						<div th:case="500">
+							<div th:text="${listTab?.errmsg}"></div>
+						</div>
+						<th:block th:case="200">
+							<th:block  th:each="datas,stat:${listTab?.datas}">
+								<th:block th:if="${stat?.index==0}">
+									<div  class="col-md-12 col-lg-12 col-xs-12 services-item wow fadeInRight services-item2" data-wow-delay="0.3s" >
+										<div class="services-content col-md-6 col-lg-6 col-xs-12" style=" padding: 2em">
+											<h3><a th:href="@{${datas?.url}}"  th:text="${datas?.fatherTitle}"></a></h3>
+											<p th:text="${#strings.abbreviate(datas?.detail,150)}"></p>
+											<a th:href="@{${datas?.url}}"  class="btn btn-common">更多</a>
+										</div>
+										<div class="col-md-6 col-lg-6 col-xs-12" style="padding: 0">
+											<div class="secimg" style="height: 18em">
+												<img th:src="${datas?.cover_url}"/>
+											</div>
+										</div>
+									</div>
+								</th:block>
+
+							</th:block>
+
+						</th:block>
+					</th:block>
+
+
+<!--					<th:block  th:switch="${list2?.errcode}" >-->
+<!--						<div th:case="500">-->
+<!--							<div th:text="${list2?.errmsg}"></div>-->
+<!--						</div>-->
+<!--						<th:block th:case="200">-->
+<!--							<th:block  th:each="datas,stat:${list2?.datas}">-->
+<!--									<div  class="col-md-12 col-lg-12 col-xs-12 services-item wow fadeInRight services-item2" data-wow-delay="0.3s" >-->
+<!--										<div class="services-content col-md-6 col-lg-6 col-xs-12" style=" padding: 2em">-->
+<!--											<h3><a th:href="@{${datas?.url}}"  th:text="${datas?.fatherTitle}"></a></h3>-->
+<!--											<p th:text="${#strings.abbreviate(datas?.detail,150)}"></p>-->
+<!--											<a th:href="@{${datas?.url}}"  class="btn btn-common">更多</a>-->
+<!--										</div>-->
+<!--										<div class="col-md-6 col-lg-6 col-xs-12" style="padding: 0">-->
+<!--											<div class="secimg" style="height: 18em">-->
+<!--												<img th:src="${datas?.cover_url}"/>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--							</th:block>-->
+
+<!--						</th:block>-->
+<!--					</th:block>-->
+
+
+					<th:block  th:switch="${list2?.errcode}" >
+						<div th:case="500">
+							<div th:text="${list2?.errmsg}"></div>
+						</div>
+						<th:block th:case="200">
+							<th:block  th:each="datas,stat:${list2?.datas}">
+								<div data-wow-delay="0.6s" class="col-md-6 col-lg-4 col-xs-12 wow fadeInRight">
+									<div class="secimg">
+										<img th:src="${datas?.cover_url}"/>
+									</div>
+									<div class="services-item  "  style="margin-top: 0;padding-top: 1em">
+										<div class="services-content">
+											<h3><a th:href="@{${datas?.url}}"  th:text="${datas?.title}"></a></h3>
+											<p th:text="${#strings.abbreviate(datas?.detail,40)}"></p>
+											<a th:href="@{${datas?.url}}"  class="btn btn-common">更多</a>
+										</div>
+									</div>
+								</div>
+							</th:block>
+						</th:block>
+					</th:block >
+
+				</div>
+			</div>
+		</section>
+	</div>
+
+
+
+	<div>
+		<footer th:replace="fragments/footerPage :: footerPage"></footer>
+	</div>
+
+</body>
+<script src="/resources/plugin/swiper/swiper-bundle.min.js"></script>
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+	layui.use(['element', 'layer','carousel'] , function(){
+		var element = layui.element
+				,layer = layui.layer;
+		var carousel = layui.carousel;
+		layer.photos({
+			photos: '#layer-photos'
+			,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+		});
+		//建造实例
+		carousel.render({
+			elem: '#test1'
+			,width: '45vw' //设置容器宽度
+			,height:'28.5vw'
+			,arrow: 'hover' //始终显示箭头
+			,indicator	:'none'
+			,anim: 'fade' //切换动画方式
+			,autoplay:'false'
+			,interval:'4000'
+		});
+
+		var swiper = new Swiper('.swiper-container', {
+			pagination: '.swiper-pagination',
+			slidesPerView: 1,
+			paginationClickable: true,
+			spaceBetween: 20,
+			loop: true,
+			loopFillGroupWithBlank: true,
+			freeMode: true,
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+				outline: 'none'
+
+			},
+			breakpoints: {
+				//当宽度大于等于320
+				320: {
+					slidesPerView: 1,
+					spaceBetween: 10
+				},
+				//当宽度大于等于480
+				480: {
+					slidesPerView: 1,
+					spaceBetween: 20
+				},
+				//当宽度大于等于640
+				1080: {
+					slidesPerView: 3,
+					spaceBetween: 30
+				}
+			}
+		});
+
+	});
+
+
+    var documentHeight = 0;
+    var topPadding = 200;
+    $(function() {
+		// $(".mask").hide();
+		// $('.swiper-slide').hover(function(){
+		// 	$('.mask',this).slideToggle(500);
+		// });
+
+    });
+
+</script>
+
+</html>

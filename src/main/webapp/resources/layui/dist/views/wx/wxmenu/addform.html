@@ -1,0 +1,221 @@
+<style>
+  body .layui-form-label {
+    width: 112px;
+  }
+  body .menuflex{
+    display: flex;
+    justify-content:flex-end;
+    align-items:center;
+    height: 36px;
+  }
+
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+
+    <table class="layui-table">
+      <colgroup>
+        <col width="150">
+        <col width="200">
+        <col>
+      </colgroup>
+      <thead>
+      <tr>
+        <th><button  type="button" data-type="addMenu" class=" layui-btn layuiadmin-btn-menu">添加一级菜单</button></th>
+        <th>菜单名称</th>
+        <th>菜单类型</th>
+        <th>菜单值(key/url)</th>
+      </tr>
+      </thead>
+      <tbody id="menuBody">
+
+
+<!--      <tr>-->
+<!--        <td class="menuflex" >-->
+<!--          <button  type="button" onclick="addMenuSub()" class=" layui-btn  layui-btn-primary layui-btn-xs ">添加二级菜单</button>-->
+<!--          <button  type="button" onclick="deleteMenuSub()" class=" layui-btn layui-btn layui-btn-danger layui-btn-xs">删除</button>-->
+<!--        </td>-->
+<!--        <td><input type="text" name="title" required lay-verify="required" placeholder="菜单名称" autocomplete="off" class="layui-input">    </td>-->
+<!--        <td>-->
+<!--          <select name="menuType" lay-verify="" lay-search="">-->
+<!--            <option value="click">click</option>-->
+<!--            <option value="view">view</option>-->
+<!--            <option value="scancode_waitmsg" >scancode_waitmsg</option>-->
+<!--            <option value="scancode_waitmsg" >scancode_waitmsg</option>-->
+<!--            <option value="pic_sysphoto" >pic_sysphoto</option>-->
+<!--            <option value="pic_photo_or_album" >pic_photo_or_album</option>-->
+<!--            <option value="pic_weixin" >pic_weixin</option>-->
+<!--            <option value="location_select" >location_select</option>-->
+<!--            <option value="media_id" >media_id</option>-->
+<!--            <option value="view_limited" >view_limited</option>-->
+<!--          </select>-->
+<!--        </td>-->
+<!--        <td><input type="text" name="title" required lay-verify="required" placeholder="菜单值" autocomplete="off" class="layui-input">    </td>-->
+<!--      </tr>-->
+<!--      <tr>-->
+<!--        <td  class="menuflex" ><button  type="button" onclick="deleteMenuSub()" class=" layui-btn layui-btn layui-btn-danger layui-btn-xs">删除</button></td>-->
+<!--        <td><input type="text" name="title" required lay-verify="required" placeholder="子菜单名称" autocomplete="off" class="layui-input">    </td>-->
+<!--        <td>-->
+<!--          <select name="menuType" lay-verify="" lay-search="">-->
+<!--            <option value="click">click</option>-->
+<!--            <option value="view">view</option>-->
+<!--            <option value="scancode_waitmsg" >scancode_waitmsg</option>-->
+<!--            <option value="scancode_waitmsg" >scancode_waitmsg</option>-->
+<!--            <option value="pic_sysphoto" >pic_sysphoto</option>-->
+<!--            <option value="pic_photo_or_album" >pic_photo_or_album</option>-->
+<!--            <option value="pic_weixin" >pic_weixin</option>-->
+<!--            <option value="location_select" >location_select</option>-->
+<!--            <option value="media_id" >media_id</option>-->
+<!--            <option value="view_limited" >view_limited</option>-->
+<!--          </select>-->
+<!--        </td>-->
+<!--        <td><input type="text" name="title" required lay-verify="required" placeholder="菜单值" autocomplete="off" class="layui-input">    </td>-->
+<!--      </tr>-->
+      </tbody>
+    </table>
+
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+  var menuBody = $("#menuBody");
+  var menuLsit=[];
+  var fnum=0;
+  var snum=0;
+layui.use(['admin', 'form', 'upload','table','layer','jquery'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+  var table = layui.table;
+  var layer = layui.layer;
+  var jquery = layui.jquery;
+
+
+  var active = {
+    addMenu: function(){
+      if(menuLsit.length>=3){
+        layer.msg("最多只能添加3个一级菜单", {time: 3000, icon: 5});
+      }else{
+        var  fid="f"+fnum;
+        var str='        <tr class="father" id="'+fid+'"><td class="menuflex" >\n' +
+                '          <button  type="button" onclick="addMenuSub(this)"  data-id="'+fid+'"   class=" layui-btn layuiadmin-btn-menu  layui-btn-primary layui-btn-xs ">添加二级菜单</button>\n' +
+                '          <button  type="button" onclick="deleteMenu(this)"   data-id="'+fid+'"  class="layui-btn layuiadmin-btn-menu layui-btn layui-btn-danger layui-btn-xs">删除</button>\n' +
+                '        </td>\n' +
+                '        <td><input type="text" name="title'+ fnum+'"   id="title'+ fnum+'"  required lay-verify="required" placeholder="菜单名称" autocomplete="off" class="layui-input">    </td>\n' +
+                '        <td>\n' +
+                '          <select name="menuType'+ fnum+'"   id="menuType'+ fnum+'"  lay-verify="" lay-search="">\n' +
+                '            <option value="click">click</option>\n' +
+                '            <option value="view">view</option>\n' +
+                '            <option value="scancode_waitmsg" >scancode_waitmsg</option>\n' +
+                '            <option value="scancode_waitmsg" >scancode_waitmsg</option>\n' +
+                '            <option value="pic_sysphoto" >pic_sysphoto</option>\n' +
+                '            <option value="pic_photo_or_album" >pic_photo_or_album</option>\n' +
+                '            <option value="pic_weixin" >pic_weixin</option>\n' +
+                '            <option value="location_select" >location_select</option>\n' +
+                '            <option value="media_id" >media_id</option>\n' +
+                '            <option value="view_limited" >view_limited</option>\n' +
+                '          </select>\n' +
+                '        </td>\n' +
+                '        <td><input type="text" name="key'+ fnum+'"  id="key'+ fnum+'"  required lay-verify="required" placeholder="菜单值" autocomplete="off" class="layui-input">    </td></tr>\n' ;
+        fnum++;
+        menuBody.append(str);
+        menuLsit.push(str);
+        form.render('select');
+      }
+    }
+  };
+  $('body .layuiadmin-btn-menu').on('click', function(){
+    console.info("click !");
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+
+})
+  function addMenuSub(e) {
+    var id = $(e).attr("data-id");
+    var appendid = id.substring(1);
+    var i = 0;
+    while (1) {
+      var sid = "s" + appendid + "_" + i;
+      if ($("#" + sid).length > 0) {
+        i++;
+        continue;
+      } else {
+        break;
+      }
+    }
+    if (i >= 5) {
+      layer.msg("最多只能添加5个二级菜单", {time: 3000, icon: 5});
+      return;
+    }
+    var sid = "s" + appendid + "_" + i;
+    var str = '      <tr class="son"  id="' + sid + '">\n' +
+            '        <td  class="menuflex" ><button  type="button" data-id="' + sid + '"  onclick="deleteMenuSub(this)"  class=" layui-btn layuiadmin-btn-menu layui-btn-danger layui-btn-xs">删除</button></td>\n' +
+            '        <td><input type="text" name="title'+appendid + "_" + i+'"  id="title'+appendid + "_" + i+'" required lay-verify="required" placeholder="子菜单名称" autocomplete="off" class="layui-input">    </td>\n' +
+            '        <td>\n' +
+            '          <select name="menuType'+appendid + "_" + i+'" id="menuType'+appendid + "_" + i+'" lay-verify="" lay-search="">\n' +
+            '            <option value="click">click</option>\n' +
+            '            <option value="view">view</option>\n' +
+            '            <option value="scancode_waitmsg" >scancode_waitmsg</option>\n' +
+            '            <option value="scancode_waitmsg" >scancode_waitmsg</option>\n' +
+            '            <option value="pic_sysphoto" >pic_sysphoto</option>\n' +
+            '            <option value="pic_photo_or_album" >pic_photo_or_album</option>\n' +
+            '            <option value="pic_weixin" >pic_weixin</option>\n' +
+            '            <option value="location_select" >location_select</option>\n' +
+            '            <option value="media_id" >media_id</option>\n' +
+            '            <option value="view_limited" >view_limited</option>\n' +
+            '          </select>\n' +
+            '        </td>\n' +
+            '        <td><input type="text" name="key'+appendid + "_" + i+'" id="key'+appendid + "_" + i+'"  required lay-verify="required" placeholder="菜单值" autocomplete="off" class="layui-input">    </td>\n' +
+            '      </tr>';
+    snum++;
+    if ($("#" + sid).length > 0) {
+      $("#" + sid).after(str);
+    } else {
+      $("#f" + appendid).after(str);
+    }
+    layui.form.render('select');
+  }
+
+  function deleteMenuSub(e) {
+    var id = $(e).attr("data-id");
+    $("#"+id).remove();
+  }
+
+  function deleteMenu(e) {
+    console.info(e);
+    var id = $(e).attr("data-id");
+    var appendid = id.substring(1);
+    var i = 0;
+    while (1) {
+      var sid = "s" + appendid + "_" + i;
+      if ($("#" + sid).length > 0) {
+        $("#" + sid).remove();
+        i++;
+        continue;
+      } else {
+        break;
+      }
+    }
+    $("#" + id).remove();
+
+    menuLsit.splice(menuLsit.length - 1, 1);
+  }
+
+
+
+
+
+
+  
+  
+</script>

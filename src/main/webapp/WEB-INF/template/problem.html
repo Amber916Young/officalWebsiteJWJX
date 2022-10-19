@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<style>
+    .bgNavigation{
+        background-image: url('/resources/img/aboutus/timgb.jpg');
+
+    }
+    #intro{
+        height: auto;
+        padding: 20% 0 0 0;
+        background-attachment: fixed;
+    }
+    #container{
+        /* width: 50em; */
+        height: 22em;
+        /*margin: 0 auto;*/
+        /*padding: 0 0.525rem;*/
+        /*max-width: 127.25rem;*/
+    }
+    .padding_2{
+        padding: 1em 2em;
+        background: whitesmoke;
+    }
+    .breadFont{
+        font-weight: 600;
+    }
+    .layui-tab-title .layui-this{
+        background: rgb(52,73,94);
+        color: white;
+    }
+    ol {
+        list-style: none;
+        list-style-type: none;
+        counter-reset: sectioncounter;
+        color: #31708f;
+        font-size: 14px;
+        font-weight: 600;
+
+    }
+    ol  li{
+        margin-bottom: 6px;
+    }
+    ol li:before {
+        content: counter(sectioncounter) "、";
+        counter-increment: sectioncounter;
+        font-weight: bold;
+        color: #fa9914;
+        font-family: HelveticaNeue-Bold, HelveticaNeue;
+    }
+    .support_title{
+        color: #004ac2;
+        font-size: 18px;
+    }
+    .layui-colla-title{
+        margin: 0;
+    }
+</style>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+<div th:replace="fragments/navigation :: navigation"></div>
+<section class=" bgNavigation"  ></section>
+
+<section class="padding_2 breadFont layui-col-xs12 layui-col-sm12 layui-col-md12" >
+    <i class="layui-icon layui-icon-home"></i>
+    <span class="layui-breadcrumb">
+		  <a href="/">首页</a>
+		  <a href="javascript:void(0)">关于我们</a>
+		  <a><cite>常见问题</cite></a>
+		</span>
+</section>
+<div class="layui-row">
+    <section class=" breadFont text-center  " style="margin: 0 7em">
+        <hr/>
+        <div class="layui-tab" lay-filter="tabNavigation">
+            <ul class="layui-tab-title">
+                <li id="tab1"  class="layui-this " >常见问题</li>
+                <i class="layui-icon layui-icon-more-vertical"></i>
+                <li id="tab2" ><a href="/support">售后服务</a></li>
+            </ul>
+        </div>
+        <hr/>
+    </section>
+</div>
+<section id="about2" class="home-section text-center">
+    <div class="container">
+        <div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+            <div class="col-xs-12 col-sm-8 col-md-8 " style="text-align: initial;">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <div>
+                            <img src="/resources/img/support/p.png" style="width: 3em"/>
+                            <span  class="support_title">疑难解答</span>
+<!--                            <div class="layui-inline" style="float:right;height:29px;" title="搜索" lay-event="LAYTABLE_SEARCH"><i class="layui-icon layui-icon-search"></i></div>-->
+<!--                            <input type="text" id="title" style="width:200px;float:right;height:30px;" placeholder="请输入标题" autocomplete="off" class="layui-input"/>-->
+
+                        </div>
+                    </div>
+
+                    <div class="layui-card-body">
+                        客服技术支持出勤服务以控制系统调试为准，在现场调试的过程中，如出现其他的问题，请客户协调安装方配合操作，共同解决问题
+
+                        <div class="layui-collapse" id="itemData">
+                            <!--<div class="layui-colla-item">-->
+                                <!--<h2 class="layui-colla-title">GPS看不到车辆显示了？</h2>-->
+                                <!--<div class="layui-colla-content layui-show">内容区域</div>-->
+                            <!--</div>-->
+
+
+                            <!--<div class="layui-colla-item">-->
+                                <!--<h2 class="layui-colla-title">GPS多数车辆进入某一区域内时车辆停止</h2>-->
+                                <!--<div class="layui-colla-content layui-show">内容区域</div>-->
+                            <!--</div>-->
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4" >
+                <img src="/resources/img/support/p2.png " style="width: 15em"/>
+                <div class="layui-form layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-input-block" style="margin-left: 0">
+                                <input type="text" name="keyword" placeholder="查询" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div>
+    <footer th:replace="fragments/footerPage :: footerPage"></footer>
+</div>
+
+</body>
+
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use((['layer','element','form']), function(){
+        var element = layui.element;
+        var layer = layui.layer;
+        var form = layui.form;
+        form.on('submit(LAY-user-front-search)', function(data){
+            var field = data.field;
+            //执行重载
+            console.info(field)
+            loadData(field);
+
+        });
+        loadData(null);
+        function loadData(jsonData){
+            var loadingIndex  = null;
+            $.ajax({
+                async: false,
+                method:"POST",
+                url:"/index/problem/queryAll",
+                data: JSON.stringify(jsonData),
+                contentType: 'application/json',
+                success:function (result) {
+                    layer.close(loadingIndex);
+                    if(result.code==0){
+                        // 局部刷新页面数据
+                        var tableContent = "";
+                        var pageContent = "";
+                        var PageData = result.data;
+                        $.each(PageData, function(i, item){
+                            tableContent += '  <div class="layui-colla-item">\n' +
+                                '                    <h2 class="layui-colla-title">'+item.title+'</h2>\n' +
+                                '                    <div class="layui-colla-content layui-show">'+item.content+'</div>\n' +
+                                '               </div>';
+                        });
+                        $("#itemData").html(tableContent);
+                        // $(".pagination").html(pageContent);
+                        element.render('collapse');
+                    }else {
+                        layer.msg("加载失败,请联系管理员,错误代码："+result.errmsg, {time:3000, icon:5});
+                    }
+                },
+                error:function () {
+                    layer.msg("ajax请求失败,请联系管理员", {time:3000, icon:5});
+                }
+            });
+        }
+
+
+
+    });
+
+
+
+
+
+</script>
+
+</html>

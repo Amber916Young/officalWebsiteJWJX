@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.mapper.WebMapper">
+
+  <select id="selectPageListGzhuser" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *
+    from jwjxinfo2.userInfo
+    <where>
+      1=1
+      <if test="keyWord !=null">
+        and  concat(nickname,country,province,city,tagid_list) like concat('%', #{keyWord}, '%')
+      </if>
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountGzhuser" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from jwjxinfo2.userInfo
+    <where>
+      1=1
+      <if test="keyWord !=null">
+        and concat(nickname,country,province,city,tagid_list)  like concat('%', #{keyWord}, '%')
+      </if>
+    </where>
+  </select>
+
+
+
+
+  <select id="selectPageListQuestion" parameterType="com.web.utils.Page" resultType="hashmap" >
+    select *
+    from jwjxinfo2.question
+    <where>
+      1=1
+      <if test="keyWord!=null">
+        and  concat(title,content,categroy) like concat('%', #{keyWord}, '%')
+      </if>
+    </where>
+    limit #{start},#{rows}
+  </select>
+  <select id="selectPageCountQuestion" parameterType="com.web.utils.Page" resultType="java.lang.Integer">
+    select count(1) from jwjxinfo2.question
+    <where>
+      1=1
+      <if test="keyWord !=null">
+        and concat(title,content,categroy)  like concat('%', #{keyWord}, '%')
+      </if>
+
+    </where>
+  </select>
+
+
+  <insert id="insertwebQuestion" parameterType="hashmap">
+    insert into jwjxinfo2.question(title,content,createTime,categroy,status)
+    values (
+     #{title}
+    ,#{content}
+    ,#{createTime}
+    ,#{categroy}
+    ,#{status}
+    )
+  </insert>
+
+  <update id="updatewebQuestion" parameterType="hashmap">
+    update jwjxinfo2.question
+    <set>
+      <if test="title != null">
+        title = #{title},
+      </if>
+      <if test="content != null">
+        content = #{content},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime},
+      </if>
+      <if test="categroy != null">
+        categroy = #{categroy},
+      </if>
+      <if test="status != null">
+        status = #{status},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateTags" parameterType="hashmap">
+    update jwjxinfo2.tags
+    <set>
+      <if test="tags != null">
+        tags = #{tags},
+      </if>
+      <if test="value != null">
+        value = #{value},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <insert id="insertTags" parameterType="hashmap">
+    insert into jwjxinfo2.tags(tags,value)
+    values (
+     #{tags}
+     ,#{value)}
+    )
+  </insert>
+
+
+</mapper>

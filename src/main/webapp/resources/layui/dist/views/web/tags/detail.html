@@ -1,0 +1,132 @@
+
+<title>标签用户详情</title>
+<style>
+  .selectUp .layui-form-select dl{
+    top: auto;
+    bottom: 36px;
+  }
+
+
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a lay-href="web/tags/list">标签管理</a>
+    <a><cite>详情</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-app-message-detail">
+  <div class="layui-card layuiAdmin-msg-detail">
+      <div class="layui-card-header">
+          <script type="text/html" template>
+              <h1><b>{{decodeURIComponent(layui.router().search.name)}}</b> 标签下的所有用户</h1>
+          </script>
+      </div>
+      <div class="layui-card-body layui-text" id="layer-photos">
+        <table id="LAY-tag-user" lay-filter="LAY-tag-user"></table>
+          <script type="text/html" id="buttonTpl">
+              {{#  if(d.sex===0){ }}
+              <label >未知</label>
+              {{# } else if(d.sex===1){ }}
+              <label>男</label>
+              {{#  } else { }}
+              <label >女</label>
+              {{#  } }}
+          </script>
+          <script type="text/html" id="imgTpl">
+              <img style="display: inline-block; width: 100%; height: 100%;" src= {{ d.headimgurl }}>
+          </script>
+          <script type="text/html" id="layuiadmin-app-cont-tagsbar">
+              <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="userremark">
+                  <i class="layui-icon layui-icon-edit"></i>用户备注</a>
+          </script>
+
+
+        <div style="padding-top: 30px;">
+          <a lay-href="web/tags/list" class="layui-btn layui-btn-primary layui-btn-sm">返回上级</a>
+        </div>
+      </div>
+  </div>
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+  layui.use(['admin', 'table', 'util','form','layer'], function() {
+    var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , form = layui.form  ,view = layui.view
+            ,layer = layui.layer;
+
+
+      layer.photos({
+          photos: '#layer-photos'
+          ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+      });
+
+      table.render({
+      elem: '#LAY-tag-user'
+      ,url: '/web/wx/Tags/getuser' //模拟接口
+      ,page: true
+      ,where:{id: layui.router().search.id }
+      ,cols: [[
+            {field: 'id',title: '序号',width: 70, fixed: 'left', templet: function (d) {
+                    return "<label id='" + d.LAY_INDEX + "'  >" + d.LAY_INDEX + "</label>";
+                }}
+            ,{field: 'nickname', title: '昵称', minWidth: 100}
+            ,{field: 'openid', title: 'openid', minWidth: 100}
+            ,{field: 'sex', title: '性别', minWidth: 100,templet: '#buttonTpl'}
+            ,{field: 'headimgurl', title: '头像', minWidth: 100,templet: '#imgTpl'}
+            ,{field: 'country', title: '国', minWidth: 100}
+            ,{field: 'province', title: '省', minWidth: 100}
+            ,{field: 'city', title: '市', minWidth: 100}
+            ,{field: 'remark', title: '备注', minWidth: 100}
+            ,{field: 'groupid', title: 'groupid', minWidth: 100}
+            , {
+                field: 'tagid_list', title: '分组', minWidth: 100, templet: function (d) {
+                    return "<label id='" + d.LAY_INDEX + "'  >" + d.tagid_list + "</label>";
+                }
+            }
+              ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#layuiadmin-app-cont-tagsbar'}
+
+          ]]
+      ,limit: 10
+      ,limits: [10, 15, 20, 25, 30]
+      ,text: '对不起，加载出现异常！'
+    });
+
+
+      //监听工具条
+      table.on('tool(LAY-tag-user)', function(obj) {
+          var data = obj.data;
+          console.info(obj)
+          if (obj.event === 'userremark') {
+              admin.popup({
+                  title: '用户备注'
+                  , area: ['450px', '200px']
+                  , id: 'LAY-popup-content-tags'
+                  , success: function (layero, index) {
+                      view(this.id).render('web/tags/tagsform', data).done(function () {
+                          form.render(null, 'layuiadmin-form-tags');
+                          //监听提交
+                          form.on('submit(layuiadmin-app-tags-submit)', function (data) {
+                              var field = data.field; //获取提交的字段
+                              var api = "/web/wx/userRemark";
+                              postJson(api, JSON.stringify(field))
+                              layui.table.reload('LAY-tag-user'); //重载表格
+                              layer.close(index); //执行关闭
+                          });
+                      });
+                  }
+              });
+          }
+      });
+
+
+
+
+
+  });
+
+
+</script>

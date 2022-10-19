@@ -1,0 +1,296 @@
+<style>
+  body .layui-form-label {
+    width: 112px;
+  }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">公司名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="companyName" value="{{ d.params.companyName || '' }}" lay-verify="required" placeholder="公司名称(必填)" autocomplete="off" class="layui-input">
+        <input type="text" name="companyID" value="{{ d.params.companyID || '' }}" hidden="hidden">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业编号|授权码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="accredit" value="{{ d.params.accredit || '' }}" placeholder="企业编号|授权码(必填)" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">区域编码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="adcode" value="{{ d.params.adcode || '' }}"  placeholder="区域编码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">类型</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template>
+          <select name="type" lay-verify="typeSelect" >
+            <option value="0" {{ d.params.type === '0' ? 'selected' : '' }} >未知</option>
+            <option value="1" {{ d.params.type === '1' ? 'selected' : '' }} >自有</option>
+            <option value="2" {{ d.params.type === '2' ? 'selected' : '' }} >思徽</option>
+            <option value="9" {{ d.params.type === '9' ? 'selected' : '' }} >包含ERP对应全套ERP以及小程序</option>
+            <option value="12" {{ d.params.type === '12' ? 'selected' : '' }}>对接生产线以及使用ERP中的过磅管理、原材料管理功能、使用小程序</option>
+            <option value="15" {{ d.params.type === '15' ? 'selected' : '' }} >只对接生产线，使用小程序</option>
+            <option value="18" {{ d.params.type === '18' ? 'selected' : '' }} >对接旧的ERP数据库，使用小程序功能</option>
+          </select>
+        </script>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">有效性标识</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template>
+          <select name="validFlag" lay-verify="validFlagSelect">
+            <option value="0" {{ d.params.validFlag === 0 ? 'selected' : '' }} >无效</option>
+            <option value="1" {{ d.params.validFlag === 1 ? 'selected' : '' }} >有效</option>
+            <option value="2" {{ d.params.validFlag === 2 ? 'selected' : '' }} >服务器同步</option>
+            <option value="3" {{ d.params.validFlag === 3 ? 'selected' : '' }} >客户库同步</option>
+          </select>
+        </script>
+      </div>
+    </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业注册地址</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="administrative" value="{{ d.params.administrative || '' }}"  placeholder="企业注册地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业地址</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="address" value="{{ d.params.address || '' }}"  placeholder="企业地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业联系人</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="contactName" value="{{ d.params.contactName || '' }}"  placeholder="企业地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业联系人电话</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="contactsTel" value="{{ d.params.contactsTel || '' }}"  placeholder="企业联系人电话" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业注册号码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="regNO" value="{{ d.params.regNO || '' }}" lay-verify="required"   placeholder="企业注册号码(必填)" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业数据库</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="dbName" value="{{ d.params.dbName || '' }}"  placeholder="企业数据库" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">企业数据库(局域网)</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="dbName_LAN" value="{{ d.params.dbName_LAN || '' }}"  placeholder="企业数据库" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">更新标志</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switchsync"  value="true" name="sync" {{ d.params.sync ? 'checked' : '' }}  lay-skin="switch" lay-text="更新|不需要更新">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">networkIP</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="networkIP" value="{{ d.params.networkIP || '' }}"  placeholder="networkIP" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">端口</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="port" value="{{ d.params.port || '' }}"  placeholder="端口" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+<!--  <div class="layui-form-item">-->
+<!--    <label class="layui-form-label">CPU</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--      <script type="text/html" template>-->
+<!--        <input type="text" name="CPU" value="{{ d.params.CPU || '' }}"  placeholder="CPU" autocomplete="off" class="layui-input">-->
+<!--      </script>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="layui-form-item">-->
+<!--    <label class="layui-form-label">操作系统</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--      <script type="text/html" template>-->
+<!--        <input type="text" name="osName" value="{{ d.params.osName || '' }}"  placeholder="操作系统" autocomplete="off" class="layui-input">-->
+<!--      </script>-->
+<!--    </div>-->
+<!--  </div>-->
+
+<!--  <div class="layui-form-item">-->
+<!--    <label class="layui-form-label">MAC地址</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--      <script type="text/html" template>-->
+<!--        <input type="text" name="MACAddress" value="{{ d.params.MACAddress || '' }}"  placeholder="MAC地址" autocomplete="off" class="layui-input">-->
+<!--      </script>-->
+<!--    </div>-->
+<!--  </div>-->
+  <div class="layui-form-item">
+    <label class="layui-form-label">经度</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="longitude" value="{{ d.params.longitude || '' }}"  placeholder="经度" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">纬度</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="latitude" value="{{ d.params.latitude || '' }}"  placeholder="纬度" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">是否使用</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="isInterior"  value="true" {{ d.params.isInterior ? 'checked' : '' }}  lay-skin="switch" lay-text="使用|未使用">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">有效期</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="indate" class="layui-input" id="dateCheck" value="{{ layui.util.toDateString(d.params.indate, 'yyyy-MM-dd HH:mm:ss') || '' }}" >
+<!--        <input type="text" name="indate" value="{{ d.params.indate || '' }}"  placeholder="有效期" autocomplete="off" class="layui-input">-->
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">推送公众号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <select name="wxAppID" lay-verify="wxAppIDSelect">
+          <option value="wx66861739dbbd59b1" {{ d.params.wxAppID === 'wx66861739dbbd59b1' ? 'selected' : '' }} >经纬捷讯公众号</option>
+          <option value="wxeffb62b611ce734d" {{ d.params.wxAppID === 'wxeffb62b611ce734d' ? 'selected' : '' }} >卓越商砼公众号</option>
+          <option value="wx226095662f8b0c51" {{ d.params.wxAppID === 'wx226095662f8b0c51' ? 'selected' : '' }} >港佳检测公众号</option>
+        </select>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">故障推送人员</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+<!--        oTeKzwHcEiC6XdxeoiT1CQcDQDYY,oTeKzwKwJcAxUTMfXp_Dfk09cSy0,oTeKzwC0OiGG3V_Ge5tXTMnCPrTU-->
+        <select name="wxOpenids" lay-verify="wxAppIDSelect">
+<!--          <input type="checkbox" name="" title="发呆" lay-skin="primary">-->
+          <option value="oTeKzwHcEiC6XdxeoiT1CQcDQDYY" {{ d.params.wxOpenids === 'oTeKzwHcEiC6XdxeoiT1CQcDQDYY' ? 'selected' : '' }} >xxx</option>
+          <option value="oTeKzwKwJcAxUTMfXp_Dfk09cSy0" {{ d.params.wxOpenids === 'oTeKzwKwJcAxUTMfXp_Dfk09cSy0' ? 'selected' : '' }} >bbb</option>
+          <option value="oTeKzwC0OiGG3V_Ge5tXTMnCPrTU" {{ d.params.wxOpenids === 'oTeKzwC0OiGG3V_Ge5tXTMnCPrTU' ? 'selected' : '' }} >ccc</option>
+        </select>
+<!--        <input type="text" name="wxOpenids" value="{{ d.params.wxOpenids || '' }}"  placeholder="接收公众号" autocomplete="off" class="layui-input">-->
+      </script>
+    </div>
+  </div>
+
+<!--  <div class="layui-form-item">-->
+<!--    <label class="layui-form-label">推送小程序</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--      <script type="text/html" template>-->
+<!--        <input type="text" name="appletAppID" value="{{ d.params.appletAppID || '' }}"  placeholder="推送小程序" autocomplete="off" class="layui-input">-->
+<!--      </script>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="layui-form-item">-->
+<!--    <label class="layui-form-label">接收小程序</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--      <script type="text/html" template>-->
+<!--        <input type="text" name="appletOpenids" value="{{ d.params.appletOpenids || '' }}"  placeholder="接收小程序" autocomplete="off" class="layui-input">-->
+<!--      </script>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form', 'upload','laydate'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,upload = layui.upload;
+  var laydate = layui.laydate;
+  laydate.render({
+    elem: '#dateCheck' //指定元素
+    ,type: 'datetime'
+    // ,format: 'yyyy-MM-dd HH:mm:ss' //可任意组合
+  });
+  //上传头像
+  upload.render({
+    elem: '#layuiadmin-upload-useradmin'
+    ,url: '/image/user/worker/headImg/upload'
+    ,accept: 'images'
+    ,method: 'get'
+    ,acceptMime: 'image/*'
+    ,done: function(res) {
+      $(this.item).prev("div").children("input").val(res.data.src)
+    }
+    ,error: function(){
+        //请求异常回调
+      }
+  });
+})
+</script>

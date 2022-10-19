@@ -1,0 +1,213 @@
+
+
+<title>客户维护</title>
+  
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/template.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<style>
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">远程连接列表</a>
+    <a><cite>egt数据库</cite></a>
+    <a><cite>egt.remote_mode</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid layadmin-maillist-fluid">
+
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">公司名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="companyName" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-block">
+                        <select name="remoteType">
+                            <option value=""  >不限</option>
+                            <option value="向日葵"  >向日葵</option>
+                            <option value="ToDesk"  >ToDesk</option>
+                            <option value="桌面远程" >桌面远程</option>
+                            <option value="锁屏">锁屏</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+            </div>
+            <table class="layui-hide" id="LAY_table_user" lay-filter="test"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container"></div>
+            </script>
+            <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+
+</div>
+
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+layui.use(['admin','table' ,'form', 'upload','jquery'], function(){
+    var $ = layui.$
+      ,form = layui.form
+        ,$=layui.jquery
+        ,upload = layui.upload
+        ,view = layui.view
+      ,admin = layui.admin;
+    var table = layui.table;
+    table.render({
+        elem: '#LAY_table_user'
+        ,url:'/client/egt_remote_mode/queryAll'
+        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            ,layEvent: 'LAYTABLE_TIPS'
+            ,icon: 'layui-icon-tips'
+        }]
+        ,title: '远程表'
+        ,limit: 30
+        ,limits:[20,30,40,50,60,70,80,90,100,150,200]
+        ,cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field:'id', title:'ID', width:70, fixed: 'left', unresize: true, sort: true}
+            ,{field:'companyName', title:'公司名称', width:300, sort: true,align: 'center'}
+            ,{field:'controlledMember', title:'控制对象', width:250,align: 'center'}
+            ,{field:'remoteType', title:'远程类型', width:250,align: 'center'}
+            ,{field:'account', title:'账号', width:200,align: 'center'}
+            ,{field:'password', title:'密码',width:200,align: 'center'}
+            ,{title:'操作',width:250,align: 'center', toolbar: '#barDemo',fixed: 'right'}
+        ]]
+        ,page: true //开启分页
+        ,text: '对不起，加载出现异常！'
+    });
+
+
+
+    //监听行工具事件
+    table.on('tool(test)', function(obj){
+        var data = obj.data;
+        console.info(data)
+        if(obj.event === 'del'){
+            var jsonData={};
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/client/egt_remote_mode/delete";
+                    jsonData["id"]=data.id;
+                    postJson(api, JSON.stringify(jsonData))
+                    table.reload('LAY_table_user'); //重载表格
+                    layer.close(index);
+                });
+            });
+        } else if(obj.event === 'edit'){
+            admin.popup({
+                title: '编辑远程连接信息'
+                ,area: ['500px', '600px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('client/remote_mode/addform', data).done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/client/egt_remote_mode/edit";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                            layer.close(index); //执行关闭
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+        var field = data.field;
+        //执行重载
+        table.reload('LAY_table_user', {
+            where: field
+        });
+    });
+
+
+
+    //事件
+    var active = {
+        batchdel: function(){
+            var checkStatus = table.checkStatus('LAY_table_user')
+                ,checkData = checkStatus.data; //得到选中的数据
+            var ids=new Array(),jsonData={};
+            if(checkData.length === 0){
+                return layer.msg('请选择数据');
+            }else {
+                for(var i = 0 ;i<checkData.length;i++){
+                    ids.push(checkData[i].id);
+                }
+                jsonData["ids"] = ids;
+            }
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/client/egt_remote_mode/deletes"
+                    postJson(api,JSON.stringify(jsonData))
+                    table.reload('LAY_table_user');
+                });
+            });
+        }
+        ,add: function(){
+            admin.popup({
+                title: '新增远程连接信息'
+                ,area: ['500px', '600px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('client/remote_mode/addform').done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+                            var api = "/client/egt_remote_mode/upload";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                        });
+                    });
+                }
+            });
+        }
+    };
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+});
+
+</script>

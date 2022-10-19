@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<style>
+	.bgNavigation{
+		background-image: url('/resources/img/aboutus/timgb.jpg');
+
+	}
+	#intro{
+		height: auto;
+		padding: 20% 0 0 0;
+		background-attachment: fixed;
+	}
+	#container{
+		/* width: 50em; */
+		height: 22em;
+		/*margin: 0 auto;*/
+		/*padding: 0 0.525rem;*/
+		/*max-width: 127.25rem;*/
+	}
+	.padding_2{
+		padding: 1em 2em;
+		background: whitesmoke;
+	}
+	.breadFont{
+		font-weight: 600;
+	}
+	.layui-tab-title .layui-this{
+		background: rgb(52,73,94);
+		color: white;
+	}
+	ol {
+		list-style: none;
+		list-style-type: none;
+		counter-reset: sectioncounter;
+		color: #31708f;
+		font-size: 14px;
+		font-weight: 600;
+
+	}
+	ol  li{
+		margin-bottom: 6px;
+	}
+	ol li:before {
+		content: counter(sectioncounter) "、";
+		counter-increment: sectioncounter;
+		font-weight: bold;
+		color: #fa9914;
+		font-family: HelveticaNeue-Bold, HelveticaNeue;
+	}
+</style>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+	<div th:replace="fragments/navigation :: navigation"></div>
+	<section class=" bgNavigation"  ></section>
+
+	<section class="padding_2 breadFont layui-col-xs12 layui-col-sm12 layui-col-md12" >
+		<i class="layui-icon layui-icon-home"></i>
+		<span class="layui-breadcrumb">
+		  <a href="/">首页</a>
+		  <a href="javascript:void(0)">关于我们</a>
+		  <a><cite>人才招聘</cite></a>
+		</span>
+	</section>
+	<div class="layui-row">
+		<section class=" breadFont text-center  " style="margin: 0 7em">
+			<hr/>
+			<div class="layui-tab" lay-filter="tabNavigation">
+				<ul class="layui-tab-title">
+					<li id="tab0"><a href="/aboutus">公司介绍</a></li>
+					<i class="layui-icon layui-icon-more-vertical"></i>
+					<li id="tab1"><a href="/aboutus#photo">公司风采</a></li>
+					<i class="layui-icon layui-icon-more-vertical"></i>
+					<li id="tab2" class="layui-this " >人才招聘</li>
+					<i class="layui-icon layui-icon-more-vertical"></i>
+					<li id="tab3" ><a href="/aboutus#contact">联系我们</a></li>
+				</ul>
+			</div>
+			<hr/>
+		</section>
+	</div>
+    <section id="about2" class="home-section text-center">
+		<div class="heading-about">
+			<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">
+					<div class="wow bounceInDown" data-wow-delay="0.4s">
+						<div class="section-heading">
+							<h5>欢迎有志之士加盟到我们的行列</h5>
+							<i class="fa fa-2x fa-angle-down"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="container">
+			<div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+				<div class="col-xs-12 col-sm-6 col-md-6 " style="text-align: initial;">
+					<div class="layui-card">
+						<div class="layui-card-header">
+							<div style="display: flex">
+								<img src="/resources/img/career/zp.png" style="width: 3em"/>
+								<div class="support_title">人才招聘</div>
+							</div>
+						</div>
+						<div class="layui-card-body">
+							<div class="layui-form">
+								<p>深圳经纬捷讯信息技术有限公司注册于前海自贸区，是一家基于互联网为客户提供软件服务的高新技术企业。</p>
+								<p>公司以客户为中心，依托云计算、大数据、车联网、物联网等信息技术，通过SaaS模式，为传统行业客户提供可靠的信息产品和全面的综合解决方案。</p>
+								<div class="layui-collapse " >
+									<div class="layui-colla-item layui-show">
+										<h2 class="layui-colla-title" style="margin: 0;">JAVA工程师</h2>
+										<div class="layui-colla-content layui-show">
+											<i class="layui-icon layui-icon-circle-dot" style="color: rgb(238,190,60)"></i><b>岗位职责</b>
+											<ol>
+												<li>负责公司各类产品的系统分析、架构设计、功能开发及相关运营后台的建设维护</li>
+												<li>IT支撑系统需求分析、产品设计、开发和维护</li>
+											</ol>
+											<i class="layui-icon layui-icon-circle-dot" style="color: rgb(16,80,112)"></i><b>岗位要求</b>
+											<ol>
+												<li>全日制大专及以上学历，计算机相关专业</li>
+												<li>3年以上Java开发经验，熟练使用设计模式</li>
+												<li>熟练使用Eclipse等开发工具，熟悉一种web服务器的安装部署，熟悉Linux的基本操作</li>
+												<li>熟悉Java语言和面向对象设计开发，熟悉多线程程序开发，对多线程技术、异步、并发有较深入理解；熟悉MySQL应用开发、配置、维护及性能优化</li>
+											</ol>
+										</div>
+									</div>
+									<div class="layui-colla-item">
+										<h2 class="layui-colla-title" style="margin: 0;">运维工程师</h2>
+										<div class="layui-colla-content layui-show">
+											<i class="layui-icon layui-icon-circle-dot" style="color: rgb(238,190,60)"></i><b>岗位职责</b>
+											<ol >
+												<li>负责网络及其设备的维护、管理、故障排除等日常工作，确保公司网络日常的正常运作</li>
+												<li>负责公司办公环境的软硬件和桌面系统的日常维护</li>
+												<li>维护客户局域网、广域网，保证其正常运行，确保局域网、广域网在工作期间内安全稳定运行</li>
+												<li>安装和维护客户计算机、服务器系统软件和应用软件，同时为其他部门提供软硬件技术支持</li>
+												<li>解决排除各种软硬件故障，做好记录，定期制作系统运行报告；维护数据中心，对系统数据进行备份</li>
+											</ol>
+											<i class="layui-icon layui-icon-circle-dot" style="color: rgb(16,80,112)"></i><b>岗位要求</b>
+											<ol>
+												<li>全日制大专及以上学历，计算机相关专业</li>
+											</ol>
+										</div>
+									</div>
+									<div class="layui-colla-item">
+										<h2 class="layui-colla-title" style="margin: 0;">市场营销经理</h2>
+										<div class="layui-colla-content layui-show">
+											<i class="layui-icon layui-icon-circle-dot" style="color: rgb(16,80,112)"></i><b>岗位要求</b>
+											<ol>
+												<li>负责分析、挖掘用户需求，设计产品功能、流程，制作产品原型，编写需求文档，协调整合资源，与协作部门保持良好沟通，及时跟踪开发进度，推进项目达成产品目标及质量。
+												</li>
+												<li>跟踪产品运营数据，不断完善和优化产品，提升产品的用户体验</li>
+												<li>为人踏实细心，工作认真，具有敬业精神、沟通能力和团队合作精神</li>
+												<li>根据公司整体市场策略规划，拟定市场推广计划；熟悉电商平台各类传播渠道，有营销意识，对营销卖点有准确洞察；热爱文案创作，有相当的文字根基优先考虑</li>
+											</ol>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-6" >
+					<img src="/resources/img/career/zp.svg" style="width: 43vw"/>
+					<fieldset class="layui-elem-field">
+						<legend>
+							<img src="/resources/img/career/rx.png" style="width: 2em"/>
+							招聘热线</legend>
+						<div class="layui-field-box">
+							<div>联系人:xxxx</div>
+							<div>电话:123123123</div>
+							<div>邮箱:12312312312</div>
+						</div>
+					</fieldset>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+	<div>
+		<footer th:replace="fragments/footerPage :: footerPage"></footer>
+	</div>
+
+</body>
+
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+
+
+</script>
+
+</html>

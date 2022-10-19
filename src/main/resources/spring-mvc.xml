@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    <!-- 配置Controller扫描 -->
+    <context:component-scan base-package="com.web.controller" />
+    <!-- 配置Service扫描 -->
+    <context:component-scan base-package="com.web.service" />
+    <mvc:resources mapping="/MP_verify_m6e5ElEXy0naeDyQ.txt" location="/resources/MP_verify_m6e5ElEXy0naeDyQ.txt" />
+
+    <!-- 开启SpringMVC注解模式 -->
+    <mvc:annotation-driven/>
+<!--    <context:property-placeholder location="classpath:application.properties" />-->
+
+
+
+<!--    <bean id="propertyPlaceHolderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+<!--        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />-->
+<!--        <property name="ignoreResourceNotFound" value="true" />-->
+<!--        <property name="locations">-->
+<!--            <list>-->
+<!--                &lt;!&ndash; 把需要配置的properties文件配置在这里，可以有多个 &ndash;&gt;-->
+<!--                <value>classpath:application.properties</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
+    <!-- 静态资源默认servlet配置 -->
+    <mvc:default-servlet-handler/>
+    <!--创建websocket包并扫描-->
+    <context:component-scan base-package="com.web.websocket" />
+    <!-- 对静态资源放行  -->
+    <mvc:resources location="/resources/" mapping="/resource/**"/>
+    <mvc:resources location="/" mapping="*.html"/>
+    <mvc:resources location="/" mapping="*.jpg"/>
+    <mvc:resources location="/" mapping="*.png"/>
+    <mvc:resources location="/" mapping="*.JPG"/>
+    <mvc:resources location="/" mapping="*.PNG"/>
+    <mvc:resources location="/" mapping="*.gif"/>
+    <mvc:resources location="/" mapping="*.GIF"/>
+    <mvc:resources location="/" mapping="*.bmp"/>
+    <mvc:resources location="/" mapping="*.BMP"/>
+    <mvc:resources location="/" mapping="*.jpeg"/>
+    <mvc:resources location="/" mapping="*.JPEG"/>
+
+    <!-- 对静态资源放行  -->
+    <mvc:resources location="/WEB-INF/template/layuiAdmin" mapping="/WEB-INF/template/layuiAdmin/**"/>
+
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            &lt;!&ndash;表示所有请求都会进入这个拦截器&ndash;&gt;-->
+<!--            <mvc:mapping path="/admin/**"/>-->
+<!--            &lt;!&ndash;不要拦截静态资源&ndash;&gt;-->
+<!--            <mvc:exclude-mapping path="/admin#/user/login/**"/>-->
+<!--            <mvc:exclude-mapping path="/admin/user/login/**"/>-->
+<!--            <mvc:exclude-mapping path="/index/**"/>-->
+<!--            <mvc:exclude-mapping path="/aboutus/**"/>-->
+<!--            <mvc:exclude-mapping path="/support/**"/>-->
+<!--            <mvc:exclude-mapping path="/display/**"/>-->
+<!--            <mvc:exclude-mapping path="/problem/**"/>-->
+<!--            <mvc:exclude-mapping path="/career/**"/>-->
+<!--            <mvc:exclude-mapping path="/product/**"/>-->
+<!--            <mvc:exclude-mapping path="/api/**"/>-->
+<!--            <mvc:exclude-mapping path="/permission/user/login"/>-->
+<!--            &lt;!&ndash;图标&ndash;&gt;-->
+<!--            <mvc:exclude-mapping path="/favicon.ico"/>-->
+<!--            <mvc:exclude-mapping path="/MP_verify_m6e5ElEXy0naeDyQ.txt/**"/>-->
+<!--            <mvc:exclude-mapping path="/mini/**"/>-->
+<!--            <mvc:exclude-mapping path="/resource/**"/>-->
+<!--            <bean class="com.web.filters.AuthInterceptor"></bean>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+
+
+    <!-- 配置视图解析器 -->
+    <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/template/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="LEGACYHTML5" />
+        <property name="cacheable" value="false" />
+        <property name="characterEncoding" value="UTF-8" />
+        <property name="order" value="0" />
+    </bean>
+
+
+    <bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewNames" value="views*"/>
+        <property name="prefix" value="/resources/layui/dist/views/" />
+        <property name="suffix" value=".html" />
+        <property name="order" value="1"></property>
+        <property name="contentType" value="text/html;charset=UTF-8"></property>
+    </bean>
+
+    <bean id="templateEngine"
+          class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver" />
+    </bean>
+
+    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine"/>
+        <property name="characterEncoding" value="UTF-8" />
+    </bean>
+
+
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    <bean id="fileuploadPath" class="java.lang.String">
+        <constructor-arg index="0" value="https://fileserver.jwjxinfo.com/file/upload"></constructor-arg>
+<!--        <constructor-arg index="0" value="http://localhost:8088/file/uploadImgMany"></constructor-arg>-->
+    </bean>
+    <bean id="websocketURL" class="java.lang.String">
+        <constructor-arg index="0" value="http://new.jwjxinfo.com/"></constructor-arg>
+    </bean>
+    <bean id="grant_type" class="java.lang.String">
+        <constructor-arg index="0" value="client_credential"></constructor-arg>
+    </bean>
+    <bean id="appid" class="java.lang.String">
+        <constructor-arg index="0" value="wx66861739dbbd59b1"></constructor-arg>
+    </bean>
+    <bean id="secret" class="java.lang.String">
+        <constructor-arg index="0" value="57ea154cd32a3e0bd81f463c75de869b"></constructor-arg>
+    </bean>
+    <bean id="originalID" class="java.lang.String">
+        <constructor-arg index="0" value="gh_b0e59386cf0f"></constructor-arg>
+    </bean>
+    <bean id="Delcode" class="java.lang.String">
+        <constructor-arg index="0" value="root"></constructor-arg>
+    </bean>
+    <bean id="springContextUtil" class="com.web.utils.SpringContextUtil"/>
+
+</beans>

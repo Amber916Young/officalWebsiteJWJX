@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+    <link rel="stylesheet" href="/resources/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/resources/layui/css/modules/layer/default/layer.css?v=3.1.1"/>
+    <link rel="stylesheet" href="/resources/layui/dist/style/admin.css?v=1.5.0%20pro-1"/>
+    <link rel="stylesheet" href="/resources/layui/dist/style/login.css?v=1.5.0%20pro-1"/>
+    <title>系统维护</title>
+    <style>
+        body .layadmin-user-login-body .layui-form-item .layui-input {
+             padding-left: 1em;
+        }
+        body .layui-input-block {
+            margin-left: 87px;
+        }
+        body .layui-form-label {
+            width:auto ;
+        }
+        body .layadmin-tabspage-none .layui-layout-admin .layui-body {
+            top: 0;
+        }
+        @media screen and (max-width: 768px){
+            body   .layadmin-user-login {
+                 padding-top: 0;
+                margin-top: 60px;
+            }
+        }
+        body .layadmin-user-login {
+            padding-top: 0;
+            min-height: 80%;
+        }
+
+    </style>
+</head>
+<body layadmin-themealias="default" class="layui-layout-body ">
+<div id="LAY_app" class="layadmin-tabspage-none">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-body" id="LAY_app_body">
+            <a onclick="showInfo()"  style="float: right;margin: 1em;font-size: 24px;" class="layui-icon layui-icon-tips"></a>
+            <div class=" layadmin-user-login layadmin-user-display-show" id="LAY-user-login" >
+                <div class="layadmin-user-login-main">
+                    <div class="layadmin-user-login-box layadmin-user-login-header">
+                        <h2>远程操作</h2>
+                        <p th:text="${'操作者：'+username}"></p>
+                        <input hidden="hidden" th:value="${openid}" id="openid"/>
+                    </div>
+                    <div class="layadmin-user-login-box layadmin-user-login-body layui-form" id="Admin_form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" >选择公司</label>
+                            <div class="layui-input-block">
+                                <select name="city" lay-verify="required" lay-filter="Admin_select"  id="companyList"></select>
+                            </div>
+                        </div>
+                        <div id="downloadFile">
+<!--                            <div class="layui-form-item">-->
+<!--                                <label class=" layui-form-label">下载日志</label>-->
+<!--                                <div class="layui-input-block">-->
+<!--                                    <input type="button" value="修改地址栏下载"    title="下载日志"/>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class=" layui-form-label">选择操作</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="downloadLog" lay-filter="Admin_checkbox" title="下载日志"/>
+                                <input type="checkbox" name="restart" lay-filter="Admin_checkbox" title="重启" />
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <button class="layui-btn layui-btn-fluid"   style="display: none" id="queryBtn1" onclick="remoteClick()">确 认</button>
+                            <button class="layui-btn layui-btn-fluid layui-btn-danger" style="display: none" id="queryBtn2" onclick="connectMqtt()">网络连接测试</button>
+<!--                            <button class="layui-btn layui-btn-fluid layui-btn-normal"   style="display: block" id="queryBtn3" onclick="checkNetwork()">网络连接测试</button>-->
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-trans layadmin-user-login-footer">
+                    <p>© 2021 <a href="https://www.jwjxinfo.com/" target="_blank">深圳经纬捷讯信息技术有限公司</a></p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+</body>
+<script src="/resources/layui/layui.js"></script>
+<script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/mqtt.js"></script>
+<script src="/resources/js/ajaxHandle.js"></script>
+<script src="/resources/js/mqttHandle.js"></script>
+
+<script>
+    var checkArry = new Array();
+    layui.use([ 'form','layer'], function(){
+        var $ = layui.$
+            ,setter = layui.setter
+            ,form = layui.form
+            ,layer = layui.layer //弹层
+
+        form.render();
+        //提交
+        openid = $("#openid").val();
+        loadCompanyList();
+        form.on('checkbox(Admin_checkbox)', function(data){
+            console.log(data.elem.checked); //是否被选中，true或者false
+            console.log(data.elem.name); //得到checkbox原始DOM对象
+            var boolean = data.elem.checked;
+            if(boolean==true){
+                checkArry.push(data.elem.name);
+            }else{
+                for(var i in checkArry){
+                    if(checkArry[i]==data.elem.name){
+                        checkArry.splice(i,1);
+                        break;
+                    }
+                }
+            }
+        });
+
+        form.on('select(Admin_select)', function(data){
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
+            console.log(data.othis); //得到美化后的DOM对象
+            $("#queryBtn1").css('display',"none");
+            $("#queryBtn2").css('display',"block");
+        });
+
+        function loadCompanyList() {
+            var jsonData={};
+            jsonData["openid"]= openid;
+            var api="/wx/remote/queryAllCompany"
+            var res = postJson(api,JSON.stringify(jsonData));
+            if(res.errcode==0){
+                var resultData = res.data;
+                var html1 = '<option value="未选择" >未选择</option>';
+                $.each(resultData, function (i, item) {
+                    html1 += '<option  value="' + item.regNO + '">' + item.companyName + '</option>';
+                });
+                $("#companyList").html(html1);
+                form.render('select');//没有写这个，操作后没有效果
+            }else{
+                $("#Admin_form").css('display',none);
+            }
+        }
+
+    });
+    function showInfo(){
+        var str = "<b>需要先连接所选公司的网络再进行操作，否则会失败</b>\n"
+         + "<p>下载路径：/jwjxData/wapApp/zyst/examiningReport/regNO/LOG</p>\n"
+         + "<p>文件名称：yyyy-MM-ddHHmmss.txt</p>"
+
+        layer.open({
+            title: '说明'
+            ,content: str
+        });
+    }
+
+    function connectMqtt() {
+        var company = $("#companyList").val();
+        regNO = company;
+
+
+        var jsonData={};
+        jsonData["regNO"]=regNO;
+        var api="/wx/remote/pingNetwork"
+        var res = postJson(api,JSON.stringify(jsonData));
+
+        if(res.errcode==0){
+            var topic="LANconnect/"+regNO+"/return/0/"+openid+"/systemMaintenance"
+            var json = {"regNO":regNO,"topic":topic};
+            var flag=0;
+            if(subTopic.length==0){
+                subTopic.push(json);
+                initMqtt(topic);
+            }else{
+                for(var i in subTopic){
+                    if(subTopic[i].regNO!=regNO){
+                        unsubscribeTopic(subTopic[i].topic);
+                        subTopic.splice(i,1);
+                        flag=0;
+                    }else{
+                        flag=1;
+                    }
+                }
+                if(flag==0){
+                    subTopic.push(json);
+                    subscribeTopic(topic);
+                    $("#queryBtn2").css('display',"none");
+                    $("#queryBtn1").css('display',"block");
+                }
+            }
+
+        }else {
+
+
+        }
+
+
+
+
+
+    }
+
+    function remoteClick(){
+        if(checkArry.length==0){
+            layer.msg("操作未选择", {time:2000, icon:5, shift:6});
+            return;
+        }
+        // var jsonData={};
+        // jsonData["company"]=company;
+        // jsonData["checkbox"]=checkArry;
+        // var api="/wx/remote/upload"
+        // var res = postJson(api,JSON.stringify(jsonData));
+        // if(res.errcode==0){
+        //
+        // }
+        layer.confirm('确定操作？', function(index) {
+            sendMsg(checkArry);
+            //https://wap.jwjxinfo.com/zyst/examiningReport/800001/LOG/2021-05-10113042.txt
+            //yyyy-MM-ddHHmmss.txt;
+
+            var url ="https://wap.jwjxinfo.com/zyst/examiningReport/"+regNO+"/LOG/"
+            layer.msg('操作完成');
+            var str='   <div class="layui-form-item">\n' +
+                '           <label class=" layui-form-label">下载日志</label>\n' +
+                '           <div class="layui-input-block">\n' +
+                '               <input type="button" value="修改地址栏下载"  onclick="window.location.href=\'\'"  title="下载日志"/>\n' +
+                '           </div>\n' +
+                '       </div>'
+            // $("#downloadFile").html(str)
+        });
+
+
+
+
+
+
+
+
+    }
+
+</script>
+
+
+</html>

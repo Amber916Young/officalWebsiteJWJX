@@ -1,0 +1,101 @@
+<style>
+  body .layui-form-label {
+    width: 112px;
+  }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">客户名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="clientName" value="{{ d.params.clientName || '' }}" lay-verify="required" placeholder="客户名称(必填)" autocomplete="off" class="layui-input">
+        <input type="text" name="clientID" value="{{ d.params.clientID || '' }}" hidden="hidden">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">客户编码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="clientCode" value="{{ d.params.clientCode || '' }}" placeholder="客户编码(必填)" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="pass" value="{{ d.params.pass || '' }}"  placeholder="密码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="memo" value="{{ d.params.memo || '' }}"  placeholder="备注" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">识别码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="accredit" value="{{ d.params.accredit || '' }}"  placeholder="识别码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">数据库服务器代码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="serverFlag" value="{{ d.params.serverFlag || '' }}"  placeholder="数据库服务器代码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">超速速度</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="maxSpeed" value="{{ d.params.maxSpeed || '' }}"  placeholder="超速速度" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">区域编码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="adcode" value="{{ d.params.adcode || '' }}"   placeholder="区域编码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">密码字节</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="password" value="{{ d.params.password || '' }}"  placeholder="密码字节类型" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+
+})
+</script>

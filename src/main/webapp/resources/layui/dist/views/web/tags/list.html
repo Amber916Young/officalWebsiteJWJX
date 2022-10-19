@@ -1,0 +1,386 @@
+
+<title>标签分类管理</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>网站维护</cite></a>
+    <a><cite>分类管理</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid" id="LAY-app-message">
+  <div class="layui-card">
+    <div class="layui-tab layui-tab-brief">
+      <ul class="layui-tab-title">
+        <li class="layui-this">网站标签管理</li>
+        <li>经纬捷讯公众号标签管理</li>
+        <li>经纬捷讯公众号所有用户</li>
+      </ul>
+      <div class="layui-tab-content">
+      
+        <div class="layui-tab-item layui-show">
+          <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layuiadmin-btn-tags" data-type="all" data-events="add" >添加</button>
+            <button class="layui-btn layui-btn-danger layuiadmin-btn-tags" data-type="all" data-events="dels">批量删除</button>
+          </div>
+          <table id="LAY-app-message-all" lay-filter="LAY-app-message-all"></table>
+          <script type="text/html" id="layuiadmin-app-cont-tagsbar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+          </script>
+        </div>
+
+        <div class="layui-tab-item">
+          <h3>为了区分用户，需要给不同类型的用户打标签，不同类型经纬捷讯公众号下方的菜单不同</h3>
+          <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layuiadmin-btn-tags" data-type="notice" data-events="add" >添加</button>
+          </div>
+          <table id="LAY-app-message-notice" lay-filter="LAY-app-message-notice"></table>
+          <script type="text/html" id="layuiadmin-app-cont-tagsbar2">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+          </script>
+        </div>
+
+        <div class="layui-tab-item">
+          <h3>如果公众号关注人数和显示人数不一致，请校正公众号关注人数</h3>
+          <div class="LAY-app-message-btns" style="margin-bottom: 10px;">
+            <button class="layui-btn layuiadmin-btn-tags" data-type="gzh" data-events="gzhUser" >校验公众号正确人数</button>
+          </div>
+          <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-userfront-formlist">
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label">关键字查询</label>
+                <div class="layui-input-block">
+                  <input type="text" name="keyword" placeholder="模糊查询" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                  <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <table id="LAY-app-message-gzhUser" lay-filter="LAY-app-message-gzhUser"></table>
+          <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container"></div>
+          </script>
+          <script type="text/html" id="buttonTpl">
+            {{#  if(d.sex===0){ }}
+            <button class="layui-btn  layui-bg-black layui-btn-xs">未知</button>
+            {{# } else if(d.sex===1){ }}
+            <button class="layui-btn   layui-btn-xs">男</button>
+            {{#  } else { }}
+            <button class="layui-btn  layui-bg-red  layui-btn-xs">女</button>
+            {{#  } }}
+          </script>
+          <script type="text/html" id="imgTpl">
+            <img style="display: inline-block; " src= {{ d.headimgurl }}>
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/resources/js/ajaxHandle.js"></script>
+
+<script>
+layui.use(['admin', 'table', 'util','form'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,table = layui.table
+  ,form = layui.form
+  ,view = layui.view
+  ,element = layui.element;
+
+  var DISABLED = 'layui-btn-disabled'
+  
+  //区分各选项卡中的表格
+  ,tabs = {
+    all: {
+      text: '网站标签管理'
+      ,id: 'LAY-app-message-all'
+    }
+    ,notice: {
+      text: '经纬捷讯公众号标签管理'
+      ,id: 'LAY-app-message-notice'
+    }
+  };
+  //标题内容模板
+  var tplTitle2 = function(d){
+    return '<a lay-href="web/tags/detail/id='+ d.id +'/name='+d.name+'">'+ d.name;
+  };
+  var tplTitle = function(d){
+    return '<a lay-href="web/tags/detail/id='+ d.id +'/name='+d.name+'">'+ d.count;
+  };
+  //全部消息
+  table.render({
+    elem: '#LAY-app-message-all'
+    ,url: '/api/app/content/tags' //模拟接口
+    ,page: true
+    ,cols: [[
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', width: 100, title: 'ID', sort: true}
+      ,{field: 'tags', title: '分类名', minWidth: 100}
+      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#layuiadmin-app-cont-tagsbar'}
+    ]]
+    ,limit: 10
+    ,limits: [10, 15, 20, 25, 30]
+    ,text: '对不起，加载出现异常！'
+  });
+
+  table.render({
+    elem: '#LAY-app-message-notice'
+    ,url: '/web/wx/getTags' //模拟接口
+    ,page: true
+    ,cols: [[
+      {field: 'id', width: 100, title: 'ID', sort: true}
+      ,{field: 'name', title: '标签名', minWidth: 100, templet: tplTitle2}
+      ,{field: 'count', title: '标签下用户数', minWidth: 100, templet: tplTitle}
+      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#layuiadmin-app-cont-tagsbar2'}
+    ]]
+    ,limit: 10
+    ,limits: [10, 15, 20, 25, 30]
+    ,text: '对不起，加载出现异常！'
+  });
+
+  table.render({
+    elem: '#LAY-app-message-gzhUser'
+    ,url: '/web/wx/gzhuser/queryAll'
+    ,page: true
+    ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+    ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+      title: '提示'
+      ,layEvent: 'LAYTABLE_TIPS'
+      ,icon: 'layui-icon-tips'
+    }]
+    ,title: '经纬捷讯微信公众号关注客户表'
+    ,limit: 30
+    ,limits:[20,30,40,50,60,70,80,90,100,150,200]
+    ,cols: [[
+      {field: 'id', width: 100, title: 'ID', sort: true}
+      ,{field: 'openid', title: 'openid', minWidth: 100}
+      ,{field: 'nickname', title: 'nickname', minWidth: 100}
+      ,{field: 'headimgurl', title: 'headimgurl', minWidth: 100,templet: '#imgTpl'}
+      ,{field: 'unionid', title: 'unionid', minWidth: 100}
+      ,{field: 'language', title: 'language', minWidth: 100}
+      ,{field: 'qr_scene_str', title: 'qr_scene_str', minWidth: 100}
+      ,{field: 'subscribe_scene', title: 'subscribe_scene', minWidth: 150}
+      ,{field: 'subscribe', title: 'subscribe', minWidth: 100}
+      ,{field: 'sex', title: 'sex', minWidth: 100,templet: '#buttonTpl'}
+      ,{field: 'remark', title: 'remark', minWidth: 100}
+      ,{field: 'country', title: 'country', minWidth: 100}
+      ,{field: 'province', title: 'province', minWidth: 100}
+      ,{field: 'city', title: 'city', minWidth: 100}
+      ,{field: 'groupid', title: 'groupid', minWidth: 100}
+      , {
+        field: 'subscribe_time', title: '订阅时间', width: 150, align: 'center',
+        templet: function (d) {
+          var subscribe_time = layui.util.toDateString(d.subscribe_time, "yyyy-MM-dd HH:mm:ss");
+          return "<label id='" + d.LAY_INDEX + "'  >" + subscribe_time + "</label>";
+        }
+      }
+      ,{field: 'tagid_list', title: 'tagid_list', minWidth: 100}
+      ,{field: 'qr_scene', title: 'qr_scene', minWidth: 100}
+      ,{field: 'phone', title: 'phone', minWidth: 100}
+    ]]
+    ,limit: 20
+    ,limits: [20, 30,40,50,70,100,150,200]
+    ,text: '对不起，加载出现异常！'
+  });
+
+
+
+
+  //监听工具条
+  table.on('tool(LAY-app-message-notice)', function(obj){
+    var data = obj.data;
+    console.info(obj)
+    if(obj.event === 'del'){
+      layer.confirm('确定删除此标签？', function(index){
+        var api='/web/wx/delTags';
+        postParam(api, data.id)
+        layui.table.reload('LAY-app-message-notice'); //重载表格
+        layer.close(index);
+      });
+    } else if(obj.event === 'edit'){
+      admin.popup({
+        title: '编辑标签'
+        ,area: ['450px', '200px']
+        ,id: 'LAY-popup-content-tags'
+        ,success: function(layero, index){
+          view(this.id).render('web/tags/tagsform', data).done(function(){
+            form.render(null, 'layuiadmin-form-tags');
+            //监听提交
+            form.on('submit(layuiadmin-app-tags-submit)', function(data){
+              var field = data.field; //获取提交的字段
+              var api = "/web/wx/editTags";
+              postJson(api, JSON.stringify(field))
+              layui.table.reload('LAY-app-message-notice'); //重载表格
+              layer.close(index); //执行关闭
+            });
+          });
+        }
+      });
+    }
+  });
+
+
+  //监听工具条
+  table.on('tool(LAY-app-message-all)', function(obj){
+    var data = obj.data;
+    console.info(obj)
+    if(obj.event === 'del'){
+      layer.confirm('确定删除此标签？', function(index){
+        var api='/web/Tags/deleteByid';
+        postParam(api, data.id)
+        layui.table.reload('LAY-app-message-all'); //重载表格
+        layer.close(index);
+      });
+    } else if(obj.event === 'edit'){
+      admin.popup({
+        title: '编辑标签'
+        ,area: ['450px', '200px']
+        ,id: 'LAY-popup-content-tags'
+        ,success: function(layero, index){
+          view(this.id).render('web/tags/tagsform', data).done(function(){
+            form.render(null, 'layuiadmin-form-tags');
+            //监听提交
+            form.on('submit(layuiadmin-app-tags-submit)', function(data){
+              var field = data.field; //获取提交的字段
+              var api = "/web/Tags/edit";
+              postJson(api, JSON.stringify(field))
+              layui.table.reload('LAY-app-message-all'); //重载表格
+              layer.close(index); //执行关闭
+            });
+          });
+        }
+      });
+    }
+  });
+  var events = {
+
+    gzhUser: function(othis, type) {
+      var api = "/web/wx/allUser/check";
+      postJsonNoParam(api);
+    }
+    , add: function(othis, type) {
+        var thisTabs = tabs[type];
+        console.info(type)
+        console.info(othis)
+        admin.popup({
+          title: '新增标签'
+          ,area: ['450px', '200px']
+          ,id: 'LAY-popup-content-tags'
+          , success: function (layero, index) {
+            view(this.id).render('web/tags/tagsform').done(function(){
+              form.render(null, 'layuiadmin-form-tags');
+              //监听提交
+              form.on('submit(layuiadmin-app-tags-submit)', function(data){
+                var field = data.field; //获取提交的字段
+                var api = "/web/Tags/add";
+                if (thisTabs.id == "LAY-app-message-notice") {
+                  api = "/web/wx/addTags";
+                }
+                postJson(api, JSON.stringify(field))
+                if(type=="notice"){
+                  layui.table.reload('LAY-app-message-notice'); //重载表格
+                }else{
+                  layui.table.reload('LAY-app-message-all'); //重载表格
+                }
+                layer.close(index); //执行关闭
+              });
+            });
+          }
+        });
+      }
+    ,dels: function(othis, type) {
+      var thisTabs = tabs[type]
+              , checkStatus = table.checkStatus(thisTabs.id)
+              , data = checkStatus.data; //获得选中的数据
+      console.info(checkStatus);
+      var jsonData = {}, ids = "";
+      var api = "", type = null;
+      layer.confirm('确定删除选中的数据吗？', function () {
+        if (thisTabs.id == "LAY-app-message-notice") {
+          if (data.length === 0) {
+            return layer.msg('未选中行');
+          } else {
+            for (var i = 0; i < data.length; i++) {
+              ids += data[i].id + ",";
+            }
+            jsonData.id = ids;
+            jsonData.type = "wxTags";
+          }
+          type = "wxTags";
+          api = '/web/Tags/deleteByids';
+        } else if (thisTabs.id == "LAY-app-message-all") {
+          if (data.length === 0) {
+            return layer.msg('未选中行');
+          } else {
+            for (var i = 0; i < data.length; i++) {
+              ids += data[i].id + ",";
+            }
+            jsonData.id = ids;
+            jsonData.type = "webTags";
+          }
+          type = "webTags";
+          api = '/web/Tags/deleteByids';
+        }
+        if (api != "") {
+          admin.req({
+            url: api //实际使用请改成服务端真实接口
+            , data: jsonData//这里把数据封装成json的了，在springmvc里面会自己解析。
+            , done: function (res) {
+              if (res.code == 0) {
+                layer.msg('删除成功', {
+                  icon: 1
+                });
+                if (type == "wxTags") {
+                  table.reload('LAY-app-message-notice');
+                } else if (type == "webTags") {
+                  table.reload('LAY-app-message-all');
+                } else {
+                }
+
+              } else {
+                layer.msg('删除失败', {
+                  icon: 5
+                });
+              }
+            }
+
+          });
+
+        }
+
+        table.reload(thisTabs.id); //刷新表格
+      });
+    }
+
+  };
+
+
+  //监听搜索
+  form.on('submit(LAY-user-front-search)', function(data){
+    var field = data.field;
+    //执行重载
+    table.reload('LAY-app-message-gzhUser', {
+      where: field
+    });
+  });
+
+
+
+
+
+  $('.LAY-app-message-btns .layui-btn').on('click', function(){
+    var othis = $(this)
+    ,thisEvent = othis.data('events')
+    ,type = othis.data('type');
+    events[thisEvent] && events[thisEvent].call(this, othis, type);
+  });
+});
+</script>

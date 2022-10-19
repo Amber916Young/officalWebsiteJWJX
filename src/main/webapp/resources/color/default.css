@@ -1,0 +1,38 @@
+
+a,.tp-caption a.btn:hover {
+	color: rgb(35,60,133);
+}
+.top-nav-collapse {
+	background: rgb(35,60,133);
+}
+
+.navbar-custom ul.nav ul.dropdown-menu li a:hover {
+	color: rgb(52,73,94);
+}
+
+.owl-theme .owl-controls .owl-page.active span,
+.owl-theme .owl-controls.clickable .owl-page:hover span {
+    background-color: rgb(35,60,133);
+}
+
+.widget-avatar .avatar:hover {
+    border: 5px solid rgb(35,60,133);
+}
+
+.bg-skin {
+	background: rgb(35,60,133);
+}
+
+form#contact-form input:focus,form#contact-form select:focus,form#contact-form textarea:focus {
+	border-color: rgb(35,60,133);
+}
+
+footer {
+    background-color: rgb(35,60,133);
+}
+
+.btn-skin {
+  color: #fff;
+  background-color: rgb(35,60,133);
+  border-color: rgb(35,60,133);
+}

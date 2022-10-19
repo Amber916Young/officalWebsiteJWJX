@@ -1,0 +1,290 @@
+
+
+<title>客户维护</title>
+  
+<script type="text/html" template>
+  <link rel="stylesheet" href="{{ layui.setter.base }}style/template.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<style>
+    .layui-border-green{
+
+    }
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">微信菜单栏</a>
+    <a><cite>自定义菜单</cite></a>
+    <a><cite></cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid layadmin-maillist-fluid">
+
+    <div class="layui-card">
+        <div class="layui-card-header">删除菜单时，必须删除所有自定义菜单（微信api暂时不支持修改菜单）</div>
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="del1">删除所有菜单</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="del2">删除个性化菜单</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">新增菜单</button>
+            </div>
+
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header" id="t1">所有用户可见菜单</div>
+            <div class="layui-card-body">
+                <table class="layui-table layui-form" id="table1" lay-size="lg"></table>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header" id="t2">标签用户菜单</div>
+            <div class="layui-card-body">
+                <table class="layui-table layui-form" id="table2" lay-size="lg"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/resources/js/ajaxHandle.js"></script>
+<script>
+    var menuid1=null;
+    var menuid2=null;
+
+    layui.use(['admin','table' ,'form', 'upload','jquery','treeTable','layer'], function(){
+    var $ = layui.$
+      ,form = layui.form
+        ,$=layui.jquery
+        ,view = layui.view
+      ,admin = layui.admin;
+
+    var table = layui.table;
+    var treeTable = layui.treeTable;
+    var api = "/wx/wxmenu/get"
+        $.ajax({
+            type : "POST",
+            processData: false,
+            contentType: "application/json",
+            url  : api,
+            cache: false,
+            async: false, // 同步
+            success: function (result) {
+                if (result.errcode == 0 ) {
+                    menuid1 =  result.data.menuid1;
+                    menuid2 =  result.data.menuid2;
+                    var tree1= result.data.tree1;
+                    if(tree1!=null){
+                        treeTable.render({
+                            elem: '#table1',
+                            data: tree1,
+                            primary_key: 'id',
+                            parent_key: 'pid',
+                            icon_key: 'title',
+                            is_checkbox: false,
+                            end: function(e){
+                                console.info(e);
+                                form.render();
+                                // treeTable.openAll();
+                            },
+                            cols: [
+                                {
+                                    key: 'title',
+                                    title: '名称',
+                                    width: '100px',
+                                    template: function(item){
+                                        if(item.level == 0){
+                                            return '<span style="color:rgb(215,74,0);font-weight: 600">'+item.name+'</span>';
+                                        }else if(item.level == 1){
+                                            return '<span style="color:#004c66;">'+item.name+'</span>';
+                                        }else if(item.level == 2){
+                                            return '<span style="color:#aaa;">'+item.name+'</span>';
+                                        }
+                                    }
+                                },
+                                {
+                                    key: 'type',
+                                    title: 'type ',
+                                    width: '100px',
+                                    align: 'center',
+                                },
+                                {
+                                    key: 'view',
+                                    title: 'view',
+                                    width: '100px',
+                                    align: 'center',
+                                    template: function(item){
+                                        return '<span style="color:#aaa;">'+item.url+'</span>';
+                                    }
+                                },
+
+                                // {
+                                //     title: '开关',
+                                //     width: '100px',
+                                //     align: 'center',
+                                //     template: function(item){
+                                //         return '<input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF">';
+                                //     }
+                                // },
+                                // {
+                                //     title: '操作',
+                                //     align: 'center',
+                                //     template: function(item){
+                                //         return '<a lay-filter="add">添加</a> | <a target="_blank" href="/detail?id='+item.id+'">编辑</a>';
+                                //     }
+                                // }
+                            ]
+
+                        });
+                    }
+                    var tree2= result.data.tree2;
+                    if(tree2!=null){
+                        treeTable.render({
+                            elem: '#table2',
+                            // url: 'json/data1.json',
+                            data: tree2,
+                            primary_key: 'id',
+                            parent_key: 'pid',
+                            icon_key: 'title',
+                            is_checkbox: false,
+                            end: function(e){
+                                console.info(e);
+                                form.render();
+                                // treeTable.openAll();
+                            },
+                            cols: [
+                                {
+                                    key: 'title',
+                                    title: '名称',
+                                    width: '100px',
+                                    template: function(item){
+                                        if(item.level == 0){
+                                            return '<span style="color:rgb(215,74,0);font-weight: 600">'+item.name+'</span>';
+                                        }else if(item.level == 1){
+                                            return '<span style="color:#004c66;">'+item.name+'</span>';
+                                        }else if(item.level == 2){
+                                            return '<span style="color:#aaa;">'+item.name+'</span>';
+                                        }
+                                    }
+                                },
+                                {
+                                    key: 'type',
+                                    title: 'type ',
+                                    width: '100px',
+                                    align: 'center',
+                                },
+                                {
+                                    key: 'view',
+                                    title: 'view',
+                                    width: '100px',
+                                    align: 'center',
+                                    template: function(item){
+                                        return '<span style="color:#aaa;">'+item.url+'</span>';
+                                    }
+                                },
+
+                                // {
+                                //     title: '开关',
+                                //     width: '100px',
+                                //     align: 'center',
+                                //     template: function(item){
+                                //         return '<input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF">';
+                                //     }
+                                // },
+                                // {
+                                //     title: '操作',
+                                //     align: 'center',
+                                //     template: function(item){
+                                //         return '<a lay-filter="add">添加</a> | <a target="_blank" href="/detail?id='+item.id+'">编辑</a>';
+                                //     }
+                                // }
+                            ]
+
+                        });
+                    }
+
+                } else {
+                    // if(result.errcode!=0){
+                    //     layer.msg(result.errmsg, {time: 3000, icon: 5});
+                    // }else{
+                    //     layer.msg(result.msg, {time: 3000, icon: 5});
+                    // }
+                }
+
+            },
+            error: function () {
+
+            }
+        });
+
+
+
+    //事件
+    var active = {
+        del1: function(){
+            var jsonData={};
+            if(menuid2==null){
+                layer.msg("无个性化菜单，不可删除", {time: 3000, icon: 0});
+                return;
+            }else {
+                layer.prompt({
+                    formType: 1
+                    , title: '敏感操作，请验证口令'
+                }, function (value, index) {
+                    layer.close(index);
+                    jsonData["code"] = value;
+                    layer.confirm('确定删除吗？', function (index) {
+                        var api = "/wx/menu/deleteall"
+                        postJson(api, JSON.stringify(jsonData))
+                        form.render();
+                    });
+                });
+            }
+
+        }
+        ,del2: function(){
+            var jsonData={};
+            layer.prompt({
+                formType: 1
+                ,title: '敏感操作，请验证口令'
+            }, function(value, index){
+                layer.close(index);
+                jsonData["code"]=value;
+                jsonData["menuid"]=menuid2;
+                layer.confirm('确定删除吗？', function(index) {
+                    var api = "/wx/menu/delconditional"
+                    postJson(api,JSON.stringify(jsonData))
+                    form.render();
+                });
+            });
+        }
+        ,add: function(){
+            admin.popup({
+                title: '新增菜单'
+                ,area: ['700px', '700px']
+                ,id: 'LAY-popup-user-add'
+                ,success: function(layero, index){
+                    view(this.id).render('wx/wxmenu/addform').done(function(){
+                        form.render(null, 'layuiadmin-form-useradmin');
+                        //监听提交
+                        form.on('submit(LAY-user-front-submit)', function(data){
+                            var field = data.field; //获取提交的字段
+
+
+                            console.info(data);
+                            var api = "/wx/wxmenu/upload";
+                            postJson(api, JSON.stringify(field))
+                            table.reload('LAY_table_user'); //重载表格
+                        });
+                    });
+                }
+            });
+        }
+    };
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+    });
+});
+
+
+</script>

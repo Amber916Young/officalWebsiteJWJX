@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<style>
+    .bgNavigation{
+        background-image: url('/resources/img/aboutus/timgb.jpg');
+
+    }
+    #intro{
+        height: auto;
+        padding: 20% 0 0 0;
+        background-attachment: fixed;
+    }
+    #container{
+        /* width: 50em; */
+        height: 22em;
+        /*margin: 0 auto;*/
+        /*padding: 0 0.525rem;*/
+        /*max-width: 127.25rem;*/
+    }
+    .padding_2{
+        padding: 1em 2em;
+        background: whitesmoke;
+    }
+    .breadFont{
+        font-weight: 600;
+    }
+    .layui-tab-title .layui-this{
+        background: rgb(52,73,94);
+        color: white;
+    }
+    ol {
+        list-style: none;
+        list-style-type: none;
+        counter-reset: sectioncounter;
+        color: #31708f;
+        font-size: 14px;
+        font-weight: 600;
+
+    }
+    ol  li{
+        margin-bottom: 6px;
+    }
+    ol li:before {
+        content: counter(sectioncounter) "、";
+        counter-increment: sectioncounter;
+        font-weight: bold;
+        color: #fa9914;
+        font-family: HelveticaNeue-Bold, HelveticaNeue;
+    }
+    .support_title{
+        color: #004ac2;
+        font-size: 18px;
+    }
+    .support_section{
+        width: auto;
+        border-bottom: #428bca 1px solid;
+    }
+</style>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+<div th:replace="fragments/navigation :: navigation"></div>
+<section  class=" bgNavigation"  ></section>
+
+<section class="padding_2 breadFont layui-col-xs12 layui-col-sm12 layui-col-md12" >
+    <i class="layui-icon layui-icon-home"></i>
+    <span class="layui-breadcrumb">
+		  <a href="/">首页</a>
+		  <a href="javascript:void(0)">关于我们</a>
+		  <a><cite>售后服务</cite></a>
+		</span>
+</section>
+<div class="layui-row">
+    <section class=" breadFont text-center  " style="margin: 0 10em">
+        <hr/>
+        <div class="layui-tab" lay-filter="tabNavigation">
+            <ul class="layui-tab-title">
+                <li id="tab1" ><a href="/problem">常见问题</a></li>
+                <i class="layui-icon layui-icon-more-vertical"></i>
+                <li id="tab2" class="layui-this " >售后服务</li>
+            </ul>
+        </div>
+        <hr/>
+    </section>
+</div>
+<section id="about2" class="home-section text-center">
+    <div class="heading-about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2">
+                    <div class="wow bounceInDown" data-wow-delay="0.4s">
+                        <div class="section-heading">
+                            <h3>售后服务工作流程及管理制度</h3>
+                            <i class="fa fa-2x fa-angle-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+            <div class="col-xs-12 col-sm-8 col-md-8 " style="text-align: initial;">
+                <div class="support_section">
+                    <img src="/resources/img/support/n1.png " style="width: 3em"/>
+                    <span class="support_title">售后服务管理目的</span>
+                </div>
+                <div>
+                    <p>
+                        为规范售后服务工作，满足用需求，保证用户在使用我公司产品时，能发挥最大的效益，<br/>
+                        提高用户对产品的满意度和信任度，提高产品的市场占有率，<br/>
+                        制定售后服务管理制度和工作流程<br/>
+                    </p>
+                </div>
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <div class="support_section">
+                            <img src="/resources/img/support/n2.png " style="width: 3em"/>
+                            <span class="support_title">售后服务的标准及要求 </span>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <ol>
+                            <li> 售后服务人员树立用户满意是检验服务工作标准的理念，要竭尽全力为用户服务，杜绝与用户发生口角
+                            </li>
+                            <li> 在服务中积极，热情，耐心的解答用户提出的各种问题，传授维修保养常识，用户问题无法解答时，应耐心解释，并及时报告售后服务总部协助解决
+                            </li>
+                            <li> 服务人员应举止文明，礼貌待人，主动服务，和用户建立良好的关系
+                            </li>
+
+                        </ol>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4" >
+                <img src="/resources/img/support/s1.png " style="width: 15em"/>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div>
+    <footer th:replace="fragments/footerPage :: footerPage"></footer>
+</div>
+
+</body>
+
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+
+
+</script>
+
+</html>

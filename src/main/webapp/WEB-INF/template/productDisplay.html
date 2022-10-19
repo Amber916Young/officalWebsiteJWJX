@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+<style>
+    .bgNavigation{
+        background-image: url('/resources/img/aboutus/timgb.jpg');
+    }
+    #intro{
+        height: auto;
+        padding: 20% 0 0 0;
+        background-attachment: fixed;
+    }
+      .padding_2{
+        padding: 1em 2em;
+        background: whitesmoke;
+    }
+    .breadFont{
+        font-weight: 600;
+    }
+    .layui-tab-title .layui-this{
+        background: rgb(52,73,94);
+        color: white;
+    }
+    ol {
+        list-style: none;
+        list-style-type: none;
+        counter-reset: sectioncounter;
+        color: #31708f;
+        font-size: 14px;
+        font-weight: 600;
+
+    }
+    ol  li{
+        margin-bottom: 6px;
+    }
+    ol li:before {
+        content: counter(sectioncounter) "、";
+        counter-increment: sectioncounter;
+        font-weight: bold;
+        color: #fa9914;
+        font-family: HelveticaNeue-Bold, HelveticaNeue;
+    }
+    .support_title{
+        color: #004ac2;
+        font-size: 18px;
+    }
+    .input-group{
+        padding: 0.3em 0;
+    }
+    .btn{
+        padding: 0.3em;
+        border-radius: 0;
+    }
+    #accountShow{
+        display: none;
+    }
+    .layui-timeline h3 .active{
+        font-weight: 600;
+        font-size: larger;
+        color: #f44336;
+    }
+    .piclunbo2{
+        display: none;
+    }
+    .piclunbo{
+        display: none;
+    }
+</style>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+<div th:replace="fragments/navigation :: navigation"></div>
+<section  class=" bgNavigation"  ></section>
+
+<section class="padding_2 breadFont layui-col-xs12 layui-col-sm12 layui-col-md12" >
+    <i class="layui-icon layui-icon-home"></i>
+    <span class="layui-breadcrumb">
+		  <a href="/">首页</a>
+		  <a><cite>在线试用</cite></a>
+		</span>
+</section>
+<div class="layui-row">
+    <section class=" breadFont text-center  " style="margin: 0 10em">
+        <hr/>
+        <div class="layui-tab" lay-filter="tabNavigation">
+            <ul class="layui-tab-title">
+                <li id="tab1"  class="layui-this " >在线试用</li>
+            </ul>
+        </div>
+        <hr/>
+    </section>
+</div>
+<section id="about2" class="home-section text-center">
+    <div class="container">
+        <div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+            <div class="col-xs-12 col-sm-4 col-md-4" >
+                <img src="/resources/img/display/d3.png " style="width: 15em"/>
+
+
+            </div>
+            <div class="col-xs-12 col-sm-8 col-md-8 " style="text-align: initial;">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <div>
+                            <i class="layui-icon layui-icon-app" style="color: #1a82b4"></i>
+                            <span  class="support_title">卓越商砼信息管理系统---产品描述</span>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        卓越商砼信息管理系统主要分为原材料管理、调度管理、实验室管理、过磅管理、合同结算管理、辅材管理、
+                        资料管理七大功能模块以及系统维护模块同时移动端用微信小程序进行信息接收和辅助操作。
+                        通过这些模块的应用，将企业生产过程中的原材料自助过磅入库、生产线料仓与原材料实际存放对应、特定配合比的快速设定、
+                        生产线生产状况的实时掌控等都可简单完成；移动端的加入可以使工地管理者、原材料供应运输着更多的参与，
+                        实现自主下订单、电子签单、自助过磅等操作；使商砼企业的销售、生产、试验、调度、物料部等部门形成了一个整体，
+                        进而实现物料的进、销、存、产等数据在不需要过多人为干预的情况下形成自动化的管理。
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+            <div class="col-xs-12 col-sm-8 col-md-8 " style="text-align: initial;">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <div>
+                            <img src="/resources/img/display/d.png" style="width: 3em"/>
+                            <span  class="support_title"><b>演示操作手册</b></span>
+                        </div>
+                    </div>
+                    <div class="layui-card-body " >
+                        <p><b>您在您的个人电脑端按照以下步骤通过远程连接方式连接到卓越商砼信息管理系统软件进行试用</b></p>
+                        <style>
+                            .layui-timeline-title{
+                                display: flex;
+                            }
+                            .layui-timeline-title p{
+                                margin: auto 0;
+                            }
+                        </style>
+                        <ul class="layui-timeline">
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n1.png " style="width: 3em"/>
+                                        <p class="txtlunbo active">按Windows键+R键打开“运行”窗口。</p>
+                                    </h3>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n2.png " style="width: 3em"/>
+                                        <p class="txtlunbo">输入mstsc，点击确定打开“远程桌面连接口</p>
+                                    </h3>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n3.png " style="width: 3em"/>
+                                        <p class="txtlunbo">
+                                            “远程桌面连接“计算机处填写，短信验证获取的IP地址，点击<b>连接</b>
+                                        </p>
+                                    </h3>
+                                    <div id="ipShow">
+                                        <button onclick="getIP()" class="btn btn-danger">短信验证获取IP地址和端口号</button>
+                                        <p style="color: darkred"><b>验证后可获取当前可用的用户名和密码</b></p>
+                                        <div id="showDetail" >
+                                        </div>
+                                        <div  id="accountShow">
+                                            <div class="layui-card-header" >
+                                                <div class="support_section">
+                                                    <span class="support_title">【步骤4】当前可用的远程登陆用户名和密码</span>
+                                                </div>
+                                            </div>
+                                            <div class="layui-card-body">
+                                                <p style="color: #c6173d"><b>* 区分大小写</b></p>
+                                                <p th:text="${'用户名：'+list.datas?.username}"></p>
+                                                <p th:text="${'密码：'+list.datas?.password}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n4.png " style="width: 3em"/>
+                                        <p  class="txtlunbo">
+                                            用户名和密码填写获取的账号和密码，点击<b>确定</b>
+                                        </p>
+                                    </h3>
+
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n5.png " style="width: 3em"/>
+                                        <p  class="txtlunbo">
+                                            随后弹出的框框中点击“<b>是</b>“
+                                        </p>
+                                    </h3>
+
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title " >
+                                        <img src="/resources/img/support/n6.png " style="width: 3em"/>
+                                        <p  class="txtlunbo">打开桌面上面的“卓越商砼信息管理系统“</p>
+                                    </h3>
+                                    <p  >
+                                        “卓越商砼信息管理系统”用户名：5001，密码：123456
+                                    </p>
+                                </div>
+                            </li>
+
+                        </ul>
+                        <hr/>
+
+                        <p><b>移动端：卓越商砼小程序试用</b></p>
+                        <p><b>为了更好的使用全部功能请关注卓越商砼公众号</b></p>
+                        <ul class="layui-timeline">
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n1.png " style="width: 3em"/>
+                                        <p class="txtlunbo2 active">用微信扫描“卓越商砼”小程序二维码或者搜索“卓越商砼”微信小程序</p>
+                                    </h3>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n2.png " style="width: 3em"/>
+                                        <p class="txtlunbo2">下方按钮选择【登陆注册】</p>
+                                    </h3>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n3.png " style="width: 3em"/>
+                                        <p class="txtlunbo2">注册页面，根据提示填写信息</p>
+                                    </h3>
+                                    <p>注册类型：点击可以选择注册的角色</p>
+                                    <p>手机号码：填写注册微信用的手机号，点击获取验证码</p>
+                                    <p>所属企业：选择<b>卓越商砼系统测试环境</b></p>
+                                    <p>切换企业：这个可以不填</p>
+                                    <p>输入验证码：把收到的短信验证码填写上去</p>
+                                </div>
+                            </li>
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title ">
+                                        <img src="/resources/img/support/n4.png " style="width: 3em"/>
+                                        <p  class="txtlunbo2">建议多个微信注册，试用不同角色，你会发现每个角色的功能都非常强大，使用方便</p>
+                                    </h3>
+                                </div>
+                            </li>
+<!--                            <li class="layui-timeline-item">-->
+<!--                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
+<!--                                <div class="layui-timeline-content layui-text">-->
+<!--                                    <h3 class="layui-timeline-title ">-->
+<!--                                        <img src="/resources/img/support/n5.png " style="width: 3em"/>-->
+<!--                                        <p  class="txtlunbo">-->
+<!--                                            随后弹出的框框中点击“<b>是</b>“-->
+<!--                                        </p>-->
+<!--                                    </h3>-->
+
+<!--                                </div>-->
+<!--                            </li>-->
+<!--                            <li class="layui-timeline-item">-->
+<!--                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
+<!--                                <div class="layui-timeline-content layui-text">-->
+<!--                                    <h3 class="layui-timeline-title " >-->
+<!--                                        <img src="/resources/img/support/n6.png " style="width: 3em"/>-->
+<!--                                        <p  class="txtlunbo">打开桌面上面的“卓越商砼信息管理系统“</p>-->
+<!--                                    </h3>-->
+<!--                                    <p  >-->
+<!--                                        “卓越商砼信息管理系统”用户名：5001，密码：123456-->
+<!--                                    </p>-->
+<!--                                </div>-->
+<!--                            </li>-->
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4" >
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <div class="support_section">
+                            <span class="support_title"><b>卓越商砼桌面应用详细步骤</b>(点击查看大图)</span>
+                            <input id="VerifyCode"  hidden="hidden" value="0"/>
+                        </div>
+                    </div>
+                    <div class="layui-card-body" style="height: 34vw;">
+                        <style>
+                            /*轮播*/
+                            .layui-carousel>[carousel-item]{
+                                overflow: visible;
+                            }
+                            .layui-carousel>[carousel-item]>*{
+                                height: auto;
+                            }
+                            .layui-carousel-ind{
+                                margin-top: -20px;
+                                top: auto;
+                                bottom: 10px;
+                            }
+                            #layer-photos img{
+                                width: 100%;
+                            }
+                            #layer-photos .layui-card-body{
+                                text-align: center;
+                            }
+                        </style>
+                        <div id="layer-photos">
+                            <img  style="width: 100%;display: block" class="piclunbo" src="/resources/img/display/1.png " layer-src="/resources/img/display/1.png" alt="按Windows键+R键打开“运行”窗口" />
+                            <img style="width: 100%;" class="piclunbo" src="/resources/img/display/2.png "  layer-src="/resources/img/display/2.png" alt="输入mstsc，点击确定打开“远程桌面连接口"/>
+                            <img style="width: 100%;" class="piclunbo" src="/resources/img/display/3.png "  layer-src="/resources/img/display/3.png" alt="“远程桌面连接“计算机处填写，从获取的IP地址，点击连接" />
+                            <img style="width: 100%;" class="piclunbo" alt="用户名和密码填写获取的账号和密码，点击确定" src="/resources/img/display/4.png "  layer-src="/resources/img/display/4.png" />
+                            <img style="width: 100%;" class="piclunbo" src="/resources/img/display/5.png " layer-src="/resources/img/display/5.png" alt="随后弹出的框框中点击“是“" />
+                            <img style="width: 100%;" class="piclunbo" src="/resources/img/display/6.png "  layer-src="/resources/img/display/6.png" alt="“卓越商砼信息管理系统”用户名：5001，密码：123456" />
+                        </div>
+
+                    </div>
+                </div>
+                <img src="/resources/img/display/d2.png " style="width: 15em"/>
+                <hr/>
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        <div class="support_section">
+                            <span class="support_title"><b>卓越商砼小程序详细步骤</b></span>
+                        </div>
+                    </div>
+                    <div class="layui-card-body">
+                        <div  id="layer-photos2">
+                            <div class="piclunbo2" style="display: block">
+                                <p>卓越商砼小程序</p>
+                                <img style="width: 100%;"  src="https://fileserver.jwjxinfo.com/statics/webimg/xcxcode.jpg" layer-src="https://fileserver.jwjxinfo.com/statics/webimg/xcxcode.jpg" alt="微信扫码" />
+                                <hr/>
+                                <p>卓越商砼公众号</p>
+                                <img style="width: 100%;"  src="https://fileserver.jwjxinfo.com/statics/webimg/zystgzh.jpg" layer-src="https://fileserver.jwjxinfo.com/statics/webimg/zystgzh.jpg" alt="微信扫码" />
+                            </div>
+                            <img style="width: 100%;" class="piclunbo2" src="/resources/img/display/8.png " layer-src="/resources/img/display/8.png" alt="打开卓越商砼小程序，注册用户" />
+                            <img style="width: 100%;" class="piclunbo2" src="/resources/img/display/9.png "  layer-src="/resources/img/display/8.png" alt="选择注册类型，输入注册微信的手机号，填写用户姓名，选择所属企业：卓越商砼系统测试环境"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div>
+    <footer th:replace="fragments/footerPage :: footerPage"></footer>
+</div>
+
+</body>
+
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use([ 'layer','carousel'], function(){
+        var layer = layui.layer;
+        var carousel = layui.carousel;
+
+        layer.photos({
+            photos: '#layer-photos'
+            ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+        layer.photos({
+            photos: '#layer-photos2'
+            ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+    });
+
+
+    var a=0;
+    var a2=0;
+    function lunbo(){
+        $('.txtlunbo').removeClass('active')
+        $(".piclunbo").hide();
+        $('.piclunbo').eq(a).show()
+        $('.txtlunbo').eq(a).addClass("active")
+    };
+    $(".txtlunbo").mouseenter(function () {
+        a=$('.txtlunbo').index(this);
+        lunbo();
+    })
+    $(".txtlunbo").mouseleave(function () {
+        a=$('.txtlunbo').index(this);
+        lunbo()
+    });
+
+    function lunbo2(){
+        $('.txtlunbo2').removeClass('active')
+        $('.txtlunbo2').eq(a2).addClass("active")
+
+        $(".piclunbo2").hide();
+        $('.piclunbo2').eq(a2).show()
+    };
+    $(".txtlunbo2").mouseenter(function () {
+        a2=$('.txtlunbo2').index(this);
+        lunbo2();
+    })
+    $(".txtlunbo2").mouseleave(function () {
+        a2=$('.txtlunbo2').index(this);
+        lunbo2()
+    });
+
+
+    function getCode() {
+        var phone = $("#phone").val();
+        var name = $("#name").val();
+        var jsonData = {};
+        jsonData["phone"] = phone;
+        jsonData["name"] = name;
+        if (name == "") {
+            layer.msg("您的称呼为空，请输入", {time: 2000, icon: 5, shift: 6});
+            return;
+        }
+        if (phone == "") {
+            layer.msg("您的联系方式为空，请输入", {time: 2000, icon: 5, shift: 6});
+            return;
+        }
+        $("#VerifyBtn").attr('disabled',true);
+        $.ajax({
+            type: "POST",
+            processData: false,
+            contentType: "application/json",
+            url: '/index/getCode',
+            data : JSON.stringify(jsonData),
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                $("#QueryBtn").attr('disabled',false);
+                if (result.errcode == 200) {
+                    $("#VerifyBtn").attr('disabled',true);
+                    layer.msg('验证码发送成功，请注意', {time: 3000, icon: 6});
+                    $("#VerifyCode").val(result.datas);
+                } else {
+                    $("#VerifyBtn").attr('disabled',false);
+                    layer.msg("验证码发送失败", {time: 3000, icon: 5});
+                }
+            },
+            error: function () {
+                layer.msg("ajax请求失败", {time: 3000, icon: 5});
+            }
+        });
+    }
+    function verify() {
+
+        var code = $("#verfiy").val();
+        var VerifyCode = $("#VerifyCode").val();
+
+        var jsonData = {};
+        jsonData["code"] = code;
+        jsonData["VerifyCode"] = VerifyCode;
+        if (code == "") {
+            layer.msg("验证码未输入", {time: 2000, icon: 5, shift: 6});
+            return;
+        }
+        $("#QueryBtn").attr('disabled',true);
+        $.ajax({
+            type: "POST",
+            processData: false,
+            contentType: "application/json",
+            url: '/index/getIP', //用戶發送消息到後臺  消息中心
+            data : JSON.stringify(jsonData),
+            dataType: "json",
+            cache: false,
+            success: function (result) {
+                if (result.errcode == 200) {
+                    $("#QueryBtn").attr('disabled',true);
+                    layer.msg('获取成功', {time: 3000, icon: 6});
+                    var data = result.datas;
+                    var str='<p><h3>ip和端口</h3></p>';
+                     str+='<p><h3>'+data+':9231</h3></p>';
+                    $("#showDetail").html(str);
+                    $("#accountShow").css("display","block");
+                } else {
+                    if(result.errcode == 404){
+                        $("#QueryBtn").attr('disabled',false);
+                        layer.msg("验证码错误", {time: 3000, icon: 5});
+                    }
+                }
+            },
+            error: function () {
+                layer.msg("ajax请求失败", {time: 3000, icon: 5});
+            }
+        });
+    }
+
+    function getIP() {
+        var str ='    <div class="input-group">\n' +
+            '             <div class="input-group-addon">昵称</div>\n' +
+            '             <input id="name" style="padding-right: 12px;width: 15em"  placeholder="您希望我们如何称呼您" class="form-control has-success" type="text"  required="required"  data-error="请输入您的姓名（我该如何称呼您）"/>\n' +
+            '         </div>\n' +
+            '         <div class="input-group">\n' +
+            '             <div class="input-group-addon">手机号</div>\n' +
+            '             <div style="display:flex;">\n' +
+            '                 <input id="phone" style="padding-right: 12px;width: 15em"  placeholder="电话" class="form-control has-success" type="text" required="required"  data-error="请输入手机号码" />\n' +
+            '                 <input value="获取验证码" id="VerifyBtn" onclick="getCode()" class="btn btn-success" type="button" />\n' +
+            '             </div>\n' +
+            '           \n' +
+            '         </div>\n' +
+            '         <div class="input-group">\n' +
+            '             <div class="input-group-addon">验证码</div>\n' +
+            '             <input id="verfiy" style="padding-right: 12px;width: 15em"  placeholder="验证码" class="form-control has-success" type="text" required="required"  data-error="请输入手机号码" />\n' +
+            '     </div>\n' +
+            '   <button onclick="verify()"  disabled="disabled" id="QueryBtn" class="btn btn-primary">确认</button>';
+        $("#showDetail").html(str);
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,128 @@
+/*
+
+Full-page view:
+
+https://codepen.io/GeorgePark/full/gegavO/
+
+*/
+
+/* @import url(https://fonts.googleapis.com/css?family=Montserrat:500); */
+
+:root {
+	/* Base font size */
+	font-size: 10px;
+
+	/* Border color variable */
+	--border-color: #e70;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+
+.cube-container {
+
+	position: relative;
+	width: 30rem;
+	height: 30rem;
+	margin: 0 5rem auto 6rem;
+	perspective: 100rem;
+}
+
+.cube {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	transform-style: preserve-3d;
+	transition: transform 1s cubic-bezier(0.32, 0.05, 0.35, 1.6);
+}
+
+.cube-face-image {
+	display: block;
+	position: absolute;
+	/* opacity: 0.95; */
+	/*width: 100%;*/
+	/* border: 0.2rem solid #fafafa; */
+	box-shadow: 0 0 0.5rem #fff, 0 0 1.5rem #5dc2ff, 0 0 3rem #00a0ee3d;
+}
+
+.image-buttons {
+	display: grid;
+	grid-template-columns: repeat(6, auto);
+	grid-gap: 1.5rem;
+	justify-content: center;
+	margin-bottom:10px;
+}
+
+.image-buttons input {
+	width: 80%;
+	border: 0.2rem solid #fafafa;
+}
+
+.image-buttons input:focus {
+	outline: none;
+	border: 0.2rem solid var(--border-color);
+}
+
+/* Transform images to create cube */
+
+.image-1 {
+	transform: translateZ(15rem);
+}
+
+.image-2 {
+	transform: rotateX(-180deg) translateZ(15rem);
+}
+
+.image-3 {
+	transform: rotateY(90deg) translateZ(15rem);
+}
+
+.image-4 {
+	transform: rotateY(-90deg) translateZ(15rem);
+}
+
+.image-5 {
+	transform: rotateX(90deg) translateZ(15rem);
+}
+
+.image-6 {
+	transform: rotateX(-90deg) translateZ(15rem);
+}
+
+/* Transform cube to show correct image */
+
+.cube.initial-position {
+	transform: translateZ(-20rem) translateY(-2rem) rotateX(-15deg) rotateY(18deg) rotateZ(2deg);
+	display: flex;
+	justify-content: center;
+}
+
+.cube.show-image-1 {
+	transform: translateZ(-36rem);
+	display: flex;
+	justify-content: center;
+}
+
+.cube.show-image-2 {
+	transform: translateZ(-36rem) rotateX(180deg);
+	display: flex;
+	justify-content: center;
+}
+
+.cube.show-image-3 {
+	transform: translateZ(-36rem) rotateY(-90deg);
+}
+
+.cube.show-image-4 {
+	transform: translateZ(-36rem) rotateY(90deg);
+}
+
+.cube.show-image-5 {
+	transform: translateZ(-36rem) rotateX(-90deg);
+}
+
+.cube.show-image-6 {
+	transform: translateZ(-36rem) rotateX(90deg);
+}

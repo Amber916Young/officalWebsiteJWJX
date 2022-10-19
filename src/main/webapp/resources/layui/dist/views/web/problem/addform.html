@@ -1,0 +1,119 @@
+<style>
+  body .layui-form-label {
+    width: auto;
+  }
+  body .layui-form-item .layui-input-inline {
+    width: 86%;
+    margin-right: 0;
+  }
+  body .layui-form-item {
+    height: fit-content;
+  }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-useradmin" style="padding: 20px 0 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">标题</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <textarea placeholder="请输入内容" class="layui-textarea" name="title"  lay-verify="required"  autocomplete="off">{{ d.params.title || '' }}</textarea>
+        <input type="text" name="id" value="{{ d.params.id || '' }}" hidden="hidden">
+        <input type="text" name="categroy" value="" hidden="hidden" id="categroy">
+        <input type="text" name="tagsArr" value="{{ d.params.tagsArr || '' }}" hidden="hidden" id="tagsArr">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">内容</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <textarea placeholder="请输入内容" class="layui-textarea" name="content"   lay-verify="required"  autocomplete="off">{{ d.params.content || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">分类</label>
+    <div class="layui-input-inline" >
+      <script type="text/html" template>
+        {{# layui.each(d.params.checkTagsArr, function(index, item){
+          if(item.type ==1 ){  }}
+        <input type="checkbox" value="{{item.name}}" lay-filter="Tags"  title="{{item.name}}" lay-skin="primary" checked />
+        {{#  } else {  }}
+        <input type="checkbox" value="{{item.name}}" lay-filter="Tags" title="{{item.name}}" lay-skin="primary" />
+        {{# }
+        }); }}
+        {{#  if(d.params.checkTagsArr==undefined){ }}
+        <input type="checkbox" value="常见问题" lay-filter="Tags" title="常见问题" lay-skin="primary" />
+        <input type="checkbox" value="GPS" lay-filter="Tags" title="GPS" lay-skin="primary" />
+        {{#  } }}
+      </script>
+    </div>
+  </div>
+
+
+  <div class="layui-form-item =">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switchstatus" lay-verify="required"  value="true" name="status" {{ d.params.status ? 'checked' : '' }}  lay-skin="switch" lay-text="发布|不发布">
+      </script>
+    </div>
+  </div>
+
+  <hr>
+  <div class="layui-form-item" style="    text-align: center;">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form','jquery','laytpl'], function(){
+  var $ = layui.$
+          ,form = layui.form
+          ,$ = layui.jquery;
+  var laytpl = layui.laytpl;
+  var categroys=[];
+  var num=0;
+
+  form.on('checkbox(Tags)', function(data) {
+    if (num == 0) {
+      if( $("#tagsArr").val()!=""){
+        var tagsArr = $("#tagsArr").val().split(",");
+        for (var k = 0; k < tagsArr.length; k++) {
+          var flag = 0;
+          for (var j = 0; j < categroys.length; j++) {
+            if (categroys[j] == tagsArr[k]) {
+              flag = 1;
+              break;
+            }
+          }
+          if (flag == 0) {
+            categroys.push(tagsArr[k]);
+          }
+          num = 1;
+        }
+      }
+    }
+    if (data.elem.checked) {
+      categroys.push(data.value);
+    } else {
+      for (var i in categroys) {
+        if (categroys[i] == data.value) {
+          categroys.splice(i, 1);
+          break;
+        }
+      }
+    }
+
+
+    $("#categroy").val(categroys);
+    console.info(categroys);
+  });
+
+
+})
+</script>

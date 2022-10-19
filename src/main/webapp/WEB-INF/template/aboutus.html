@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments/headerPage :: headerPage"></div>
+
+<link rel="stylesheet" href="/resources/plugin/swiper/swiper-bundle.min.css"/>
+
+<style>
+	.bgNavigation{
+		background-image: url('/resources/img/aboutus/timgb.jpg');
+	}
+	#intro{
+		height: auto;
+	}
+	#container{
+		/* width: 50em; */
+		height: 22em;
+		/*margin: 0 auto;*/
+		/*padding: 0 0.525rem;*/
+		/*max-width: 127.25rem;*/
+	}
+	.padding_2{
+		padding: 1em 2em;
+		background: whitesmoke;
+	}
+	.layui-tab-title .layui-this{
+		background: rgb(52,73,94);
+
+		color: white;
+	}
+	.layui-tab-title .layui-this a{
+		background: rgb(52,73,94);
+		color: white;
+	}
+	.user_pic:hover{
+		-webkit-transform: rotateZ(360deg);
+		-moz-transform: rotateZ(360deg);
+		-ms-transform: rotateZ(360deg);
+		-o-transform: rotateZ(360deg);
+		transform: rotateZ(360deg);
+		cursor: pointer;
+	}
+	.user_pic{
+		/*border-radius: 100%;*/
+		/*border:1px solid black;*/
+		border-radius: 50%;
+		width:19vw;
+		height:19vw;
+		border: 3px solid rgba(255,255,255,.5);
+		box-shadow: inset 1px 1px 4px rgba(0,0,0,.3),0 2px 3px rgba(0,0,0,.4);
+		transition: transform 1s ease-out;
+	}
+
+	.flex_layout2{
+		/*height: 100vh;*/
+		/*flex-flow:column wrap;*/
+		column-count: 3;
+		column-gap: 10px;
+		width: 100%
+	}
+	.flex_layout1{
+		/*flex-flow:column wrap;*/
+		column-count: 4;
+		column-gap: 10px;
+		width: 100%
+	}
+	.zzzh{
+		margin: 0.2em;
+	}
+	.zzzh img{
+		width: 13vw;
+		height:100%;
+	}
+	.item {
+		margin: 0.3em;
+	}
+	.item img{
+		width: 100%;
+		height:100%;
+		transition: all 2s;
+		-webkit-transition: all 2s; /* Safari */
+	}
+	.item img:hover{
+		cursor: pointer;
+		transform: scale(1.5);
+		-ms-transform:scale(1.5);     /* IE 9 */
+		-moz-transform:scale(1.5);     /* Firefox */
+		-webkit-transform:scale(1.5); /* Safari 和 Chrome */
+		-o-transform:scale(1.5);
+	}
+	.headTitle{
+		font-size: 16px;
+		font-weight: 600;
+	}
+	#showMsg{
+		margin: 0;
+	}
+	@media screen and (max-width:1000px){
+		#layui-layer2 { display:none; }
+	}
+
+
+	#swiper-container {
+		width: 100%;
+		padding-top: 50px;
+		padding-bottom: 50px;
+	}
+
+	#swiper-container .swiper-slide {
+		background-position: center;
+		width: 300px;
+		height: 200px;
+		background-size: contain;
+		background-repeat: no-repeat
+
+	}
+
+
+
+	#swiper-container2 .swiper-slide {
+		text-align: center;
+		font-size: 18px;
+		background: #fff;
+
+		/* Center slide text vertically */
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		-webkit-justify-content: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+	}
+
+</style>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+	<div th:replace="fragments/navigation :: navigation"></div>
+    <section  class=" bgNavigation"  ></section>
+	<section class="padding_2  layui-col-xs12 layui-col-sm12 layui-col-md12" >
+		<i class="layui-icon layui-icon-home"></i>
+		<span class="layui-breadcrumb">
+		  <a href="/">首页</a>
+		  <a href="javascript:void(0)">关于我们</a>
+		  <a><cite>企业介绍</cite></a>
+		</span>
+	</section>
+	<div class="layui-row">
+		<section class=" breadFont text-center  " >
+			<hr/>
+			<div class="layui-tab" lay-filter="tabNavigation">
+				<ul class="layui-tab-title">
+					<li id="tab0" class="layui-this"><a href="#about" >公司介绍</a></li>
+					<i class="layui-icon layui-icon-more-vertical"></i>
+<!--					<li id="tab1"><a href="#photo">公司风采</a></li>-->
+<!--					<i class="layui-icon layui-icon-more-vertical"></i>-->
+					<li id="tab2"><a href="/career">人才招聘</a></li>
+					<i class="layui-icon layui-icon-more-vertical"></i>
+					<li id="tab3"><a href="#contact">联系我们</a></li>
+				</ul>
+			</div>
+			<hr/>
+		</section>
+	</div>
+	<div class="layui-row">
+
+		<section id="about" class="layui-col-xs12 layui-col-sm12 layui-col-md12 home-section ">
+			<div class="heading-about">
+				<div class="container" >
+					<div class="row text-center" >
+						<div class="col-lg-8 col-lg-offset-2">
+							<div class="wow bounceInDown" data-wow-delay="0.4s">
+								<div class="section-heading">
+									<h3>深圳经纬捷讯信息技术有限公司</h3>
+									<i class="fa fa-2x fa-angle-down"></i>
+								</div>
+							</div>
+						</div>
+<!--						<div class="col-xs-12 col-sm-12 col-md-12 flex_layout">-->
+<!--							<div class="col-xs-4 col-sm-4 col-md-4 ">-->
+<!--								<img  class="user_pic" src="/resources/img/aboutus/a1.jpg" alt='无法显示'/>-->
+<!--							</div>-->
+<!--							<div class="col-xs-4 col-sm-4 col-md-4 ">-->
+<!--								<img  class="user_pic" src="/resources/img/aboutus/a2.jpg" alt='无法显示'/>-->
+<!--							</div>-->
+
+<!--							<div class="col-xs-4 col-sm-4 col-md-4 ">-->
+<!--								<img  class="user_pic" src="/resources/img/aboutus/a4.jpg" alt='无法显示'/>-->
+<!--							</div>-->
+<!--						</div>-->
+					</div>
+
+				</div>
+			</div>
+			<div class="container" >
+				<div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+					<div class="col-xs-12 col-sm-12 col-md-12 " style="margin-top: 2em">
+						<div class="layui-card">
+							<div class="layui-card-header"><p>关于我们</p></div>
+							<div class="layui-card-body">
+								<div class="swiper-container" style="margin:0" id="swiper-container2">
+									<div class="swiper-wrapper" id="layer-photos">
+										<div class="swiper-slide"  >
+											<img  src="/resources/img/aboutus/a1.jpg"  layer-src="/resources/img/aboutus/a1.jpg"  alt='赤湾石油大厦' style="width: 100%;"/>
+										</div>
+										<div class="swiper-slide" >
+											<img   src="/resources/img/aboutus/a2.jpg" layer-src="/resources/img/aboutus/a2.jpg"   alt='卓越商砼演示环境' style="width: 100%;"/>
+										</div>
+
+										<div class="swiper-slide"  >
+											<img  src="/resources/img/aboutus/a4.jpg"  layer-src="/resources/img/aboutus/a4.jpg"  alt='搅拌站' style="width: 100%;"/>
+										</div>
+									</div>
+								</div>
+
+								<div class="swiper-pagination2"></div>
+
+
+								<div id="floatright" style="box-shadow: 10px 10px 5px #3f51b5bf;">
+									<p class="text-indent" style="text-indent: 2em; ">
+										深圳经纬捷讯信息技术有限公司成立于2015年6月5日，
+										是深圳前海自贸区注册的高科技企业，公司软件开发团队具有丰富的企业信息化管理软件的开发经验，
+										公司主要业务是以<b>互联网、移动互联网、云计算、大数据</b>为基础，为客户提供企业管理软件定制开发的互联网+服务。
+									</p>
+									<p  style="text-indent: 2em; ">
+										深圳经纬捷讯信息技术有限公司在创业上升阶段，在信息产业领域内多元化发展的企业。径本公司以打造基于云平台的移动终端的互联网位置服务，成为一流的互联文化产业集团为目标，夯实基础，放眼全球。公司的目前产品主要包括：车队管理服务系统；软件行业人才培养采用先进的(技术+项目+企业入驻)真正的实现人才和企业的无缝对接，随着互联网的高速发展，“互联网+”概念不断深入实施到云计算、物联网、大数据的应用，为新一代信息技术与现代制造业、生产性服务业等的融合创新；
+										公司将紧跟行业发展潮流，不断进取，锐意创新。
+									</p>
+								</div>
+
+							</div>
+						</div>
+
+
+
+					</div>
+<!--					<div class="col-xs-12 col-sm-6 col-md-6" >-->
+<!--						<img style="width: 45vw;" src="/resources/img/aboutus/aboutus.png"/>-->
+<!--					</div>-->
+				</div>
+				<div  class="col-xs-12 col-sm-12 col-md-12 " >
+					<div class="layui-card">
+						<div class="layui-card-header">
+							<div style="display: flex">
+								<img src="/resources/img/aboutus/zzzs.png" style="width: 3em"/>
+								<div class="support_title">企业资质证书</div>
+							</div>
+						</div>
+						<div class="layui-card-body">
+							<div class="swiper-container" id="swiper-container">
+								<div class="swiper-wrapper" >
+									<div class="swiper-slide"  style="background-image:url(/resources/img/aboutus/zs/000001.jpg)"></div>
+									<div class="swiper-slide" style="background-image:url(/resources/img/aboutus/zs/000007.jpg)"></div>
+									<div class="swiper-slide" style="background-image:url(/resources/img/aboutus/zs/000003.jpg)"></div>
+									<div class="swiper-slide" style="background-image:url(/resources/img/aboutus/zs/000006.jpg)"></div>
+									<div class="swiper-slide" style="background-image:url(/resources/img/aboutus/zs/000001.jpg)"></div>
+									<div class="swiper-slide" style="background-image:url(/resources/img/aboutus/zs/000001.jpg)"></div>
+									<div class="swiper-slide" style="background-image:url(/resources/img/aboutus/zs/000001.jpg)"></div>
+
+								</div>
+								<!-- Add Pagination -->
+								<div class="swiper-pagination"></div>
+							</div>
+							<div class="layui-card" style="margin-top: 1em">
+								<div class="layui-card-header">
+									<div style="display: flex">
+										<img src="/resources/img/aboutus/zzq.png" style="width: 3em"/>
+										<div class="support_title">著作权登记证书</div>
+									</div>
+								</div>
+								<div class="layui-card-body">
+									<div class="layui-form">
+										<table id="certification" class="layui-table"  lay-filter="certificationTable"></table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+
+
+		</section>
+
+
+
+<!--		<section id="environment" class="layui-col-xs12 layui-col-sm12 layui-col-md12 home-section text-center ">-->
+<!--			<div class="heading-about" id="photo">-->
+<!--				<div class="container">-->
+<!--					<div class="row">-->
+<!--						<div class="col-lg-8 col-lg-offset-2">-->
+<!--							<div class="wow bounceInDown" data-wow-delay="0.4s">-->
+<!--								<div class="section-heading">-->
+<!--									<h3>公司环境</h3>-->
+<!--									<i class="fa fa-2x fa-angle-down"></i>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="container">-->
+<!--				<div  class="flex_layout2 ">-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000001.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000002.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000003.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000004.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000005.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000008.JPG" /></div>-->
+
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000007.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000006.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/000009.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/0000010.JPG" /></div>-->
+<!--					<div class="item"><img src="/resources/img/aboutus/hj/0000011.JPG" /></div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</section>-->
+		<section id="position" class="layui-col-xs12 layui-col-sm12 layui-col-md12 home-section text-center">
+			<div class="heading-about">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-8 col-lg-offset-2">
+							<div class="wow bounceInDown" data-wow-delay="0.4s">
+								<div class="section-heading">
+									<h3>公司地址</h3>
+									<i class="fa fa-2x fa-angle-down"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container" style="margin: 0;width: 100%;background-color: #f3f3f3;">
+				<div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+					<div class="col-xs-12 col-sm-8 col-md-8 " id="container" >
+
+					</div>
+					<div  class="col-xs-12 col-sm-4 col-md-4" style="margin: auto;">
+						<div class="flex_layout ">
+							<i class="layui-icon layui-icon-home fontsize30" ></i>
+							<div style="margin: auto 0;">深圳经纬捷讯信息技术有限公司</div>
+						</div>
+						<div class="flex_layout ">
+							<i class="layui-icon layui-icon-location fontsize30"></i>
+							<div style="margin: auto 0;">深圳市南山区赤湾石油大厦1501</div>
+						</div>
+						<div class="flex_layout ">
+							<i class="layui-icon layui-icon-email fontsize30"></i>
+							<div style="margin: auto 0;"><a href="mailto:jwjx@jwjxinfo.com">jwjx@jwjxinfo.com</a></div>
+						</div>
+						<div class="flex_layout ">
+							<i class="layui-icon layui-icon-cellphone fontsize30"></i>
+							<div style="margin: auto 0;">13172633929 (李工)</div>
+						</div>
+
+
+					</div>
+					<!--<div class="col-xs-6 col-sm-3 col-md-3 " style="margin: auto;">-->
+						<!--<div class="padding1_0">-->
+							<!--<div style="margin: auto 0;">-->
+								<!--<i class="layui-icon layui-icon-login-wechat fontsize30"></i>-->
+								<!--<img src="/resources/img/aboutus/qcode.png"/>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<section id="contact" class="home-section text-center">
+		<div class="heading-about">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 col-lg-offset-2">
+						<div class="wow bounceInDown" data-wow-delay="0.4s">
+							<div class="section-heading">
+								<h3>联系我们</h3>
+								<i class="fa fa-2x fa-angle-down"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container" style="">
+			<div  class="col-xs-12 col-sm-12 col-md-12 flex_layout" >
+				<div class="col-xs-12 col-sm-6 col-md-6 ">
+					<div class="headTitle">发送信息</div>
+
+					<form class="contact-form" data-toggle="validator">
+						<div class="form-group">
+							<i class="contact-icon fa fa-user"></i>
+							<input type="text" class="form-control" id="name" placeholder="我该如何称呼您"  required="required"  data-error="请输入您的姓名（我该如何称呼您）"/>
+							<div class="help-block with-errors"></div>
+						</div>
+						<div class="form-group">
+							<i class="contact-icon fa fa-envelope-o"></i>
+							<input type="email" class="form-control" id="email" placeholder="邮箱" required="required" data-error="请输入邮箱"/>
+							<div class="help-block with-errors"></div>
+						</div>
+						<div class="form-group">
+							<i class="contact-icon fa fa-pencil-square-o"></i>
+							<input type="text" class="form-control" id="phone" placeholder="电话"  required="required"  data-error="请输入手机号码"/>
+							<div class="help-block with-errors"></div>
+						</div>
+						<textarea class="form-control" id="message" rows="4" placeholder="您的需求或者想了解的内容"  required="required"  data-error="请输入您的需求或者想了解的内容"></textarea>
+						<div class="help-block with-errors"></div>
+						<button type="button" id="form-submit"  onclick="SubmitMsg()"	class="layui-btn layui-btn-primary">提交</button>
+					</form>
+				</div>
+				<div class="col-xs-12 col-sm-6 col-md-6 ">
+					<div class="headTitle">隐私保护</div>
+					<p id="showMsg">
+						深圳经纬捷讯信息技术有限公司（“我们”）尊重您的隐私权以及个人信息保护权。
+						本隐私与个人信息保护政策（“隐私政策”）旨在向您介绍我们的业务、如何可以行使您的权利。
+						<p style="text-align: left;color: darkred">
+							（1）我们在我们的【网站】上收集的您的个人信息，您的个人信息不会被公开，泄露；<br/>
+							（2）您对我们的如何使用您的个人信息有任何的问题或者疑虑，请随时通过本隐私通知底部所示的联系方式与我们联系；<br/>
+							（3）邮箱，手机号为必填项，意在于及时向您回复消息，您也可以选择下方在线联系，直接与我们沟通；<br/>
+	<!--					<button class="btn btn-common" onclick="toKefu()">在线联系</button>-->
+						</p>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div>
+		<footer th:replace="fragments/footerPage :: footerPage"></footer>
+	</div>
+
+</body>
+<script src="https://webapi.amap.com/maps?v=1.4.15&amp;key=331c47fdad54eef20750591c693ab118&amp;plugin=AMap.Geocoder"></script>
+<script src="/resources/plugin/swiper/swiper-bundle.min.js"></script>
+
+<script>
+
+	function toKefu(){
+	    window.location.href="/kefu/index";
+	}
+
+	//<!--表格数据填充-->
+
+	layui.use(['table', 'layer'] , function(){
+		var layer = layui.layer;
+        var table = layui.table;
+		layer.photos({
+			photos: '#layer-photos'
+			,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+		});
+        table.render({
+            elem: '#certification'
+            ,height: 312
+            ,url: '/index/aboutus/table/certificationTable' //数据接口
+            ,page: false //开启分页
+            ,cols: [[ //表头
+                // {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field: 'name', title: '软件名称', width:270}
+                // ,{field: 'version', title: '版本号', width:130, sort: true}
+                ,{field: 'category', title: '软件著作权分类', minwidth:200}
+                ,{field: 'type', title: '行业分类', minwidth: 150}
+                ,{field: 'createTime', title: '登记日期', minwidth: 200, sort: true}
+            ]]
+        });
+
+    });
+
+    // layui.use('layim', function(layim){
+    //     var layim = layui.layim;
+    //     layim.config({
+    //         init: {
+    //             //配置客户信息
+    //             mine: {
+    //                 "username": "访客" //我的昵称
+    //                 ,"id": "100000123" //我的ID
+    //                 ,"status": "online" //在线状态 online：在线、hide：隐身
+    //                 ,"remark": "在深邃的编码世界，做一枚轻盈的纸飞机" //我的签名
+    //                 ,"avatar": "http://tp1.sinaimg.cn/1571889140/180/40030060651/1" //我的头像
+    //             }
+    //         }
+    //         //开启客服模式
+    //         ,brief: true
+    //         //上传图片接口（返回的数据格式见下文），若不开启图片上传，剔除该项即可
+    //         ,uploadImage: {
+    //             url: '/msg/#' //接口地址
+    //             ,type: 'post' //默认post
+    //         }
+	//
+    //         //上传文件接口（返回的数据格式见下文），若不开启文件上传，剔除该项即可
+    //         ,uploadFile: {
+    //             url: '' //接口地址
+    //             ,type: 'post' //默认post
+    //         }
+    //     });
+    //     //打开一个客服面板
+    //     layim.chat({
+    //         name: '在线客服2' //名称
+	// 		,username: '在线客服2' //名称
+    //         ,type: 'kefu' //聊天类型
+    //         ,status: "online" //在线状态 online：在线、hide：隐身
+    //         ,remark: "..." //我的签名
+    //         ,avatar: '//tp1.sinaimg.cn/5619439268/180/40030060651/1' //头像
+    //         ,id: 100988 //定义唯一的id方便你处理信息
+	// 		,mine:false
+    //         ,fromid:100000123
+	//
+    //     });
+    //     layim.setChatMin(); //收缩聊天面板
+	//
+	//
+	// 	//webSocket
+    //     // var socket = new WebSocket('ws://echo.websocket.org/');
+	//
+    //     var socket = new WebSocket('ws://localhost:8888/myHandler?myid=' +100000123);
+	// 	//连接成功时触发
+    //     socket.onopen = function(){
+    //         console.info("XXX连接成功")
+    //     };
+    //     // 连接发生错误的回调方法
+    //     socket.onerror = function () {
+    //         console.log("通讯连接失败!");
+    //     };
+    //     // 连接关闭的回调方法
+    //     socket.onclose = function () {
+    //         console.log("通讯关闭连接！!");
+    //     };
+    //     //监听收到的消息
+    //     socket.onmessage = function(res){
+    //         //res为接受到的值，如 {"emit": "messageName", "data": {}}
+    //         //emit即为发出的事件名，用于区分不同的消息
+	// 		handleMessage(res.data);
+	//
+    //     };
+	//
+    //     //sendMessage  ----> onmessage(handleMessage) ----> layim.getMessage
+	//
+	// 	/**
+	// 	 *
+	// 	 * layim.getMessage({
+	// 		  username: "纸飞机" //消息来源用户名
+	// 		  ,avatar: "http://tp1.sinaimg.cn/1571889140/180/40030060651/1" //消息来源用户头像
+	// 		  ,id: "100000" //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+	// 		  ,type: "friend" //聊天窗口来源类型，从发送消息传递的to里面获取
+	// 		  ,content: "嗨，你好！本消息系离线消息。" //消息内容
+	// 		  ,cid: 0 //消息id，可不传。除非你要对消息进行一些操作（如撤回）
+	// 		  ,mine: false //是否我发送的消息，如果为true，则会显示在右方
+	// 		  ,fromid: "100000" //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+	// 		  ,timestamp: 1467475443306 //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+	// 		});
+	//
+    //      * */
+    //     function handleMessage(msg){
+    //         console.log(msg);
+    //         var data = JSON.parse(msg);
+    //         var content =data.content;
+    //         var type =data.type;
+    //         var id =data.toId;
+    //         var username =data.username;
+    //         var avatar =data.avatar;
+    //         var mine =false;
+    //         var fromid =data.id;
+    //         var timestamp = new Date();
+	//
+	//
+    //         console.log(timestamp);
+    //         layim.getMessage({
+    //             username: username //消息来源用户名
+    //             ,avatar: "http://tp1.sinaimg.cn/1571889140/180/40030060651/1" //消息来源用户头像
+    //             ,id: id //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+    //             ,type: type //聊天窗口来源类型，从发送消息传递的to里面获取
+    //             ,content: content //消息内容
+    //             ,mine: mine //是否我发送的消息，如果为true，则会显示在右方
+    //             ,fromid: fromid//消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+    //             ,timestamp: timestamp //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+    //         });
+	//
+	//
+    //     }
+    //     //监听发送消息
+    //     layim.on('sendMessage', function (data) {
+    //         //接收消息人员信息
+    //         var To = data.to;
+    //         var mine = data.mine;
+    //         console.log("sendMessage==>"+JSON.stringify(data));
+	//
+    //         //添加接收消息方的id
+    //         mine.toId = To.id;
+    //         //添加接收方与己方的关系 kefu
+    //         mine.type = To.type;
+	//
+    //         if(To.type=="kefu"){
+	//
+	// 		}
+    //         // 设置显示在接收方消息的显示位置在左
+    //         mine["mine"] = false;
+    //         var msg = JSON.stringify(mine);
+    //         //保存消息 ajax
+	//
+    //         //监听到上述消息后，就可以轻松地发送socket了
+    //         socket.send(msg);
+	//
+    //     });
+	//
+	//
+    //     //监听聊天窗口的切换
+    //     layim.on('chatChange', function (res) {
+    //         var type = res.data.type;
+    //         //选择发送的好友或群的信息
+    //         //console.log(res.data)
+    //         if (type === 'friend') {
+    //             //模拟标注好友状态
+    //             //layim.setChatStatus('<span style="color:#FF5722;">在线</span>');
+    //             //friendId = res.data.id;
+    //         } else  {
+    //             //groupId = res.data.id;
+    //              //模拟系统消息
+	// 		   // layim.getMessage({
+	// 			//    system: true
+	// 			//    ,id: res.data.id
+	// 			//    ,type: "kefu"
+	// 			//    ,content: '模拟群员'+(Math.random()*100|0) + '加入群聊'
+	// 		   // });
+    //         }
+    //     });
+	//
+	//
+    // });
+
+
+
+
+
+
+    checkUrl();
+    function checkUrl(){
+        var url = window.location.href;
+        var param = url.split("#")[1];
+        var tabId = "";
+        if(param == "contact"){
+            tabId = $("#tab3");
+            $("#tab0").removeClass("layui-this");
+            $("#tab1").removeClass("layui-this");
+            $("#tab2").removeClass("layui-this");
+            tabId.addClass("layui-this")
+
+        }else if(param == "photo"){
+            tabId = $("#tab1");
+            $("#tab0").removeClass("layui-this");
+            $("#tab3").removeClass("layui-this");
+            $("#tab2").removeClass("layui-this");
+            tabId.addClass("layui-this")
+        }else{
+		}
+
+        var swiper = new Swiper('#swiper-container', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            autoplay:true,
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        });
+
+		var swiper2 = new Swiper('#swiper-container2', {
+			// loop: true,
+			autoplay:true,
+			// loopFillGroupWithBlank: true,
+			// freeMode: true,
+			pagination: {
+				el: '.swiper-pagination2',
+				dynamicBullets: true,
+			},
+		});
+    }
+
+    function SubmitMsg(){
+        var name = $("#name");
+        var email = $("#email");
+        var phone = $("#phone");
+        var message = $("#message");
+
+        var jsonData = {};
+        jsonData["name"] = name.val();
+        jsonData["email"] = email.val();
+        jsonData["phone"] = phone.val();
+        jsonData["message"] = message.val();
+        jsonData["type"] = "question";
+
+        if (name.val()==""){
+            layer.msg("您的称呼为空，请输入", {time:2000, icon:5, shift:6});
+            return;
+        }
+        if (email.val()==""){
+            layer.msg("您的邮箱为空，请输入", {time:2000, icon:5, shift:6});
+            return;
+        }
+        if (phone.val()==""){
+            layer.msg("您的联系方式为空，请输入", {time:2000, icon:5, shift:6});
+            return;
+        }
+        if (message.val()==""){
+            layer.msg("输入内容为空", {time:2000, icon:5, shift:6});
+            return;
+        }
+        var loadingIndex=null;
+        layer.confirm('是否发送？', function(index) {
+            $.ajax({
+                type : "POST",
+                processData: false,
+                contentType: "application/json",
+                url: '/index/about/userMsgSend', //用戶發送消息到後臺  消息中心
+                data : JSON.stringify(jsonData),
+                dataType: "json",
+                cache: false,
+                beforeSend : function() {
+                    loadingIndex = layer.msg('处理中', {icon: 16});
+                },
+                success : function(result) {
+                    layer.close(loadingIndex);
+                    if ( result.code==0 ) {
+                        layer.msg('发送成功，我们会尽快回复，感谢理解！', {time:3000, icon:6});
+                        name.val("");
+                        email.val("");
+                        phone.val("");
+                        message.val("");
+                    } else {
+                        layer.msg("发送失败", {time:3000, icon:5});
+                    }
+                },
+                error:function () {
+                    layer.msg("ajax请求失败", {time:3000, icon:5});
+                }
+            });
+        });
+
+    }
+
+
+
+
+    var key = "331c47fdad54eef20750591c693ab118";
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });
+	// 同时引入工具条插件，比例尺插件和鹰眼插件
+	AMap.plugin([
+		'AMap.ToolBar',
+		'AMap.Scale',
+		'AMap.OverView',
+		'AMap.MapType',
+		'AMap.Geolocation',
+	], function(){
+		// 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+		map.addControl(new AMap.ToolBar());
+		// 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+		map.addControl(new AMap.Scale());
+		// 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
+		map.addControl(new AMap.OverView({isOpen:true}));
+		// 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+		map.addControl(new AMap.MapType());
+		// 在图面添加定位控件，用来获取和展示用户主机所在的经纬度位置
+		map.addControl(new AMap.Geolocation());
+	});
+
+    var geocoder = new AMap.Geocoder({
+        city: "4403", //深圳
+    });
+    var marker = new AMap.Marker();
+    geoCode();
+    function geoCode() {
+        var address  = "广东省深圳市南山区赤湾石油大厦";
+        geocoder.getLocation(address, function(status, result) {
+            if ((status==="complete")) {
+                var lnglat = result.geocodes[0].location;
+                var name = result.geocodes[0].formattedAddress;
+                marker.setPosition(lnglat);
+                map.add(marker);
+                map.setFitView(marker);
+                var text = new AMap.Text({
+                    text:name,
+                    cursor:'pointer',
+                    anchor:'center',
+                    draggable:false,
+                    style:{
+                        "margin-left": "16em",
+                        "padding" : ".5rem",
+                        "margin-top":"-3em",
+                        "background-color":"rgba(249, 249, 249, 0.77)",
+                    },
+                    position:result.geocodes[0].location
+                });
+                text.setMap(map);
+            }else{
+                // log.error('根据地址查询位置失败');
+            }
+        });
+    }
+</script>
+
+</html>

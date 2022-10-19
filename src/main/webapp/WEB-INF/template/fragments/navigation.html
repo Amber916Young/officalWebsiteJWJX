@@ -1,0 +1,50 @@
+<div th:fragment="navigation"  xmlns:th="http://www.thymeleaf.org">
+    <div id="preloader">
+        <div id="load"></div>
+    </div>
+    <style>
+        #hid{
+            display: none;
+        }
+        #hid2{
+            display: none;
+        }
+    </style>
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="javascript:void(0) ">
+                    <div class="logo" id="logo"></div>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <li id="l1"   class="active"><a href="/" >首页 </a><a href="#intro" id="hid"></a></li>
+<!--                    <li id="l2" ><a href="/#services">产品中心</a></li>-->
+                    <li id="l2" ><a href="/product">产品中心</a></li>
+                    <li id="l3"  class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">服务与支持<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/problem">常见问题</a></li>
+                            <li><a href="/support">售后服务</a></li>
+                        </ul>
+                    </li>
+                    <li id="l4" ><a href="/display">在线试用</a></li>
+                    <li id="l5"  class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">关于我们 <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/aboutus">企业介绍</a></li>
+                            <li><a href="/career">招聘信息</a></li>
+                            <!--<li><a href="#">混凝土企业管理方案</a></li>-->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
